@@ -1,0 +1,2061 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine 2028 Financial Tracker</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <style>
+        :root {
+            --sidebar-width: 260px;
+            --topbar-height: 64px;
+            --brand-color: #4F46E5; 
+            --brand-hover: #4338CA;
+            --bg-color-light: #F8FAFC;
+            --card-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -2px rgba(0,0,0,0.02);
+            --card-radius: 16px;
+            --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            --border-color-light: #E2E8F0;
+            --text-primary-light: #0F172A;
+        }
+
+        [data-bs-theme="dark"] {
+            --bg-color-light: #0F172A;
+            --card-shadow: 0 10px 15px -3px rgba(0,0,0,0.3), 0 4px 6px -4px rgba(0,0,0,0.3);
+            --brand-color: #6366F1;
+            --border-color-light: #1E293B;
+            --text-primary-light: #F8FAFC;
+        }
+
+        body {
+            background-color: var(--bg-color-light);
+            font-family: var(--font-family);
+            overflow-x: hidden;
+            color: #334155;
+        }
+
+        [data-bs-theme="dark"] body { color: #CBD5E1; }
+
+        /* Typography & Utilities */
+        h1, h2, h3, h4, h5, h6 { font-weight: 600; letter-spacing: -0.025em; color: var(--text-primary-light); }
+        .btn { border-radius: 8px; font-weight: 500; padding: 0.5rem 1rem; transition: all 0.2s; }
+        .btn-primary { background-color: var(--brand-color); border-color: var(--brand-color); }
+        .btn-primary:hover { background-color: var(--brand-hover); border-color: var(--brand-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2); }
+        .form-control, .form-select { border-radius: 8px; padding: 0.6rem 1rem; border-color: var(--border-color-light); background-color: #ffffff; }
+        .form-control:focus, .form-select:focus { border-color: var(--brand-color); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); }
+        
+        [data-bs-theme="dark"] .form-control, [data-bs-theme="dark"] .form-select { border-color: #334155; background-color: #1E293B; color: #F1F5F9; }
+
+        /* Loading Screen */
+        #loading-screen {
+            position: fixed; inset: 0; background: var(--bg-color-light); z-index: 9999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+        .spinner-brand { color: var(--brand-color); width: 3rem; height: 3rem; }
+
+        /* Sidebar Styling */
+        #sidebar {
+            width: var(--sidebar-width); height: 100vh; position: fixed; top: 0; left: 0; z-index: 1000;
+            transition: transform 0.3s ease; display: flex; flex-direction: column;
+            border-right: 1px solid var(--border-color-light); background-color: #ffffff;
+        }
+        [data-bs-theme="dark"] #sidebar { background-color: #0B1120; border-right-color: rgba(255,255,255,0.05); }
+
+        .sidebar-brand {
+            height: var(--topbar-height); display: flex; align-items: center; padding: 0 1.5rem;
+            font-weight: 700; font-size: 1.1rem; color: var(--brand-color); letter-spacing: -0.01em;
+            border-bottom: 1px solid var(--border-color-light);
+        }
+        [data-bs-theme="dark"] .sidebar-brand { border-bottom-color: rgba(255,255,255,0.05); }
+
+        .sidebar-nav { flex: 1; padding: 1.5rem 1rem; overflow-y: auto; }
+        .nav-item { margin-bottom: 0.25rem; }
+        .sidebar-link {
+            display: flex; align-items: center; padding: 0.75rem 1rem; border-radius: 10px;
+            color: #64748B; text-decoration: none; transition: all 0.2s ease; font-weight: 500; font-size: 0.95rem;
+        }
+        [data-bs-theme="dark"] .sidebar-link { color: #94A3B8; }
+        .sidebar-link i { margin-right: 12px; font-size: 1.2rem; transition: transform 0.2s; }
+        
+        .sidebar-link:hover { background-color: #F1F5F9; color: #0F172A; }
+        [data-bs-theme="dark"] .sidebar-link:hover { background-color: #1E293B; color: #F8FAFC; }
+        
+        .sidebar-link.active { background-color: var(--brand-color); color: white !important; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25); }
+        .sidebar-link.active i { transform: scale(1.1); }
+
+        /* Main Content & Topbar */
+        #main-content { 
+            margin-left: var(--sidebar-width); 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            transition: margin-left 0.4s; 
+            width: calc(100% - var(--sidebar-width)); 
+            min-width: 0;
+        }
+        
+        #topbar {
+            height: var(--topbar-height); display: flex; align-items: center; justify-content: space-between;
+            padding: 0 2rem; position: sticky; top: 0; z-index: 999;
+            background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-color-light);
+        }
+        [data-bs-theme="dark"] #topbar { background: rgba(11, 17, 32, 0.7); border-bottom-color: rgba(255,255,255,0.05); }
+
+        .content-container { padding: 2rem; flex: 1; }
+
+        /* Card Styling */
+        .card {
+            border: 1px solid var(--border-color-light); border-radius: var(--card-radius); box-shadow: var(--card-shadow);
+            margin-bottom: 1.5rem; background-color: #ffffff; overflow: hidden;
+        }
+        [data-bs-theme="dark"] .card { background-color: #1E293B; border-color: rgba(255,255,255,0.05); }
+        
+        .card-header {
+            background-color: transparent; border-bottom: 1px solid var(--border-color-light);
+            font-weight: 700; padding: 1.25rem 1.5rem; color: var(--text-primary-light);
+        }
+        [data-bs-theme="dark"] .card-header { border-bottom-color: rgba(255,255,255,0.05); }
+        .card-body { padding: 1.5rem; }
+
+        /* Chart Wrappers */
+        .chart-wrapper-lg { position: relative; height: 300px; width: 100%; }
+        .chart-wrapper-md { position: relative; height: 250px; width: 100%; }
+
+        /* Summary Cards */
+        .summary-card { padding: 1.5rem; border-radius: var(--card-radius); color: white; position: relative; overflow: hidden; border: none; }
+        .summary-card h3 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0; position: relative; z-index: 2; letter-spacing: -0.05em; color: white; }
+        .summary-card p { margin-bottom: 0.5rem; font-size: 0.85rem; opacity: 0.9; font-weight: 500; position: relative; z-index: 2; text-transform: uppercase; letter-spacing: 0.05em; }
+        .summary-card i.bg-icon { position: absolute; right: -15px; bottom: -20px; font-size: 6rem; opacity: 0.15; z-index: 1; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .summary-card:hover i.bg-icon { transform: scale(1.1) rotate(-5deg); }
+        
+        .bg-gradient-primary { background: linear-gradient(135deg, #4F46E5, #818CF8); }
+        .bg-gradient-success { background: linear-gradient(135deg, #059669, #34D399); }
+        .bg-gradient-danger  { background: linear-gradient(135deg, #DC2626, #F87171); }
+        .bg-gradient-warning { background: linear-gradient(135deg, #D97706, #FBBF24); }
+        .bg-gradient-info    { background: linear-gradient(135deg, #0891B2, #22D3EE); }
+        .bg-gradient-purple  { background: linear-gradient(135deg, #7C3AED, #A78BFA); }
+        .bg-gradient-dark    { background: linear-gradient(135deg, #334155, #64748B); }
+
+        /* Tables */
+        .table { margin-bottom: 0; }
+        .table th { font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; color: #64748B; padding: 1rem; border-bottom-width: 2px; }
+        [data-bs-theme="dark"] .table th { color: #94A3B8; border-color: #334155; }
+        .table td { padding: 1rem; vertical-align: middle; border-color: var(--border-color-light); font-size: 0.9rem; }
+        [data-bs-theme="dark"] .table td { border-color: #334155; }
+        .table-hover tbody tr:hover { background-color: rgba(79, 70, 229, 0.03); }
+        [data-bs-theme="dark"] .table-hover tbody tr:hover { background-color: rgba(255,255,255,0.02); }
+
+        /* Badges */
+        .badge-status { padding: 0.5em 0.8em; font-weight: 600; border-radius: 6px; font-size: 0.75rem; letter-spacing: 0.02em; }
+        .bg-success-subtle { background-color: #D1FAE5 !important; color: #065F46 !important; }
+        .bg-warning-subtle { background-color: #FEF3C7 !important; color: #92400E !important; }
+        .bg-danger-subtle { background-color: #FEE2E2 !important; color: #991B1B !important; }
+        
+        [data-bs-theme="dark"] .bg-success-subtle { background-color: rgba(16, 185, 129, 0.2) !important; color: #34D399 !important; }
+        [data-bs-theme="dark"] .bg-warning-subtle { background-color: rgba(245, 158, 11, 0.2) !important; color: #FBBF24 !important; }
+        [data-bs-theme="dark"] .bg-danger-subtle { background-color: rgba(239, 68, 68, 0.2) !important; color: #F87171 !important; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+        [data-bs-theme="dark"] ::-webkit-scrollbar-thumb { background: #475569; }
+
+        /* Responsive Utilities */
+        @media (max-width: 992px) {
+            #sidebar { transform: translateX(-100%); }
+            #sidebar.show { transform: translateX(0); }
+            #main-content { margin-left: 0; width: 100%; }
+            .content-container { padding: 1rem; }
+            .sidebar-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 999; display: none; opacity: 0; transition: opacity 0.3s; }
+            .sidebar-overlay.show { display: block; opacity: 1; }
+        }
+
+        /* Animations */
+        .page-section { display: none; animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .page-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        body.view-only .admin-only { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="spinner-border spinner-brand mb-3" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <h4 class="fw-bold">Medicine 2028 Financial Tracker</h4>
+        <p class="text-muted">Connecting to secure cloud database...</p>
+    </div>
+
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar">
+        <div class="sidebar-brand">
+            <i class="bi bi-heart-pulse-fill me-2 fs-4"></i> Med 2028
+        </div>
+        <div class="sidebar-nav">
+            <div class="nav-item"><a href="#" class="sidebar-link active" data-page="dashboard"><i class="bi bi-grid-1x2-fill"></i> Dashboard</a></div>
+            <div class="nav-item"><a href="#" class="sidebar-link" data-page="students"><i class="bi bi-people-fill"></i> Students</a></div>
+            <div class="nav-item"><a href="#" class="sidebar-link" data-page="penalties"><i class="bi bi-exclamation-triangle-fill"></i> Penalties</a></div>
+            <div class="nav-item"><a href="#" class="sidebar-link" data-page="collections"><i class="bi bi-box2-heart-fill"></i> Collections</a></div>
+            <div class="nav-item"><a href="#" class="sidebar-link" data-page="income"><i class="bi bi-graph-up-arrow"></i> Income</a></div>
+            <div class="nav-item"><a href="#" class="sidebar-link" data-page="expenses"><i class="bi bi-graph-down-arrow"></i> Expenses</a></div>
+            <div class="nav-item"><a href="#" class="sidebar-link" data-page="reports"><i class="bi bi-file-earmark-bar-graph-fill"></i> Reports</a></div>
+            <div class="nav-item mt-4"><a href="#" class="sidebar-link admin-only" data-page="settings"><i class="bi bi-gear-fill"></i> Settings</a></div>
+        </div>
+    </aside>
+
+    <!-- Main Content Wrapper -->
+    <div id="main-content">
+        <!-- Top Navbar -->
+        <nav id="topbar">
+            <div class="d-flex align-items-center">
+                <button class="btn btn-link d-lg-none me-2 text-body p-0" id="sidebarToggle">
+                    <i class="bi bi-list fs-3"></i>
+                </button>
+                <h4 class="mb-0 fw-bold" id="pageTitle">Dashboard</h4>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-primary btn-sm admin-only d-flex align-items-center" onclick="generateViewLink()">
+                    <i class="bi bi-share-fill me-2"></i> <span class="d-none d-sm-inline">Share View</span>
+                </button>
+                <button class="btn btn-light border-0 p-2 text-body" id="themeToggle" title="Toggle Theme">
+                    <i class="bi bi-moon-stars-fill fs-5"></i>
+                </button>
+            </div>
+        </nav>
+
+        <div class="content-container">
+
+            <section id="page-dashboard" class="page-section active">
+                
+                <div class="card mb-4 bg-gradient-primary text-white border-0 shadow-sm admin-only">
+                    <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-md-center p-4">
+                        <div>
+                            <h5 class="fw-bold mb-1 text-white"><i class="bi bi-google me-2"></i>Google Drive Receipts Database</h5>
+                            <p class="mb-md-0 opacity-75 small">Access all uploaded proof of payments and official receipts here.</p>
+                        </div>
+                        <a href="https://drive.google.com/drive/folders/1up-ClxhhKN3fsZ74YY_XadMT56vuDNQt" target="_blank" class="btn btn-light text-primary fw-bold px-4 mt-3 mt-md-0">Open Drive <i class="bi bi-box-arrow-up-right ms-1"></i></a>
+                    </div>
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="summary-card bg-gradient-primary shadow-sm">
+                            <p>Current Batch Balance</p>
+                            <h3 id="dash-balance">₱0.00</h3>
+                            <i class="bi bi-wallet2 bg-icon"></i>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="summary-card bg-gradient-success shadow-sm">
+                            <p>Total Cash In</p>
+                            <h3 id="dash-income">₱0.00</h3>
+                            <i class="bi bi-arrow-down-circle bg-icon"></i>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="summary-card bg-gradient-danger shadow-sm">
+                            <p>Total Expenses</p>
+                            <h3 id="dash-expenses">₱0.00</h3>
+                            <i class="bi bi-arrow-up-circle bg-icon"></i>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="summary-card bg-gradient-info shadow-sm">
+                            <p>Net Cash Flow</p>
+                            <h3 id="dash-netflow">₱0.00</h3>
+                            <div class="mt-2 pt-2 border-top border-light border-opacity-25 d-flex justify-content-between align-items-center">
+                                <span class="small opacity-75">Projected</span>
+                                <span class="fw-bold small" id="dash-projected">₱0.00</span>
+                            </div>
+                            <i class="bi bi-activity bg-icon"></i>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-xl-4">
+                        <div class="summary-card bg-gradient-warning shadow-sm">
+                            <p>Outstanding Penalties</p>
+                            <h3 id="dash-out-penalties">₱0.00</h3>
+                            <i class="bi bi-exclamation-octagon bg-icon"></i>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-xl-4">
+                        <div class="summary-card bg-gradient-purple shadow-sm">
+                            <p>Outstanding Collections</p>
+                            <h3 id="dash-out-collections">₱0.00</h3>
+                            <i class="bi bi-collection bg-icon"></i>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-xl-4">
+                        <div class="summary-card bg-gradient-dark shadow-sm">
+                            <p>Collection Completion</p>
+                            <div class="d-flex align-items-center gap-3">
+                                <h3 id="dash-completion" class="mb-0">0%</h3>
+                                <div class="progress flex-grow-1 bg-light bg-opacity-25" style="height: 8px;">
+                                    <div class="progress-bar bg-success" id="dash-progress-bar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <i class="bi bi-check2-all bg-icon"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-4 g-4">
+                    <div class="col-lg-8">
+                        <div class="card h-100">
+                            <div class="card-header border-0 pb-0">Monthly Cash Flow</div>
+                            <div class="card-body">
+                                <div class="chart-wrapper-lg"><canvas id="chartCashFlow"></canvas></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card h-100">
+                            <div class="card-header border-0 pb-0">Income vs Expenses</div>
+                            <div class="card-body">
+                                <div class="chart-wrapper-lg"><canvas id="chartIncExp"></canvas></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-4 g-4">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header border-0 pb-0">Penalties by Subject</div>
+                            <div class="card-body"><div class="chart-wrapper-md"><canvas id="chartPenSubject"></canvas></div></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header border-0 pb-0">Expenses by Category</div>
+                            <div class="card-body"><div class="chart-wrapper-md"><canvas id="chartExpCategory"></canvas></div></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-12">
+                        <div class="card h-100">
+                            <div class="card-header border-0 pb-0">Payment Modes</div>
+                            <div class="card-body"><div class="chart-wrapper-md"><canvas id="chartPaymentMode"></canvas></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header">Top Students (Highest Balance)</div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle text-nowrap mb-0" id="dash-top-students">
+                                        <thead class="table-light"><tr><th class="ps-4">Name</th><th class="text-end pe-4">Balance</th></tr></thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header">Recent Transactions</div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle text-nowrap mb-0" id="dash-recent-tx">
+                                        <thead class="table-light"><tr><th class="ps-4">Date</th><th>Type</th><th class="text-end pe-4">Amount</th></tr></thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-students" class="page-section">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center py-3 bg-transparent">
+                        <h5 class="mb-0 fw-bold">Batch Roster (2028)</h5>
+                        <button class="btn btn-primary btn-sm admin-only" onclick="openModal('studentModal')"><i class="bi bi-plus-lg me-1"></i> Add Student</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-md-5">
+                                <div class="input-group shadow-sm rounded-3">
+                                    <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                                    <input type="text" id="search-students" class="form-control border-start-0" placeholder="Search by name...">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive rounded-3 border">
+                            <table class="table table-hover align-middle text-nowrap mb-0" id="table-students">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="ps-4">Student Name</th>
+                                        <th class="text-end">Penalty Bal</th>
+                                        <th class="text-end">Collection Bal</th>
+                                        <th class="text-end fw-bold">Overall Bal</th>
+                                        <th class="text-center admin-only pe-4">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-penalties" class="page-section">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center py-3 bg-transparent">
+                        <h5 class="mb-0 fw-bold">Penalty Records</h5>
+                        <button class="btn btn-primary btn-sm admin-only" onclick="openModal('penaltyModal')"><i class="bi bi-plus-lg me-1"></i> Add Penalty</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4 g-3">
+                            <div class="col-md-4">
+                                <div class="input-group shadow-sm rounded-3">
+                                    <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                                    <input type="text" id="search-penalties" class="form-control border-start-0" placeholder="Search subject or student...">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <select id="filter-penalties-status" class="form-select shadow-sm">
+                                    <option value="">All Statuses</option>
+                                    <option value="Unpaid">Unpaid</option>
+                                    <option value="Partial">Partial</option>
+                                    <option value="Paid">Paid</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="table-responsive rounded-3 border">
+                            <table class="table table-hover align-middle text-nowrap mb-0" id="table-penalties">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="ps-4">Date</th>
+                                        <th>Student</th>
+                                        <th>Subject / Exam</th>
+                                        <th class="text-center">Missed</th>
+                                        <th class="text-end">Amount</th>
+                                        <th class="text-end">Paid</th>
+                                        <th class="text-end">Balance</th>
+                                        <th class="text-center">Status</th>
+                                        <th class="text-center pe-4">Payment Info</th>
+                                        <th class="text-center admin-only pe-4">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-collections" class="page-section">
+                
+                <ul class="nav nav-pills mb-4 gap-2" id="collectionTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link custom-tab active" data-bs-toggle="tab" data-bs-target="#col-records" type="button" role="tab">Detailed Records</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link custom-tab" data-bs-toggle="tab" data-bs-target="#col-summary" type="button" role="tab">Summary & Masterlists</button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="collectionTabsContent">
+                    
+                    <div class="tab-pane fade show active" id="col-records" role="tabpanel">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header d-flex justify-content-between align-items-center py-3 bg-transparent">
+                                <h5 class="mb-0 fw-bold">Collections Tracker</h5>
+                                <div class="d-flex gap-2 admin-only">
+                                    <button class="btn btn-outline-primary btn-sm" onclick="openBulkModal()"><i class="bi bi-people-fill me-1"></i> Bulk Charge Batch</button>
+                                    <button class="btn btn-primary btn-sm" onclick="openModal('collectionModal')"><i class="bi bi-plus-lg me-1"></i> Add Collection</button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-4 g-3">
+                                    <div class="col-md-4">
+                                        <div class="input-group shadow-sm rounded-3">
+                                            <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                                            <input type="text" id="search-collections" class="form-control border-start-0" placeholder="Search student...">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <select id="filter-collections-purpose" class="form-select shadow-sm">
+                                            <option value="">All Purposes</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select id="filter-collections-status" class="form-select shadow-sm">
+                                            <option value="">All Statuses</option>
+                                            <option value="Unpaid">Unpaid</option>
+                                            <option value="Partial">Partial</option>
+                                            <option value="Paid">Paid</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <select id="sort-collections" class="form-select shadow-sm">
+                                            <option value="date-desc">Newest First</option>
+                                            <option value="date-asc">Oldest First</option>
+                                            <option value="name-asc">Name (A-Z)</option>
+                                            <option value="name-desc">Name (Z-A)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="table-responsive rounded-3 border">
+                                    <table class="table table-hover align-middle text-nowrap mb-0" id="table-collections">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th class="ps-4">Due Date</th>
+                                                <th>Student</th>
+                                                <th>Purpose / Details</th>
+                                                <th class="text-end">Due</th>
+                                                <th class="text-end">Paid</th>
+                                                <th class="text-end">Balance</th>
+                                                <th class="text-center">Status</th>
+                                                <th class="text-center">Payment Info</th>
+                                                <th class="text-center admin-only pe-4">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="col-summary" role="tabpanel">
+                        <div id="collections-summary-container">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <section id="page-income" class="page-section">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center py-3 bg-transparent">
+                        <h5 class="mb-0 fw-bold">External Income</h5>
+                        <button class="btn btn-primary btn-sm admin-only" onclick="openModal('incomeModal')"><i class="bi bi-plus-lg me-1"></i> Record Income</button>
+                    </div>
+                    <div class="card-body">
+                         <div class="alert alert-info py-2 d-flex align-items-center border-0 bg-info bg-opacity-10 text-info-emphasis rounded-3">
+                             <i class="bi bi-info-circle-fill me-3 fs-5"></i>
+                             <div>Use this for external income (e.g., Donations, Sponsorships). Student payments are logged via Penalties/Collections.</div>
+                         </div>
+                        <div class="table-responsive mt-3 rounded-3 border">
+                            <table class="table table-hover align-middle text-nowrap mb-0" id="table-income">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="ps-4">Date</th>
+                                        <th>Source</th>
+                                        <th>Description</th>
+                                        <th class="text-end">Amount</th>
+                                        <th class="text-center">Payment Info</th>
+                                        <th>Receiver</th>
+                                        <th>Ref No.</th>
+                                        <th class="text-center admin-only pe-4">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-expenses" class="page-section">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center py-3 bg-transparent">
+                        <h5 class="mb-0 fw-bold">Expense Tracker</h5>
+                        <button class="btn btn-primary btn-sm admin-only" onclick="openModal('expenseModal')"><i class="bi bi-plus-lg me-1"></i> Record Expense</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive rounded-3 border">
+                            <table class="table table-hover align-middle text-nowrap mb-0" id="table-expenses">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="ps-4">Date</th>
+                                        <th>Category</th>
+                                        <th>Description</th>
+                                        <th class="text-end">Amount</th>
+                                        <th class="text-center">Payment Info</th>
+                                        <th>Paid By</th>
+                                        <th class="text-center admin-only pe-4">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-reports" class="page-section">
+                <div class="row">
+                    <div class="col-12 mb-4 no-print">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body p-4">
+                                <h5 class="mb-3 fw-bold">Generate Report</h5>
+                                <div class="d-flex flex-wrap gap-3">
+                                    <select id="report-type" class="form-select w-auto shadow-sm">
+                                        <option value="financial_summary">Financial Summary</option>
+                                        <option value="student_statement">Student Statement of Account</option>
+                                        <option value="penalty_report">Penalty Report</option>
+                                        <option value="collection_report">Collection Report</option>
+                                        <option value="scrubs_report">Scrubs Masterlist Report</option>
+                                        <option value="expense_report">Expense Report</option>
+                                    </select>
+                                    <select id="report-student-select" class="form-select w-auto d-none shadow-sm"></select>
+                                    <button class="btn btn-primary px-4 shadow-sm" onclick="generateReport()">Generate</button>
+                                    <button class="btn btn-light border px-4 shadow-sm text-dark" onclick="window.print()"><i class="bi bi-printer me-1"></i> Print</button>
+                                    <button class="btn btn-success px-4 shadow-sm" onclick="exportCSV()"><i class="bi bi-filetype-csv me-1"></i> Export CSV</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body p-5" id="report-container">
+                                <div class="text-center text-muted py-5">
+                                    <i class="bi bi-file-earmark-bar-graph display-1 opacity-25 mb-3"></i>
+                                    <h4 class="fw-bold">Ready to generate</h4>
+                                    <p>Select a report type above and click Generate.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-settings" class="page-section admin-only">
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-header bg-transparent py-3"><h6 class="mb-0 fw-bold">General Configurations</h6></div>
+                            <div class="card-body">
+                                <form id="form-settings-general">
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted small fw-bold text-uppercase">Academic Year</label>
+                                        <input type="text" class="form-control" id="set-acad-year" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted small fw-bold text-uppercase">Semester</label>
+                                        <select class="form-select" id="set-semester">
+                                            <option value="1st Semester">1st Semester</option>
+                                            <option value="2nd Semester">2nd Semester</option>
+                                            <option value="Summer">Summer</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label text-muted small fw-bold text-uppercase">Penalty Amount per Q Missed (₱)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light">₱</span>
+                                            <input type="number" class="form-control" id="set-penalty-amount" min="1" required>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100 shadow-sm">Save Configuration</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-header bg-transparent py-3"><h6 class="mb-0 fw-bold">System Lists (Comma Separated)</h6></div>
+                            <div class="card-body">
+                                <form id="form-settings-lists">
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted small fw-bold text-uppercase">Subjects</label>
+                                        <textarea class="form-control" id="set-subjects" rows="2"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted small fw-bold text-uppercase">Collection Purposes</label>
+                                        <textarea class="form-control" id="set-col-purposes" rows="2" placeholder="e.g., Review Materials, Class Funds, Scrubs"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted small fw-bold text-uppercase">Exam Types</label>
+                                        <textarea class="form-control" id="set-exam-types" rows="1"></textarea>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label text-muted small fw-bold text-uppercase">Expense Categories</label>
+                                        <textarea class="form-control" id="set-exp-cat" rows="1"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100 shadow-sm">Save System Lists</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Student Modal -->
+    <div class="modal fade" id="studentModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+                <form id="form-student">
+                    <div class="modal-header border-bottom-0 pb-0 px-4 pt-4">
+                        <h5 class="modal-title fw-bold">Student Profile</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body px-4">
+                        <input type="hidden" id="student-id">
+                        <div class="mb-2">
+                            <label class="form-label text-muted small fw-bold">Full Name (Last, First Middle)</label>
+                            <input type="text" class="form-control" id="student-name" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top-0 px-4 pb-4">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary px-4">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Penalty Modal -->
+    <div class="modal fade" id="penaltyModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+                <form id="form-penalty">
+                    <div class="modal-header border-bottom-0 pb-0 px-4 pt-4">
+                        <h5 class="modal-title fw-bold">Record Penalty</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body px-4">
+                        <input type="hidden" id="penalty-id">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label text-muted small fw-bold">Date</label>
+                                <input type="date" class="form-control" id="penalty-date" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-muted small fw-bold">Student</label>
+                                <select class="form-select" id="penalty-student" required></select>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label text-muted small fw-bold">Subject</label>
+                                <select class="form-select dynamic-opts" id="penalty-subject" data-list="subjects" required></select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-muted small fw-bold">Exam Type</label>
+                                <select class="form-select dynamic-opts" id="penalty-exam" data-list="examTypes" required></select>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small fw-bold">Qs Missed</label>
+                                <input type="number" class="form-control" id="penalty-qs" min="1" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small fw-bold">Penalty (₱)</label>
+                                <input type="number" class="form-control bg-light" id="penalty-amount" readonly>
+                                <div class="form-text mt-1" id="penalty-rate-hint" style="font-size: 0.7rem;"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small fw-bold">Paid (₱)</label>
+                                <input type="number" class="form-control border-success" id="penalty-paid" min="0" step="0.01" value="0" required>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small fw-bold">Payment Mode</label>
+                                <select class="form-select" id="penalty-mode" required>
+                                    <option value="N/A">N/A</option>
+                                    <option value="Cash">Cash</option>
+                                    <option value="GCash">GCash</option>
+                                    <option value="Bank Transfer">Bank Transfer</option>
+                                </select>
+                            </div>
+                            <div class="col-md-8">
+                                <label class="form-label text-muted small fw-bold">Receipt Link (G-Drive / URL)</label>
+                                <input type="url" class="form-control" id="penalty-receipt" placeholder="https://...">
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label text-muted small fw-bold">Remarks (Optional)</label>
+                            <input type="text" class="form-control" id="penalty-remarks">
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top-0 px-4 pb-4">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary px-4">Save Record</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Collection Modal -->
+    <div class="modal fade" id="collectionModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+                <form id="form-collection">
+                    <div class="modal-header border-bottom-0 pb-0 px-4 pt-4">
+                        <h5 class="modal-title fw-bold">Record Collection</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body px-4">
+                        <input type="hidden" id="collection-id">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label text-muted small fw-bold">Due Date</label>
+                                <input type="date" class="form-control" id="collection-date" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-muted small fw-bold">Student</label>
+                                <select class="form-select" id="collection-student" required></select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Collection Purpose</label>
+                            <select class="form-select dynamic-opts" id="collection-purpose" data-list="collectionPurposes" required></select>
+                        </div>
+                        
+                        <!-- Dynamic Scrubs Fields -->
+                        <div id="scrubs-fields" class="mb-3 p-3 bg-primary bg-opacity-10 rounded-3 border border-primary border-opacity-25 d-none">
+                            <h6 class="text-primary fw-bold mb-3"><i class="bi bi-scissors me-2"></i>Scrubs Order Details</h6>
+                            <div class="row g-2 mb-2">
+                                <div class="col-4">
+                                    <label class="form-label text-muted small fw-bold">Quantity</label>
+                                    <input type="number" class="form-control form-control-sm" id="scrubs-qty" min="1" value="1">
+                                </div>
+                                <div class="col-4">
+                                    <label class="form-label text-muted small fw-bold">Top Size</label>
+                                    <select class="form-select form-select-sm" id="scrubs-top">
+                                        <option value="XS">XS</option><option value="S">S</option><option value="M">M</option>
+                                        <option value="L">L</option><option value="XL">XL</option><option value="2XL">2XL</option>
+                                        <option value="3XL">3XL</option><option value="4XL">4XL</option><option value="5XL">5XL</option>
+                                    </select>
+                                </div>
+                                <div class="col-4">
+                                    <label class="form-label text-muted small fw-bold">Pants Size</label>
+                                    <select class="form-select form-select-sm" id="scrubs-pants">
+                                        <option value="XS">XS</option><option value="S">S</option><option value="M">M</option>
+                                        <option value="L">L</option><option value="XL">XL</option><option value="2XL">2XL</option>
+                                        <option value="3XL">3XL</option><option value="4XL">4XL</option><option value="5XL">5XL</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-1">
+                                <label class="form-label text-muted small fw-bold">Embroidery Name</label>
+                                <input type="text" class="form-control form-control-sm" id="scrubs-name" placeholder="Name to be embroidered">
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label text-muted small fw-bold">Amount Due (₱)</label>
+                                <input type="number" class="form-control" id="collection-amount" min="1" step="0.01" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-muted small fw-bold">Amount Paid (₱)</label>
+                                <input type="number" class="form-control border-success" id="collection-paid" min="0" step="0.01" value="0" required>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small fw-bold">Payment Mode</label>
+                                <select class="form-select" id="collection-mode" required>
+                                    <option value="N/A">N/A</option>
+                                    <option value="Cash">Cash</option>
+                                    <option value="GCash">GCash</option>
+                                    <option value="Bank Transfer">Bank Transfer</option>
+                                </select>
+                            </div>
+                            <div class="col-md-8">
+                                <label class="form-label text-muted small fw-bold">Receipt Link (Optional)</label>
+                                <input type="url" class="form-control" id="collection-receipt" placeholder="https://...">
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label text-muted small fw-bold">Remarks (Optional)</label>
+                            <input type="text" class="form-control" id="collection-remarks">
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top-0 px-4 pb-4">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary px-4">Save Collection</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Charge Modal -->
+    <div class="modal fade" id="bulkCollectionModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+                <form id="form-bulk-collection">
+                    <div class="modal-header border-bottom-0 pb-0 px-4 pt-4">
+                        <h5 class="modal-title fw-bold text-primary"><i class="bi bi-people-fill me-2"></i>Bulk Charge Batch</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body px-4">
+                        <div class="alert alert-primary bg-primary bg-opacity-10 border-0 small mb-4">
+                            This will create an unpaid collection record for <strong>EVERY</strong> student in the batch roster.
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label text-muted small fw-bold">Due Date</label>
+                                <input type="date" class="form-control" id="bulk-date" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-muted small fw-bold">Amount Due per Student (₱)</label>
+                                <input type="number" class="form-control text-danger fw-bold" id="bulk-amount" min="1" step="0.01" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Collection Purpose</label>
+                            <select class="form-select dynamic-opts" id="bulk-purpose" data-list="collectionPurposes" required></select>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top-0 px-4 pb-4">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary px-4" id="btn-submit-bulk">
+                            <span class="spinner-border spinner-border-sm d-none me-2" id="bulk-spinner" role="status"></span>
+                            Generate Records
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Income Modal -->
+    <div class="modal fade" id="incomeModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+                <form id="form-income">
+                    <div class="modal-header border-bottom-0 pb-0 px-4 pt-4">
+                        <h5 class="modal-title fw-bold">Record Income</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body px-4">
+                        <input type="hidden" id="income-id">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label text-muted small fw-bold">Date</label>
+                                <input type="date" class="form-control" id="income-date" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-muted small fw-bold">Source</label>
+                                <input type="text" class="form-control" id="income-source" placeholder="e.g., Sponsor Name" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Description</label>
+                            <input type="text" class="form-control" id="income-desc" required>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label text-muted small fw-bold">Amount (₱)</label>
+                                <input type="number" class="form-control border-success" id="income-amount" min="1" step="0.01" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-muted small fw-bold">Payment Mode</label>
+                                <select class="form-select" id="income-mode" required>
+                                    <option value="Cash">Cash</option>
+                                    <option value="GCash">GCash</option>
+                                    <option value="Bank Transfer">Bank Transfer</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-2">
+                            <div class="col-md-6">
+                                <label class="form-label text-muted small fw-bold">Received By</label>
+                                <input type="text" class="form-control" id="income-receiver">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-muted small fw-bold">Receipt / Ref Link</label>
+                                <input type="url" class="form-control" id="income-ref" placeholder="https://...">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top-0 px-4 pb-4">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary px-4">Save Income</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Expense Modal -->
+    <div class="modal fade" id="expenseModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+                <form id="form-expense">
+                    <div class="modal-header border-bottom-0 pb-0 px-4 pt-4">
+                        <h5 class="modal-title fw-bold">Record Expense</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body px-4">
+                        <input type="hidden" id="expense-id">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label text-muted small fw-bold">Date</label>
+                                <input type="date" class="form-control" id="expense-date" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-muted small fw-bold">Category</label>
+                                <select class="form-select dynamic-opts" id="expense-category" data-list="expenseCategories" required></select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Description</label>
+                            <input type="text" class="form-control" id="expense-desc" required>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label text-muted small fw-bold">Amount Spent (₱)</label>
+                                <input type="number" class="form-control border-danger" id="expense-amount" min="1" step="0.01" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-muted small fw-bold">Payment Mode</label>
+                                <select class="form-select" id="expense-mode" required>
+                                    <option value="Cash">Cash</option>
+                                    <option value="GCash">GCash</option>
+                                    <option value="Bank Transfer">Bank Transfer</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-2">
+                            <div class="col-md-6">
+                                <label class="form-label text-muted small fw-bold">Paid By</label>
+                                <input type="text" class="form-control" id="expense-payer">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-muted small fw-bold">Receipt Link (Optional)</label>
+                                <input type="url" class="form-control" id="expense-receipt" placeholder="https://...">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top-0 px-4 pb-4">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary px-4">Save Expense</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div class="modal fade" id="confirmModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content border-0 shadow-lg text-center p-4" style="border-radius: 20px;">
+                <i class="bi bi-exclamation-circle text-danger display-4 mb-3"></i>
+                <h5 class="fw-bold mb-3">Confirm Action</h5>
+                <p id="confirmMessage" class="text-muted mb-4">Are you sure?</p>
+                <div class="d-flex gap-2 justify-content-center">
+                    <button type="button" class="btn btn-light w-50" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger w-50" id="confirmBtn">Yes, Proceed</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-4" style="z-index: 1055;" id="toastContainer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, deleteDoc, onSnapshot, collection, writeBatch, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyB4kyd5E_wWAiDn_3AesKMBLoGoWW4RhrM",
+            authDomain: "medicine-2028-finance-tracker.firebaseapp.com",
+            projectId: "medicine-2028-finance-tracker",
+            storageBucket: "medicine-2028-finance-tracker.firebasestorage.app",
+            messagingSenderId: "230741246619",
+            appId: "1:230741246619:web:9f35675e8563bc61cabc3e"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'med-2028-tracker';
+
+        window.appData = {
+            settings: {
+                acadYear: "2025-2026", semester: "1st Semester", penaltyAmount: 20,
+                subjects: ["Medicine II", "Surgery II", "Pediatrics II", "Obstetrics II", "Otorhinolaryngology", "Radiology", "Behavioral Medicine II", "Bioethics III", "Rehab Medicine", "Herbal Medicine", "Orthopedic Surgery", "Pediatric Surgery", "TCVS", "Gynecology", "Neurology III", "Medical Nutrition", "Ophthalmology", "Legal Medicine", "TCM III", "Preventive Medicine III", "Plastic Surgery & Reconstructive Surgery", "Urology", "Dermatology", "Neurosurgery"],
+                collectionPurposes: ["Class Funds", "Review Materials", "Scrubs", "Event Contribution"],
+                examTypes: ["Short Quiz", "Long Quiz", "Shifting Exam", "Final Exam"],
+                expenseCategories: ["Printing", "Food", "Transportation", "Events", "Equipment", "Supplies", "Utilities", "Miscellaneous"]
+            },
+            students: [], penalties: [], collections: [], income: [], expenses: []
+        };
+        
+        const initialRoster = [
+            "ADARO, Keisha Clarice Magallanes", "Agliam, Mariella Elaine Belmonte", "Agustin, Redielle Mari Mabini", "Alfonso, Argelyn Faye Manalo", "ALZATE, Marby Krylle Ayson", "Ang, Dawn Rianne Dorol", "Aquino, Christian Derik Limbo", "AYONQUE, Krystal Cates Reyes", "BATAS, Ameera Eunice Tabujara", "Calpo, Rizelle Anne Aldas", "Cariño, Daniel Mateo", "Concepcion, Christian Dale Doromal", "Coo, Matthew Villanueva", "Cruz, Zerrinia Nicole Baydid", "Dalusag, Charlise Louise Lopez", "Danao, Faith Abigail Vivero", "De Guzman, Marvinne Danielleen Santos", "DE LEON, Ron Angelo Selapore", "Del Mundo, Ansherina", "DUQUE, Jaynard Legaspi", "Dy, Ma. Carla Sanchez", "FACUN, Monica Louise Grande", "FELICIANO, Maxine Abigail Chan", "FORBES, Venice Sitchon", "Gandol, Bridelyn Jude Cajiuat", "GARCIA, Athena Sofia Fernandez", "GARCIA, Lee Adrienne Oreta", "Go, Dianne Nicole Uy", "Go, Erika Kimberly Chang", "Go, Kim Jasmin Sy", "GONZALES, Carl Emmanuel Buenaventura", "JALOTJOT, Teresa Elika Joy", "KABIGTING, Trina Camille Reyes", "LACERNA, Paul Harvey Arbolado", "Lao, Charlene Grace", "LAPUT, Kharyn Mae Regis", "Laylo, Zoila Marie Magnaye", "Le, Alyssa Mikhail B", "LISING, Richard Rafael DEL CORRO", "LOPEZ, Czarinah Angelique Yu", "MALACAD, Christine Antonio", "Manlusoc, Diana Kate Joaquin", "Manuel, Patricia Marie", "MARIANO, Hanneleigh Ivy Baguyo", "MARTINEZ, Jasmine Rose Colico", "Martinez, Matthew Mark Alojado", "MARTIRES, Aciel Ross Gayanilo", "Mateo, Daniela Jelyn", "MATEO, Emilio Viktorio C", "Melag, Jericho Zeth A", "Membrebe, Franz Marco Latonio", "Mendoza, Jean Claude Dela Cruz", "Meralpis, Erika Mae Dioquino", "Miguel, Miguel Moses Arguilla", "Mina, Francine Mica Valdescona", "MONZON, Glenford Dela Cruz", "Naval, Jotham Balignasay", "NAVARRO, Renween Pearlle Magsumbol", "Padua, Claireszchel Rivera", "Paronda, Charisse Patricia Gatmaitan", "Peralta, Clea Marie Caño", "Perez, Gia Mikaela Torrejon", "PORNILLOS, Wenifredo III Estadilla", "Pornobi, Agape Joy Papasin", "Porta, Danica Losloso", "Racelis, Maricheiluz Alipio", "RAñESES, Karla Kaye Lamagna", "REYES, Earl Adam Galindez", "Reyes, Patrick Faypon", "RIVERA, Merilou Mytrix De Ramos", "Rivera, Sarah Valaine Cruz", "Rocreo, Aaliyah Rheanna Sarzate", "Romero, Jhonsel Joseph Tiotangco", "Romero, Karen Ysabelle Banzuela", "SALUDO, Via Ayrish Raymundo", "Santiago, Pearson Anthony Santos", "Silva, Goldine Roon", "TAN, Diellen Brandon Lim", "Tang, Precious Japhie Gan Nasis", "TUAZON, Rowena Emberga", "UY, Judy Lou Zubiri", "ZABALA, Arlyka Suzane Titular"
+        ].map(name => ({ id: crypto.randomUUID(), name }));
+
+        window.dbRef = (colName) => collection(db, 'artifacts', appId, 'public', 'data', colName);
+        window.docRef = (colName, docId) => doc(db, 'artifacts', appId, 'public', 'data', colName, docId);
+
+        let currentPage = 'dashboard';
+        window.chartInstances = {};
+
+        async function initFirebase() {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    try { await signInWithCustomToken(auth, __initial_auth_token); } catch(e) { await signInAnonymously(auth); }
+                } else { await signInAnonymously(auth); }
+                
+                await seedInitialDataIfNeeded();
+                setupRealtimeListeners();
+                
+                setTimeout(() => {
+                    document.getElementById('loading-screen').style.opacity = '0';
+                    setTimeout(() => document.getElementById('loading-screen').style.display = 'none', 500);
+                }, 800);
+            } catch (err) {
+                console.error("Firebase init failed:", err);
+                document.getElementById('loading-screen').innerHTML = `<i class="bi bi-x-circle text-danger display-4 mb-3"></i><h4>Connection Error</h4>`;
+            }
+        }
+
+        async function seedInitialDataIfNeeded() {
+            const studentsSnap = await getDocs(window.dbRef('students'));
+            if (studentsSnap.empty) {
+                const batch = writeBatch(db);
+                batch.set(window.docRef('config', 'settings'), window.appData.settings);
+                initialRoster.forEach(s => batch.set(window.docRef('students', s.id), s));
+                await batch.commit();
+            }
+        }
+
+        function setupRealtimeListeners() {
+            onSnapshot(window.docRef('config', 'settings'), (docSnap) => {
+                if (docSnap.exists()) window.appData.settings = docSnap.data();
+                if(currentPage === 'settings') window.populateSettings();
+                window.populateSelects();
+            });
+
+            ['students', 'penalties', 'collections', 'income', 'expenses'].forEach(col => {
+                onSnapshot(window.dbRef(col), (snapshot) => {
+                    window.appData[col] = snapshot.docs.map(d => ({id: d.id, ...d.data()}));
+                    window.renderPage(currentPage); 
+                });
+            });
+        }
+
+        initFirebase();
+
+        window.saveDataDoc = async function(col, id, data) {
+            try { await setDoc(window.docRef(col, id), data); window.showToast('Saved successfully'); } 
+            catch(e) { console.error(e); window.showToast('Error saving data', 'danger'); }
+        }
+        
+        window.deleteDataDoc = async function(col, id) {
+            try { await deleteDoc(window.docRef(col, id)); window.showToast('Deleted successfully'); } 
+            catch(e) { console.error(e); window.showToast('Error deleting', 'danger'); }
+        }
+
+        // Export bulk charge to window so HTML button can trigger it
+        window.processBulkCharge = async function(purpose, date, amount) {
+            try {
+                const batch = writeBatch(db);
+                window.appData.students.forEach(student => {
+                    const newId = crypto.randomUUID();
+                    const ref = window.docRef('collections', newId);
+                    batch.set(ref, {
+                        id: newId, date: date, studentId: student.id, purpose: purpose, 
+                        amountDue: amount, amountPaid: 0, paymentMode: 'N/A', receiptLink: '', remarks: ''
+                    });
+                });
+                await batch.commit();
+                window.showToast(`Successfully generated ${window.appData.students.length} records for ${purpose}!`);
+                return true;
+            } catch(e) { console.error(e); window.showToast('Error creating bulk records', 'danger'); return false; }
+        }
+
+    </script>
+    
+    <script>
+        const generateId = () => crypto.randomUUID();
+        const getEl = id => document.getElementById(id);
+        const formatMoney = amt => new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(amt || 0);
+        const formatDate = dateStr => dateStr ? new Date(dateStr).toLocaleDateString() : '';
+        const getToday = () => new Date().toISOString().split('T')[0];
+
+        window.showToast = function(message, type = 'success') {
+            const toastEl = document.createElement('div');
+            toastEl.className = `toast align-items-center text-white bg-${type} border-0 shadow-lg mb-2`;
+            toastEl.style.borderRadius = '12px';
+            toastEl.innerHTML = `<div class="d-flex"><div class="toast-body fw-medium px-3 py-2"><i class="bi bi-info-circle me-2"></i>${message}</div><button type="button" class="btn-close btn-close-white me-3 m-auto" data-bs-dismiss="toast"></button></div>`;
+            getEl('toastContainer').appendChild(toastEl);
+            new bootstrap.Toast(toastEl, { delay: 3000 }).show();
+            toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove());
+        }
+
+        function getStatus(due, paid) {
+            const bal = due - paid;
+            if (bal <= 0) return { text: 'Paid', class: 'bg-success-subtle' };
+            if (paid > 0) return { text: 'Partial', class: 'bg-warning-subtle' };
+            return { text: 'Unpaid', class: 'bg-danger-subtle' };
+        }
+
+        function getStudentBalances(studentId) {
+            const pens = window.appData.penalties.filter(p => p.studentId === studentId);
+            const cols = window.appData.collections.filter(c => c.studentId === studentId);
+            const penBal = pens.reduce((sum, p) => sum + (Number(p.penaltyAmount) - Number(p.amountPaid)), 0);
+            const colBal = cols.reduce((sum, c) => sum + (Number(c.amountDue) - Number(c.amountPaid)), 0);
+            return { penaltyBalance: penBal, collectionBalance: colBal, overall: penBal + colBal };
+        }
+
+        function formatReceiptLink(link) {
+            if(!link) return '<span class="text-muted small">-</span>';
+            if(!link.startsWith('http')) link = 'https://' + link;
+            return `<a href="${link}" target="_blank" class="btn btn-sm btn-light border py-1 text-primary"><i class="bi bi-link-45deg"></i> View</a>`;
+        }
+
+        let pendingConfirmAction = null; let confirmModalInstance = null;
+        window.confirmAction = function(msg, actionFn) {
+            getEl('confirmMessage').innerText = msg;
+            pendingConfirmAction = actionFn;
+            if(!confirmModalInstance) confirmModalInstance = new bootstrap.Modal(getEl('confirmModal'));
+            confirmModalInstance.show();
+        }
+        getEl('confirmBtn').addEventListener('click', () => { if(pendingConfirmAction) pendingConfirmAction(); if(confirmModalInstance) confirmModalInstance.hide(); });
+
+        window.generateViewLink = function() {
+            const url = window.location.href.split('?')[0] + '?mode=view';
+            navigator.clipboard.writeText(url).then(() => window.showToast('View-only link copied!', 'success')).catch(() => {
+                const input = document.createElement('input'); input.value = url; document.body.appendChild(input);
+                input.select(); document.execCommand('copy'); document.body.removeChild(input); window.showToast('View-only link copied!', 'success');
+            });
+        }
+
+        window.copyReminder = function(studentId) {
+            const student = window.appData.students.find(s=>s.id === studentId);
+            const bal = getStudentBalances(studentId);
+            if(!student || bal.overall <= 0) return;
+            const firstName = student.name.split(',')[1]?.trim().split(' ')[0] || 'Doc';
+            const msg = `Hi ${firstName}! Gentle reminder regarding your outstanding balance of ${formatMoney(bal.overall)}. Breakdown: Penalties: ${formatMoney(bal.penaltyBalance)} | Collections: ${formatMoney(bal.collectionBalance)}. Please settle when you can, thank you!`;
+            
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(msg).then(() => window.showToast(`Reminder copied for ${firstName}!`)).catch(err => console.error(err));
+            } else {
+                const textArea = document.createElement("textarea"); textArea.value = msg; document.body.appendChild(textArea);
+                textArea.select(); document.execCommand("copy"); textArea.remove(); window.showToast(`Reminder copied for ${firstName}!`);
+            }
+        }
+
+        window.jumpToSOA = function(studentId) {
+            window.navigateTo('reports');
+            getEl('report-type').value = 'student_statement';
+            getEl('report-student-select').classList.remove('d-none');
+            getEl('report-student-select').value = studentId;
+            window.generateReport();
+            window.showToast("Statement generated!");
+        }
+
+        window.copyUnpaidList = function(purpose) {
+            const records = window.appData.collections.filter(c => c.purpose === purpose);
+            const unpaidNames = [];
+            window.appData.students.forEach(s => {
+                const rec = records.find(r => r.studentId === s.id);
+                if (rec && (rec.amountDue - rec.amountPaid > 0)) unpaidNames.push(s.name);
+                else if (!rec) unpaidNames.push(`${s.name} (No Record)`);
+            });
+            unpaidNames.sort((a,b)=>a.localeCompare(b));
+            const msg = `*UNPAID LIST: ${purpose}*\n` + unpaidNames.map((n, i) => `${i+1}. ${n}`).join('\n');
+            
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(msg).then(() => window.showToast(`Unpaid list copied! (${unpaidNames.length} students)`));
+            } else {
+                const textArea = document.createElement("textarea"); textArea.value = msg; document.body.appendChild(textArea);
+                textArea.select(); document.execCommand("copy"); textArea.remove(); window.showToast(`Unpaid list copied! (${unpaidNames.length} students)`);
+            }
+        }
+
+        window.navigateTo = function(pageId) {
+            currentPage = pageId;
+            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('#sidebar .sidebar-link').forEach(el => el.classList.remove('active'));
+            
+            const targetSection = getEl(`page-${pageId}`);
+            if(targetSection) targetSection.classList.add('active');
+            
+            const targetLink = document.querySelector(`#sidebar [data-page="${pageId}"]`);
+            if(targetLink) {
+                targetLink.classList.add('active');
+                getEl('pageTitle').innerText = targetLink.innerText.trim();
+            }
+            
+            getEl('sidebar').classList.remove('show');
+            getEl('sidebarOverlay').classList.remove('show');
+            window.renderPage(pageId);
+        }
+
+        window.renderPage = function(pageId) {
+            if(!window.appData.settings) return;
+            window.populateSelects();
+            switch(pageId) {
+                case 'dashboard': renderDashboard(); break;
+                case 'students': renderStudents(); break;
+                case 'penalties': renderPenalties(); break;
+                case 'collections': renderCollections(); break;
+                case 'income': renderIncome(); break;
+                case 'expenses': renderExpenses(); break;
+                case 'reports': setupReports(); break;
+                case 'settings': window.populateSettings(); break;
+            }
+        }
+
+        window.openModal = function(modalId, item = null) {
+            const modal = new bootstrap.Modal(getEl(modalId));
+            const formId = `form-${modalId.replace('Modal', '')}`;
+            if(getEl(formId)) getEl(formId).reset();
+            
+            if (['penaltyModal', 'collectionModal', 'incomeModal', 'expenseModal'].includes(modalId)) {
+                getEl(`${modalId.replace('Modal', '')}-date`).value = getToday();
+                if(getEl('scrubs-fields')) getEl('scrubs-fields').classList.add('d-none');
+            }
+            if (modalId === 'penaltyModal') getEl('penalty-rate-hint').innerText = `Rate: ₱${window.appData.settings.penaltyAmount} / Question`;
+
+            if (item) {
+                if(modalId === 'studentModal') {
+                    getEl('student-id').value = item.id; getEl('student-name').value = item.name;
+                } else if (modalId === 'penaltyModal') {
+                    getEl('penalty-id').value = item.id; getEl('penalty-date').value = item.date;
+                    getEl('penalty-student').value = item.studentId; getEl('penalty-subject').value = item.subject;
+                    getEl('penalty-exam').value = item.examType; getEl('penalty-qs').value = item.qsMissed;
+                    getEl('penalty-amount').value = item.penaltyAmount; getEl('penalty-paid').value = item.amountPaid;
+                    getEl('penalty-mode').value = item.paymentMode || 'N/A'; getEl('penalty-receipt').value = item.receiptLink || '';
+                    getEl('penalty-remarks').value = item.remarks;
+                } else if (modalId === 'collectionModal') {
+                    getEl('collection-id').value = item.id; getEl('collection-date').value = item.date;
+                    getEl('collection-student').value = item.studentId; getEl('collection-purpose').value = item.purpose;
+                    getEl('collection-amount').value = item.amountDue; getEl('collection-paid').value = item.amountPaid;
+                    getEl('collection-mode').value = item.paymentMode || 'N/A'; getEl('collection-receipt').value = item.receiptLink || '';
+                    getEl('collection-remarks').value = item.remarks;
+                    if(item.purpose.toLowerCase().includes('scrub')) {
+                        getEl('scrubs-fields').classList.remove('d-none');
+                        getEl('scrubs-qty').value = item.scrubsQty || 1;
+                        getEl('scrubs-top').value = item.scrubsTopSize || 'M';
+                        getEl('scrubs-pants').value = item.scrubsPantsSize || 'M';
+                        getEl('scrubs-name').value = item.scrubsName || '';
+                    }
+                } else if (modalId === 'incomeModal') {
+                    getEl('income-id').value = item.id; getEl('income-date').value = item.date;
+                    getEl('income-source').value = item.source; getEl('income-desc').value = item.desc;
+                    getEl('income-amount').value = item.amount; getEl('income-mode').value = item.paymentMode || 'Cash';
+                    getEl('income-receiver').value = item.receivedBy; getEl('income-ref').value = item.refNo || item.receiptLink || '';
+                } else if (modalId === 'expenseModal') {
+                    getEl('expense-id').value = item.id; getEl('expense-date').value = item.date;
+                    getEl('expense-category').value = item.category; getEl('expense-desc').value = item.desc;
+                    getEl('expense-amount').value = item.amount; getEl('expense-mode').value = item.paymentMode || 'Cash';
+                    getEl('expense-payer').value = item.paidBy; getEl('expense-receipt').value = item.receiptLink || item.receipt || '';
+                }
+            } else {
+                ['student-id', 'penalty-id', 'collection-id', 'income-id', 'expense-id'].forEach(id => { if(getEl(id)) getEl(id).value = ''; });
+            }
+            modal.show();
+        }
+
+        window.openBulkModal = function() {
+            getEl('form-bulk-collection').reset();
+            getEl('bulk-date').value = getToday();
+            new bootstrap.Modal(getEl('bulkCollectionModal')).show();
+        }
+
+        window.populateSelects = function() {
+            const studentOpts = `<option value="">Select Student...</option>` + window.appData.students.sort((a,b)=>a.name.localeCompare(b.name)).map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+            if(getEl('penalty-student')) getEl('penalty-student').innerHTML = studentOpts;
+            if(getEl('collection-student')) getEl('collection-student').innerHTML = studentOpts;
+            if(getEl('report-student-select')) getEl('report-student-select').innerHTML = studentOpts;
+
+            document.querySelectorAll('.dynamic-opts').forEach(select => {
+                const listName = select.getAttribute('data-list');
+                const list = window.appData.settings[listName] || [];
+                const currentVal = select.value;
+                select.innerHTML = `<option value="">Select...</option>` + list.map(i => `<option value="${i}">${i}</option>`).join('');
+                if(currentVal) select.value = currentVal;
+            });
+        }
+
+        function renderDashboard() {
+            const rawIncome = window.appData.income.reduce((s,i) => s + Number(i.amount), 0);
+            const penPaid = window.appData.penalties.reduce((s,p) => s + Number(p.amountPaid), 0);
+            const colPaid = window.appData.collections.reduce((s,c) => s + Number(c.amountPaid), 0);
+            const totalIn = rawIncome + penPaid + colPaid;
+            const totalExp = window.appData.expenses.reduce((s,e) => s + Number(e.amount), 0);
+            const netFlow = totalIn - totalExp;
+            
+            const outPen = window.appData.penalties.reduce((s,p) => s + (Number(p.penaltyAmount) - Number(p.amountPaid)), 0);
+            const outCol = window.appData.collections.reduce((s,c) => s + (Number(c.amountDue) - Number(c.amountPaid)), 0);
+            const projected = netFlow + outPen + outCol;
+
+            const totalTargetCol = window.appData.collections.reduce((s,c) => s + Number(c.amountDue), 0);
+            const completionRate = totalTargetCol === 0 ? 100 : Math.round((colPaid / totalTargetCol) * 100);
+
+            getEl('dash-balance').innerText = formatMoney(netFlow);
+            getEl('dash-income').innerText = formatMoney(totalIn);
+            getEl('dash-expenses').innerText = formatMoney(totalExp);
+            getEl('dash-netflow').innerText = formatMoney(netFlow);
+            getEl('dash-projected').innerText = formatMoney(projected);
+            getEl('dash-out-penalties').innerText = formatMoney(outPen);
+            getEl('dash-out-collections').innerText = formatMoney(outCol);
+            
+            getEl('dash-completion').innerText = `${completionRate}%`;
+            getEl('dash-progress-bar').style.width = `${completionRate}%`;
+
+            renderCharts(totalIn, totalExp);
+            
+            const studsWithBal = window.appData.students.map(s => ({ name: s.name, bal: getStudentBalances(s.id).overall }))
+                .filter(s => s.bal > 0).sort((a,b) => b.bal - a.bal).slice(0, 5);
+            
+            getEl('dash-top-students').querySelector('tbody').innerHTML = studsWithBal.length ? 
+                studsWithBal.map(s => `<tr><td class="fw-medium text-secondary-emphasis ps-4">${s.name}</td><td class="text-end text-danger fw-bold pe-4">${formatMoney(s.bal)}</td></tr>`).join('') :
+                `<tr><td colspan="2" class="text-center text-muted py-4"><i class="bi bi-emoji-smile fs-4 d-block mb-2"></i>No outstanding balances</td></tr>`;
+
+            let recentTx = [
+                ...window.appData.income.map(i => ({ date: i.date, type: 'Income', amt: i.amount, sign: 1 })),
+                ...window.appData.expenses.map(e => ({ date: e.date, type: `Expense: ${e.category}`, amt: e.amount, sign: -1 })),
+                ...window.appData.penalties.filter(p=>p.amountPaid>0).map(p => ({ date: p.date, type: 'Penalty Payment', amt: p.amountPaid, sign: 1 })),
+                ...window.appData.collections.filter(c=>c.amountPaid>0).map(c => ({ date: c.date, type: 'Collection Payment', amt: c.amountPaid, sign: 1 }))
+            ].sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
+
+            getEl('dash-recent-tx').querySelector('tbody').innerHTML = recentTx.length ?
+                recentTx.map(t => `<tr><td class="ps-4">${formatDate(t.date)}</td><td class="text-secondary-emphasis">${t.type}</td><td class="text-end pe-4 fw-medium ${t.sign > 0 ? 'text-success' : 'text-danger'}">${t.sign > 0 ? '+' : '-'}${formatMoney(t.amt)}</td></tr>`).join('') :
+                `<tr><td colspan="3" class="text-center text-muted py-4">No recent transactions</td></tr>`;
+        }
+
+        function initChart(id, config) {
+            if(!getEl(id)) return;
+            if(window.chartInstances[id]) window.chartInstances[id].destroy();
+            window.chartInstances[id] = new Chart(getEl(id).getContext('2d'), config);
+        }
+
+        function renderCharts(totalIn, totalExp) {
+            const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+            const emptyColor = isDark ? '#334155' : '#E2E8F0';
+            Chart.defaults.color = isDark ? '#94A3B8' : '#64748B';
+            Chart.defaults.font.family = "'Inter', sans-serif";
+            Chart.defaults.scale.grid.color = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+
+            // 1. Income vs Expenses
+            const hasIncExp = totalIn > 0 || totalExp > 0;
+            initChart('chartIncExp', {
+                type: 'doughnut',
+                data: { 
+                    labels: hasIncExp ? ['Income', 'Expenses'] : ['No Data Yet'], 
+                    datasets: [{ 
+                        data: hasIncExp ? [totalIn, totalExp] : [1], 
+                        backgroundColor: hasIncExp ? ['#34D399', '#F87171'] : [emptyColor], 
+                        borderWidth: 0, hoverOffset: 4 
+                    }] 
+                },
+                options: { 
+                    responsive: true, maintainAspectRatio: false, cutout: '75%', 
+                    plugins: { 
+                        legend: { position: 'bottom', labels: {usePointStyle: true} },
+                        tooltip: { callbacks: { label: function(context) { return hasIncExp ? ' ' + context.label + ': ' + formatMoney(context.raw) : ' No transactions yet'; } } }
+                    } 
+                }
+            });
+
+            // 2. Penalties by Subject
+            const subData = {}; 
+            window.appData.penalties.forEach(p => { subData[p.subject] = (subData[p.subject] || 0) + Number(p.penaltyAmount); });
+            const hasPenalties = Object.keys(subData).length > 0;
+            initChart('chartPenSubject', {
+                type: 'bar',
+                data: { 
+                    labels: hasPenalties ? Object.keys(subData) : ['No Records'], 
+                    datasets: [{ label: 'Total Penalty', data: hasPenalties ? Object.values(subData) : [0], backgroundColor: hasPenalties ? '#6366F1' : emptyColor, borderRadius: 6 }] 
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+            });
+
+            // 3. Expenses by Category
+            const expData = {}; 
+            window.appData.expenses.forEach(e => { expData[e.category] = (expData[e.category] || 0) + Number(e.amount); });
+            const hasExp = Object.keys(expData).length > 0;
+            initChart('chartExpCategory', {
+                type: 'polarArea',
+                data: { 
+                    labels: hasExp ? Object.keys(expData) : ['No Data Yet'], 
+                    datasets: [{ data: hasExp ? Object.values(expData) : [1], backgroundColor: hasExp ? ['#F87171','#FBBF24','#34D399','#22D3EE','#6366F1','#A78BFA'] : [emptyColor], borderWidth: 0 }] 
+                },
+                options: { 
+                    responsive: true, maintainAspectRatio: false, 
+                    plugins: { 
+                        legend: { position: 'right', labels: {usePointStyle: true} },
+                        tooltip: { callbacks: { label: function(context) { return hasExp ? ' ' + context.label + ': ' + formatMoney(context.raw) : ' No expenses yet'; } } }
+                    } 
+                }
+            });
+
+            // 4. Payment Modes
+            const pModes = {}; 
+            [
+                ...window.appData.income.map(i => ({ mode: i.paymentMode || 'Cash', amt: i.amount })), 
+                ...window.appData.expenses.map(e => ({ mode: e.paymentMode || 'Cash', amt: e.amount })), 
+                ...window.appData.penalties.filter(p=>p.amountPaid>0).map(p => ({ mode: p.paymentMode || 'Cash', amt: p.amountPaid })), 
+                ...window.appData.collections.filter(c=>c.amountPaid>0).map(c => ({ mode: c.paymentMode || 'Cash', amt: c.amountPaid }))
+            ].forEach(t => { 
+                const m = t.mode; 
+                if(m !== 'N/A' && Number(t.amt) > 0) { pModes[m] = (pModes[m] || 0) + Number(t.amt); }
+            });
+            
+            const hasPModes = Object.keys(pModes).length > 0;
+            initChart('chartPaymentMode', {
+                type: 'pie',
+                data: { 
+                    labels: hasPModes ? Object.keys(pModes) : ['No Data Yet'], 
+                    datasets: [{ 
+                        data: hasPModes ? Object.values(pModes) : [1], 
+                        backgroundColor: hasPModes ? ['#34D399', '#3B82F6', '#8B5CF6', '#F59E0B'] : [emptyColor], 
+                        borderWidth: 0 
+                    }] 
+                },
+                options: { 
+                    responsive: true, maintainAspectRatio: false, 
+                    plugins: { 
+                        legend: { position: 'bottom', labels: {usePointStyle: true} },
+                        tooltip: { callbacks: { label: function(context) { return hasPModes ? ' ' + context.label + ': ' + formatMoney(context.raw) : ' No transactions yet'; } } }
+                    } 
+                }
+            });
+
+            // 5. Cash Flow Line
+            const mFlow = {};
+            [...window.appData.income.map(i=>({d:i.date, amt:i.amount})), ...window.appData.penalties.filter(p=>p.amountPaid>0).map(p=>({d:p.date, amt:p.amountPaid})), ...window.appData.collections.filter(c=>c.amountPaid>0).map(c=>({d:c.date, amt:c.amountPaid}))]
+             .forEach(t => { const m = t.d.substring(0,7); mFlow[m] = (mFlow[m]||0) + Number(t.amt); });
+            window.appData.expenses.forEach(e => { const m = e.date.substring(0,7); mFlow[m] = (mFlow[m]||0) - Number(e.amount); });
+            
+            const sortedMonths = Object.keys(mFlow).sort();
+            const hasFlow = sortedMonths.length > 0;
+            initChart('chartCashFlow', {
+                type: 'line',
+                data: { 
+                    labels: hasFlow ? sortedMonths : ['Jan', 'Feb', 'Mar'], 
+                    datasets: [{ 
+                        label: 'Net Cash Flow', data: hasFlow ? sortedMonths.map(m => mFlow[m]) : [0, 0, 0], 
+                        borderColor: hasFlow ? '#6366F1' : emptyColor, backgroundColor: hasFlow ? 'rgba(99, 102, 241, 0.1)' : 'transparent', fill: true, tension: 0.4 
+                    }] 
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+            });
+        }
+
+        function renderStudents() {
+            const q = getEl('search-students').value.toLowerCase();
+            const tbody = getEl('table-students').querySelector('tbody');
+            tbody.innerHTML = '';
+            
+            let filtered = window.appData.students.filter(s => s.name.toLowerCase().includes(q));
+            filtered.sort((a,b) => a.name.localeCompare(b.name)).forEach(s => {
+                const bal = getStudentBalances(s.id);
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="fw-medium text-secondary-emphasis ps-4">${s.name}</td>
+                        <td class="text-end">${formatMoney(bal.penaltyBalance)}</td>
+                        <td class="text-end">${formatMoney(bal.collectionBalance)}</td>
+                        <td class="text-end fw-bold ${bal.overall > 0 ? 'text-danger' : 'text-success'}">${formatMoney(bal.overall)}</td>
+                        <td class="text-center pe-4">
+                            ${bal.overall > 0 ? `<button class="btn btn-sm btn-light text-primary me-1 py-1 px-2 border" onclick='window.copyReminder("${s.id}")' title="Copy Reminder Message"><i class="bi bi-chat-dots"></i></button>` : ''}
+                            <button class="btn btn-sm btn-light text-info me-1 py-1 px-2 border" onclick='window.jumpToSOA("${s.id}")' title="Quick SOA"><i class="bi bi-file-earmark-text"></i></button>
+                            <span class="admin-only">
+                                <button class="btn btn-sm btn-light text-primary me-1 py-1 px-2 border" onclick='window.openModal("studentModal", ${JSON.stringify(s).replace(/'/g, "&apos;")})'><i class="bi bi-pencil"></i></button>
+                                <button class="btn btn-sm btn-light text-danger py-1 px-2 border" onclick='window.deleteStudent("${s.id}")'><i class="bi bi-trash"></i></button>
+                            </span>
+                        </td>
+                    </tr>`;
+            });
+            if(!filtered.length) tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-muted">No students found.</td></tr>`;
+        }
+
+        window.deleteStudent = function(id) {
+            if(window.appData.penalties.some(p=>p.studentId===id) || window.appData.collections.some(c=>c.studentId===id)) return window.showToast("Cannot delete student. They have associated records.", "warning");
+            window.confirmAction("Delete this student permanently?", () => window.deleteDataDoc('students', id));
+        }
+
+        function renderPenalties() {
+            const q = getEl('search-penalties').value.toLowerCase();
+            const sFilter = getEl('filter-penalties-status').value;
+            const tbody = getEl('table-penalties').querySelector('tbody');
+            tbody.innerHTML = '';
+            
+            let filtered = window.appData.penalties.map(p => {
+                const sName = window.appData.students.find(s=>s.id===p.studentId)?.name || 'Unknown';
+                const stat = getStatus(p.penaltyAmount, p.amountPaid);
+                return {...p, sName, stat};
+            }).filter(p => (p.sName.toLowerCase().includes(q) || p.subject.toLowerCase().includes(q)) && (sFilter === '' || p.stat.text === sFilter));
+            
+            filtered.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(p => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="text-muted small ps-4">${formatDate(p.date)}</td>
+                        <td class="fw-medium text-secondary-emphasis">${p.sName}</td>
+                        <td>${p.subject} <br><span class="badge bg-light text-dark border mt-1 fw-normal">${p.examType}</span></td>
+                        <td class="text-center fw-bold">${p.qsMissed}</td>
+                        <td class="text-end">${formatMoney(p.penaltyAmount)}</td>
+                        <td class="text-end text-success fw-medium">${formatMoney(p.amountPaid)}</td>
+                        <td class="text-end fw-bold text-danger">${formatMoney(p.penaltyAmount - p.amountPaid)}</td>
+                        <td class="text-center"><span class="badge badge-status ${p.stat.class}">${p.stat.text}</span></td>
+                        <td class="text-center"><span class="badge bg-light text-dark border me-1 fw-normal">${p.paymentMode || 'N/A'}</span> ${formatReceiptLink(p.receiptLink)}</td>
+                        <td class="text-center admin-only pe-4">
+                            <button class="btn btn-sm btn-light text-primary py-1 px-2 border" onclick='window.openModal("penaltyModal", ${JSON.stringify(p).replace(/'/g, "&apos;")})'><i class="bi bi-pencil"></i></button>
+                            <button class="btn btn-sm btn-light text-danger py-1 px-2 border" onclick='window.confirmAction("Delete penalty?", () => window.deleteDataDoc("penalties", "${p.id}"))'><i class="bi bi-trash"></i></button>
+                        </td>
+                    </tr>`;
+            });
+            if(!filtered.length) tbody.innerHTML = `<tr><td colspan="10" class="text-center py-4 text-muted">No records found.</td></tr>`;
+        }
+
+        function renderCollections() {
+            const pFilterDropdown = getEl('filter-collections-purpose');
+            const uniquePurposes = [...new Set(window.appData.collections.map(c => c.purpose))];
+            if(pFilterDropdown.options.length <= 1) {
+                pFilterDropdown.innerHTML = `<option value="">All Purposes</option>` + uniquePurposes.map(p => `<option value="${p}">${p}</option>`).join('');
+            }
+
+            const q = getEl('search-collections').value.toLowerCase();
+            const pFilter = getEl('filter-collections-purpose').value;
+            const sFilter = getEl('filter-collections-status').value;
+            const sortVal = getEl('sort-collections').value;
+            const tbody = getEl('table-collections').querySelector('tbody');
+            tbody.innerHTML = '';
+            
+            let filtered = window.appData.collections.map(c => {
+                const sName = window.appData.students.find(s=>s.id===c.studentId)?.name || 'Unknown';
+                const stat = getStatus(c.amountDue, c.amountPaid);
+                return {...c, sName, stat};
+            }).filter(c => (c.sName.toLowerCase().includes(q)) && (pFilter === '' || c.purpose === pFilter) && (sFilter === '' || c.stat.text === sFilter));
+            
+            filtered.sort((a,b) => {
+                if(sortVal==='date-desc') return new Date(b.date) - new Date(a.date);
+                if(sortVal==='date-asc') return new Date(a.date) - new Date(b.date);
+                if(sortVal==='name-asc') return a.sName.localeCompare(b.sName);
+                if(sortVal==='name-desc') return b.sName.localeCompare(a.sName);
+            }).forEach(c => {
+                let details = c.purpose;
+                if(c.purpose.toLowerCase().includes('scrub') && c.scrubsTopSize) {
+                    details += `<br><span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 mt-1 fw-normal">Qty: ${c.scrubsQty||1} | T:${c.scrubsTopSize} P:${c.scrubsPantsSize} | ${c.scrubsName||'-'}</span>`;
+                }
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="text-muted small ps-4">${formatDate(c.date)}</td>
+                        <td class="fw-medium text-secondary-emphasis">${c.sName}</td>
+                        <td>${details}</td>
+                        <td class="text-end">${formatMoney(c.amountDue)}</td>
+                        <td class="text-end text-success fw-medium">${formatMoney(c.amountPaid)}</td>
+                        <td class="text-end fw-bold text-danger">${formatMoney(c.amountDue - c.amountPaid)}</td>
+                        <td class="text-center"><span class="badge badge-status ${c.stat.class}">${c.stat.text}</span></td>
+                        <td class="text-center"><span class="badge bg-light text-dark border me-1 fw-normal">${c.paymentMode || 'N/A'}</span> ${formatReceiptLink(c.receiptLink)}</td>
+                        <td class="text-center admin-only pe-4">
+                            <button class="btn btn-sm btn-light text-primary py-1 px-2 border" onclick='window.openModal("collectionModal", ${JSON.stringify(c).replace(/'/g, "&apos;")})'><i class="bi bi-pencil"></i></button>
+                            <button class="btn btn-sm btn-light text-danger py-1 px-2 border" onclick='window.confirmAction("Delete collection?", () => window.deleteDataDoc("collections", "${c.id}"))'><i class="bi bi-trash"></i></button>
+                        </td>
+                    </tr>`;
+            });
+            if(!filtered.length) tbody.innerHTML = `<tr><td colspan="9" class="text-center py-4 text-muted">No records found.</td></tr>`;
+
+            // SUMMARY GENERATION
+            const sumContainer = getEl('collections-summary-container');
+            if(!sumContainer) return;
+            let sumHTML = '';
+            
+            const settingPurposes = window.appData.settings.collectionPurposes || [];
+            const usedPurposes = window.appData.collections.map(c => c.purpose);
+            const allPurposes = [...new Set([...settingPurposes, ...usedPurposes])].filter(p => p);
+            
+            const scrubPurposes = allPurposes.filter(p => p.toLowerCase().includes('scrub'));
+            const normalPurposes = allPurposes.filter(p => !p.toLowerCase().includes('scrub'));
+            const allStudents = [...window.appData.students].sort((a,b) => a.name.localeCompare(b.name));
+
+            if(!allPurposes.length) { sumContainer.innerHTML = `<div class="text-center py-5 text-muted">No collection purposes defined yet. Add one in Settings.</div>`; return; }
+
+            normalPurposes.forEach(purpose => {
+                const records = window.appData.collections.filter(c => c.purpose === purpose);
+                const stdAmount = records.length > 0 ? Math.max(...records.map(r=>r.amountDue)) : 0;
+                
+                sumHTML += `
+                <div class="card mb-4 border-0 shadow-sm">
+                    <div class="card-header bg-light d-flex justify-content-between align-items-center py-3">
+                        <h6 class="mb-0 fw-bold text-primary">${purpose} <span class="badge bg-secondary ms-2">${records.length}/${allStudents.length}</span></h6>
+                        <button class="btn btn-sm btn-white border shadow-sm text-primary" onclick="copyUnpaidList('${purpose}')"><i class="bi bi-clipboard me-1"></i> Copy Unpaid</button>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                            <table class="table table-hover align-middle mb-0 text-nowrap">
+                                <thead class="table-light sticky-top shadow-sm">
+                                    <tr><th class="ps-4">Student Name</th><th class="text-end">Due</th><th class="text-end">Paid</th><th class="text-end">Balance</th><th class="text-center pe-4">Status</th></tr>
+                                </thead>
+                                <tbody>`;
+                
+                allStudents.forEach(s => {
+                    const rec = records.find(r => r.studentId === s.id);
+                    if(rec) {
+                        const stat = getStatus(rec.amountDue, rec.amountPaid);
+                        sumHTML += `<tr><td class="fw-medium ps-4 text-secondary-emphasis">${s.name}</td><td class="text-end">${formatMoney(rec.amountDue)}</td><td class="text-end text-success">${formatMoney(rec.amountPaid)}</td><td class="text-end fw-bold text-danger">${formatMoney(rec.amountDue - rec.amountPaid)}</td><td class="text-center pe-4"><span class="badge badge-status ${stat.class}">${stat.text}</span></td></tr>`;
+                    } else {
+                        sumHTML += `<tr><td class="fw-medium ps-4 text-secondary-emphasis">${s.name}</td><td class="text-end">${formatMoney(stdAmount)}</td><td class="text-end text-success">₱0.00</td><td class="text-end fw-bold text-danger">${formatMoney(stdAmount)}</td><td class="text-center pe-4"><span class="badge badge-status bg-danger-subtle">Unpaid (No Record)</span></td></tr>`;
+                    }
+                });
+                sumHTML += `</tbody></table></div></div></div>`;
+            });
+
+            if(scrubPurposes.length > 0) {
+                sumHTML += `<h5 class="mt-5 mb-3 fw-bold text-primary border-bottom pb-2"><i class="bi bi-person-lines-fill me-2"></i>Scrubs Masterlists</h5>`;
+                scrubPurposes.forEach(purpose => {
+                    const records = window.appData.collections.filter(c => c.purpose === purpose);
+                    const stdAmount = records.length > 0 ? Math.max(...records.map(r=>r.amountDue)) : 0;
+                    
+                    sumHTML += `
+                    <div class="card mb-4 border-0 shadow-sm border border-primary border-opacity-25">
+                        <div class="card-header bg-primary bg-opacity-10 d-flex justify-content-between align-items-center py-3">
+                            <h6 class="mb-0 fw-bold text-primary">${purpose} <span class="badge bg-primary ms-2">${records.length}/${allStudents.length}</span></h6>
+                            <button class="btn btn-sm btn-white border shadow-sm text-primary" onclick="copyUnpaidList('${purpose}')"><i class="bi bi-clipboard me-1"></i> Copy Unpaid</button>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
+                                <table class="table table-hover align-middle mb-0 text-nowrap">
+                                    <thead class="table-light sticky-top shadow-sm">
+                                        <tr><th class="ps-4">Student Name</th><th class="text-center bg-info bg-opacity-10">Qty</th><th class="text-center bg-info bg-opacity-10">Top</th><th class="text-center bg-info bg-opacity-10">Pants</th><th class="bg-info bg-opacity-10">Embroidery Name</th><th class="text-end">Balance</th><th class="text-center pe-4">Status</th></tr>
+                                    </thead>
+                                    <tbody>`;
+                    
+                    allStudents.forEach(s => {
+                        const rec = records.find(r => r.studentId === s.id);
+                        if(rec) {
+                            const stat = getStatus(rec.amountDue, rec.amountPaid);
+                            sumHTML += `<tr><td class="fw-medium ps-4 text-secondary-emphasis">${s.name}</td><td class="text-center fw-bold text-primary bg-info bg-opacity-10">${rec.scrubsQty || 1}</td><td class="text-center fw-bold text-primary bg-info bg-opacity-10">${rec.scrubsTopSize || '-'}</td><td class="text-center fw-bold text-primary bg-info bg-opacity-10">${rec.scrubsPantsSize || '-'}</td><td class="fw-medium bg-info bg-opacity-10">${rec.scrubsName || '-'}</td><td class="text-end fw-bold text-danger">${formatMoney(rec.amountDue - rec.amountPaid)}</td><td class="text-center pe-4"><span class="badge badge-status ${stat.class}">${stat.text}</span></td></tr>`;
+                        } else {
+                            sumHTML += `<tr><td class="fw-medium ps-4 text-secondary-emphasis">${s.name}</td><td class="text-center fw-bold text-muted bg-info bg-opacity-10">-</td><td class="text-center fw-bold text-muted bg-info bg-opacity-10">-</td><td class="text-center fw-bold text-muted bg-info bg-opacity-10">-</td><td class="fw-medium text-muted bg-info bg-opacity-10">-</td><td class="text-end fw-bold text-danger">${formatMoney(stdAmount)}</td><td class="text-center pe-4"><span class="badge badge-status bg-danger-subtle">Unpaid (No Record)</span></td></tr>`;
+                        }
+                    });
+                    sumHTML += `</tbody></table></div></div></div>`;
+                });
+            }
+            sumContainer.innerHTML = sumHTML;
+        }
+
+        function renderIncome() {
+            const tbody = getEl('table-income').querySelector('tbody');
+            tbody.innerHTML = '';
+            window.appData.income.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(i => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="text-muted small ps-4">${formatDate(i.date)}</td>
+                        <td class="fw-medium text-secondary-emphasis">${i.source}</td>
+                        <td>${i.desc}</td>
+                        <td class="text-end text-success fw-bold">+${formatMoney(i.amount)}</td>
+                        <td class="text-center"><span class="badge bg-light text-dark border me-1 fw-normal">${i.paymentMode || 'Cash'}</span> ${formatReceiptLink(i.refNo || i.receiptLink)}</td>
+                        <td>${i.receivedBy}</td>
+                        <td class="text-muted small">${i.refNo || '-'}</td>
+                        <td class="text-center admin-only pe-4">
+                            <button class="btn btn-sm btn-light text-primary py-1 px-2 border" onclick='window.openModal("incomeModal", ${JSON.stringify(i).replace(/'/g, "&apos;")})'><i class="bi bi-pencil"></i></button>
+                            <button class="btn btn-sm btn-light text-danger py-1 px-2 border" onclick='window.confirmAction("Delete income?", () => window.deleteDataDoc("income", "${i.id}"))'><i class="bi bi-trash"></i></button>
+                        </td>
+                    </tr>`;
+            });
+            if(!window.appData.income.length) tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-muted">No records found.</td></tr>`;
+        }
+
+        function renderExpenses() {
+            const tbody = getEl('table-expenses').querySelector('tbody');
+            tbody.innerHTML = '';
+            window.appData.expenses.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(e => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="text-muted small ps-4">${formatDate(e.date)}</td>
+                        <td><span class="badge bg-light text-dark border fw-normal">${e.category}</span></td>
+                        <td class="text-secondary-emphasis">${e.desc}</td>
+                        <td class="text-end text-danger fw-bold">-${formatMoney(e.amount)}</td>
+                        <td class="text-center"><span class="badge bg-light text-dark border me-1 fw-normal">${e.paymentMode || 'Cash'}</span> ${formatReceiptLink(e.receiptLink || e.receipt)}</td>
+                        <td>${e.paidBy}</td>
+                        <td class="text-center admin-only pe-4">
+                            <button class="btn btn-sm btn-light text-primary py-1 px-2 border" onclick='window.openModal("expenseModal", ${JSON.stringify(e).replace(/'/g, "&apos;")})'><i class="bi bi-pencil"></i></button>
+                            <button class="btn btn-sm btn-light text-danger py-1 px-2 border" onclick='window.confirmAction("Delete expense?", () => window.deleteDataDoc("expenses", "${e.id}"))'><i class="bi bi-trash"></i></button>
+                        </td>
+                    </tr>`;
+            });
+            if(!window.appData.expenses.length) tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-muted">No records found.</td></tr>`;
+        }
+
+        function setupReports() {
+            getEl('report-type').addEventListener('change', function() {
+                getEl('report-student-select').classList.toggle('d-none', this.value !== 'student_statement');
+            });
+        }
+
+        window.generateReport = function() {
+            const type = getEl('report-type').value;
+            const container = getEl('report-container');
+            let html = `<div class="text-center mb-5"><h2 class="fw-bold text-primary">Medicine 2028 Financial Report</h2><h5 class="text-muted">${window.appData.settings.acadYear} - ${window.appData.settings.semester}</h5><p class="small text-muted">Generated on ${new Date().toLocaleDateString()}</p></div>`;
+
+            if (type === 'financial_summary') {
+                const rawIncome = window.appData.income.reduce((s,i) => s + Number(i.amount), 0);
+                const penPaid = window.appData.penalties.reduce((s,p) => s + Number(p.amountPaid), 0);
+                const colPaid = window.appData.collections.reduce((s,c) => s + Number(c.amountPaid), 0);
+                const totalIn = rawIncome + penPaid + colPaid;
+                const totalExp = window.appData.expenses.reduce((s,e) => s + Number(e.amount), 0);
+                
+                html += `<h4 class="border-bottom pb-2 mb-4">Financial Summary</h4>
+                    <table class="table table-bordered table-hover mb-5">
+                        <tr><th class="bg-light">Total External Income</th><td class="text-end fw-medium">${formatMoney(rawIncome)}</td></tr>
+                        <tr><th class="bg-light">Total Penalty Collections</th><td class="text-end fw-medium">${formatMoney(penPaid)}</td></tr>
+                        <tr><th class="bg-light">Total Other Collections</th><td class="text-end fw-medium">${formatMoney(colPaid)}</td></tr>
+                        <tr class="table-success"><th class="fs-5">Total Cash Inflow</th><td class="text-end fw-bold fs-5 text-success">${formatMoney(totalIn)}</td></tr>
+                        <tr class="table-danger"><th class="fs-5">Total Expenses (Outflow)</th><td class="text-end fw-bold fs-5 text-danger">-${formatMoney(totalExp)}</td></tr>
+                        <tr class="table-primary"><th class="fs-4 py-3">Net Available Balance</th><td class="text-end fw-bold fs-4 py-3 text-primary">${formatMoney(totalIn - totalExp)}</td></tr>
+                    </table>`;
+            } else if (type === 'student_statement') {
+                const sId = getEl('report-student-select').value;
+                if(!sId) return window.showToast("Please select a student.", "warning");
+                const student = window.appData.students.find(s=>s.id === sId);
+                const bal = getStudentBalances(sId);
+                
+                html += `<h4 class="border-bottom pb-2 mb-3">Statement of Account: <span class="text-primary">${student.name}</span></h4>`;
+                html += `<div class="alert ${bal.overall > 0 ? 'alert-danger' : 'alert-success'} fs-5 mb-4 d-flex justify-content-between"><span>Overall Outstanding Balance:</span> <strong>${formatMoney(bal.overall)}</strong></div>`;
+                
+                html += `<h5 class="mt-4 mb-3">Penalty Breakdown</h5><table class="table table-sm table-bordered"><thead class="table-light"><tr><th>Date</th><th>Subject</th><th class="text-end">Amount</th><th class="text-end">Paid</th><th class="text-end">Bal</th></tr></thead><tbody>`;
+                window.appData.penalties.filter(p=>p.studentId === sId).forEach(p => { html += `<tr><td>${formatDate(p.date)}</td><td>${p.subject}</td><td class="text-end">${formatMoney(p.penaltyAmount)}</td><td class="text-end">${formatMoney(p.amountPaid)}</td><td class="text-danger text-end fw-bold">${formatMoney(p.penaltyAmount-p.amountPaid)}</td></tr>` });
+                html += `</tbody></table>`;
+
+                html += `<h5 class="mt-5 mb-3">Collections Breakdown</h5><table class="table table-sm table-bordered"><thead class="table-light"><tr><th>Date</th><th>Purpose</th><th class="text-end">Due</th><th class="text-end">Paid</th><th class="text-end">Bal</th></tr></thead><tbody>`;
+                window.appData.collections.filter(c=>c.studentId === sId).forEach(c => { 
+                    let detail = c.purpose;
+                    if(c.purpose.toLowerCase().includes('scrub')) detail += `<br><small class="text-muted">Qty: ${c.scrubsQty||1} | Size: ${c.scrubsTopSize}/${c.scrubsPantsSize} | Name: ${c.scrubsName}</small>`;
+                    html += `<tr><td>${formatDate(c.date)}</td><td>${detail}</td><td class="text-end">${formatMoney(c.amountDue)}</td><td class="text-end">${formatMoney(c.amountPaid)}</td><td class="text-danger text-end fw-bold">${formatMoney(c.amountDue-c.amountPaid)}</td></tr>` 
+                });
+                html += `</tbody></table>`;
+            } else if (type === 'scrubs_report') {
+                const scrubPurposes = window.appData.settings.collectionPurposes.filter(p=>p.toLowerCase().includes('scrub'));
+                const allStudents = [...window.appData.students].sort((a,b)=>a.name.localeCompare(b.name));
+                
+                html += `<h4 class="border-bottom pb-2 mb-4">Scrubs Masterlist Report</h4>`;
+                scrubPurposes.forEach(purpose => {
+                    const records = window.appData.collections.filter(c => c.purpose === purpose);
+                    html += `<h5 class="mt-4">${purpose}</h5><div class="table-responsive"><table class="table table-striped table-bordered table-sm text-nowrap"><thead class="table-light"><tr><th>Name</th><th class="text-center">Qty</th><th class="text-center">Top</th><th class="text-center">Pants</th><th>Embroidery Name</th><th class="text-end">Balance</th></tr></thead><tbody>`;
+                    allStudents.forEach(s => {
+                        const r = records.find(rec => rec.studentId === s.id);
+                        if(r) html += `<tr><td>${s.name}</td><td class="text-center">${r.scrubsQty||1}</td><td class="text-center">${r.scrubsTopSize||'-'}</td><td class="text-center">${r.scrubsPantsSize||'-'}</td><td>${r.scrubsName||'-'}</td><td class="text-end text-danger">${formatMoney(r.amountDue - r.amountPaid)}</td></tr>`;
+                        else html += `<tr><td>${s.name}</td><td class="text-center text-muted">-</td><td class="text-center text-muted">-</td><td class="text-center text-muted">-</td><td class="text-muted">-</td><td class="text-end text-danger">No Record</td></tr>`;
+                    });
+                    html += `</tbody></table></div>`;
+                });
+            } else {
+                let data = [], headers = [];
+                if(type==='penalty_report') { headers = ['Date','Student','Detail','Amount','Paid','Balance']; data = window.appData.penalties.map(p=>[formatDate(p.date), window.appData.students.find(s=>s.id===p.studentId)?.name, p.subject, formatMoney(p.penaltyAmount), formatMoney(p.amountPaid), formatMoney(p.penaltyAmount-p.amountPaid)]); }
+                if(type==='collection_report') { headers = ['Date','Student','Detail','Scrubs Info','Amount','Paid','Balance']; data = window.appData.collections.map(c=>[formatDate(c.date), window.appData.students.find(s=>s.id===c.studentId)?.name, c.purpose, c.purpose.toLowerCase().includes('scrub')?`Q:${c.scrubsQty||1} T:${c.scrubsTopSize} P:${c.scrubsPantsSize} N:${c.scrubsName||'-'}`:'-', formatMoney(c.amountDue), formatMoney(c.amountPaid), formatMoney(c.amountDue-c.amountPaid)]); }
+                if(type==='expense_report') { headers = ['Date','Category','Description','Amount','Paid By']; data = window.appData.expenses.map(e=>[formatDate(e.date), e.category, e.desc, formatMoney(e.amount), e.paidBy]); }
+                
+                html += `<h4 class="border-bottom pb-2 mb-4">${type.replace('_',' ').toUpperCase()}</h4><div class="table-responsive"><table class="table table-striped table-bordered table-sm text-nowrap"><thead class="table-light"><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>`;
+                data.forEach(row => { html += `<tr>${row.map(cell=>`<td>${cell}</td>`).join('')}</tr>`; });
+                if(!data.length) html += `<tr><td colspan="${headers.length}" class="text-center text-muted">No data available.</td></tr>`;
+                html += `</tbody></table></div>`;
+            }
+            container.innerHTML = html;
+        }
+
+        window.exportCSV = function() {
+            const type = getEl('report-type').value;
+            let csv = "data:text/csv;charset=utf-8,";
+            
+            if (type === 'financial_summary') {
+                csv += "Metric,Amount\n";
+                csv += `Total Income,${window.appData.income.reduce((s,i) => s + Number(i.amount), 0)}\n`;
+                csv += `Total Expenses,${window.appData.expenses.reduce((s,e) => s + Number(e.amount), 0)}\n`;
+            } else if (type === 'scrubs_report') {
+                csv += "Purpose,Student,Qty,Top Size,Pants Size,Embroidery Name,Balance\n";
+                window.appData.settings.collectionPurposes.filter(p=>p.toLowerCase().includes('scrub')).forEach(purpose => {
+                    const records = window.appData.collections.filter(c => c.purpose === purpose);
+                    window.appData.students.sort((a,b)=>a.name.localeCompare(b.name)).forEach(s => {
+                        const r = records.find(rec => rec.studentId === s.id);
+                        if(r) csv += `"${purpose}","${s.name}",${r.scrubsQty||1},${r.scrubsTopSize||'-'},${r.scrubsPantsSize||'-'},"${r.scrubsName||'-'}",${r.amountDue-r.amountPaid}\n`;
+                        else csv += `"${purpose}","${s.name}",-,-,-,"-",No Record\n`;
+                    });
+                });
+            } else if (type === 'student_statement') {
+                return window.showToast("CSV export for individual statements not supported. Use Print.", "warning");
+            } else {
+                let data = [];
+                if(type==='penalty_report') {
+                    csv += "Date,Student,Subject,Penalty,Paid,Balance\n";
+                    data = window.appData.penalties.map(p=>[p.date, `"${window.appData.students.find(s=>s.id===p.studentId)?.name}"`, p.subject, p.penaltyAmount, p.amountPaid, p.penaltyAmount-p.amountPaid]);
+                } else if(type==='collection_report') {
+                    csv += "Date,Student,Purpose,Scrubs Info,Due,Paid,Balance\n";
+                    data = window.appData.collections.map(c=>[c.date, `"${window.appData.students.find(s=>s.id===c.studentId)?.name}"`, c.purpose, c.purpose.toLowerCase().includes('scrub')?`"Q:${c.scrubsQty||1} T:${c.scrubsTopSize} P:${c.scrubsPantsSize} N:${c.scrubsName||'-'}"`:'"-"', c.amountDue, c.amountPaid, c.amountDue-c.amountPaid]);
+                } else if(type==='expense_report') {
+                    csv += "Date,Category,Description,Amount,Paid By\n";
+                    data = window.appData.expenses.map(e=>[e.date, e.category, `"${e.desc}"`, e.amount, `"${e.paidBy}"`]);
+                }
+                data.forEach(row => { csv += row.join(",") + "\n"; });
+            }
+
+            const encodedUri = encodeURI(csv);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri); link.setAttribute("download", `${type}_export.csv`);
+            document.body.appendChild(link); link.click(); link.remove();
+        }
+
+        window.populateSettings = function() {
+            if(!window.appData.settings) return;
+            getEl('set-acad-year').value = window.appData.settings.acadYear;
+            getEl('set-semester').value = window.appData.settings.semester;
+            getEl('set-penalty-amount').value = window.appData.settings.penaltyAmount;
+            getEl('set-subjects').value = (window.appData.settings.subjects||[]).join(', ');
+            getEl('set-col-purposes').value = (window.appData.settings.collectionPurposes||[]).join(', ');
+            getEl('set-exam-types').value = (window.appData.settings.examTypes||[]).join(', ');
+            getEl('set-exp-cat').value = (window.appData.settings.expenseCategories||[]).join(', ');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (new URLSearchParams(window.location.search).get('mode') === 'view') {
+                document.body.classList.add('view-only'); setTimeout(() => window.showToast('Viewing in Read-Only Mode', 'info'), 1000);
+            }
+
+            document.querySelectorAll('#sidebar .sidebar-link').forEach(link => {
+                link.addEventListener('click', (e) => { e.preventDefault(); window.navigateTo(e.currentTarget.getAttribute('data-page')); });
+            });
+
+            getEl('themeToggle').addEventListener('click', () => {
+                const html = document.documentElement; const current = html.getAttribute('data-bs-theme');
+                html.setAttribute('data-bs-theme', current === 'dark' ? 'light' : 'dark');
+                getEl('themeToggle').innerHTML = current === 'dark' ? '<i class="bi bi-moon-stars-fill fs-5"></i>' : '<i class="bi bi-sun-fill fs-5"></i>';
+                if(getEl('page-dashboard').classList.contains('active')) renderDashboard(); 
+            });
+
+            getEl('sidebarToggle').addEventListener('click', () => { getEl('sidebar').classList.add('show'); getEl('sidebarOverlay').classList.add('show'); });
+            getEl('sidebarOverlay').addEventListener('click', () => { getEl('sidebar').classList.remove('show'); getEl('sidebarOverlay').classList.remove('show'); });
+
+            getEl('search-students').addEventListener('input', renderStudents);
+            getEl('search-penalties').addEventListener('input', renderPenalties);
+            getEl('filter-penalties-status').addEventListener('change', renderPenalties);
+            getEl('search-collections').addEventListener('input', renderCollections);
+            getEl('filter-collections-purpose').addEventListener('change', renderCollections);
+            getEl('filter-collections-status').addEventListener('change', renderCollections);
+            getEl('sort-collections').addEventListener('change', renderCollections);
+
+            getEl('penalty-qs').addEventListener('input', function() {
+                const qs = parseInt(this.value) || 0;
+                getEl('penalty-amount').value = qs * (window.appData.settings?.penaltyAmount || 20);
+            });
+
+            getEl('collection-purpose').addEventListener('change', function() {
+                if(this.value.toLowerCase().includes('scrub')) getEl('scrubs-fields').classList.remove('d-none');
+                else getEl('scrubs-fields').classList.add('d-none');
+            });
+
+            const modalFormHandler = (formId, modalId, colName, mapFn) => {
+                const form = getEl(formId);
+                if(form) {
+                    form.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        const id = getEl(`${modalId.replace('Modal','')}-id`)?.value || generateId();
+                        window.saveDataDoc(colName, id, mapFn(id));
+                        bootstrap.Modal.getInstance(getEl(modalId)).hide();
+                    });
+                }
+            };
+
+            modalFormHandler('form-student', 'studentModal', 'students', (id) => ({ id, name: getEl('student-name').value }));
+            modalFormHandler('form-penalty', 'penaltyModal', 'penalties', (id) => ({
+                id, date: getEl('penalty-date').value, studentId: getEl('penalty-student').value,
+                subject: getEl('penalty-subject').value, examType: getEl('penalty-exam').value,
+                qsMissed: parseInt(getEl('penalty-qs').value), penaltyAmount: parseFloat(getEl('penalty-amount').value),
+                amountPaid: parseFloat(getEl('penalty-paid').value), paymentMode: getEl('penalty-mode').value,
+                receiptLink: getEl('penalty-receipt').value, remarks: getEl('penalty-remarks').value
+            }));
+            modalFormHandler('form-collection', 'collectionModal', 'collections', (id) => {
+                const data = {
+                    id, date: getEl('collection-date').value, studentId: getEl('collection-student').value,
+                    purpose: getEl('collection-purpose').value, amountDue: parseFloat(getEl('collection-amount').value),
+                    amountPaid: parseFloat(getEl('collection-paid').value), paymentMode: getEl('collection-mode').value,
+                    receiptLink: getEl('collection-receipt').value, remarks: getEl('collection-remarks').value
+                };
+                if(data.purpose.toLowerCase().includes('scrub')) {
+                    data.scrubsQty = parseInt(getEl('scrubs-qty').value) || 1;
+                    data.scrubsTopSize = getEl('scrubs-top').value;
+                    data.scrubsPantsSize = getEl('scrubs-pants').value;
+                    data.scrubsName = getEl('scrubs-name').value;
+                }
+                return data;
+            });
+            modalFormHandler('form-income', 'incomeModal', 'income', (id) => ({
+                id, date: getEl('income-date').value, source: getEl('income-source').value,
+                desc: getEl('income-desc').value, amount: parseFloat(getEl('income-amount').value),
+                paymentMode: getEl('income-mode').value, receivedBy: getEl('income-receiver').value,
+                receiptLink: getEl('income-ref').value, refNo: getEl('income-ref').value // Keep refNo for backwards compat
+            }));
+            modalFormHandler('form-expense', 'expenseModal', 'expenses', (id) => ({
+                id, date: getEl('expense-date').value, category: getEl('expense-category').value,
+                desc: getEl('expense-desc').value, amount: parseFloat(getEl('expense-amount').value),
+                paymentMode: getEl('expense-mode').value, paidBy: getEl('expense-payer').value,
+                receiptLink: getEl('expense-receipt').value, receipt: getEl('expense-receipt').value
+            }));
+
+            const formBulk = getEl('form-bulk-collection');
+            if(formBulk) {
+                formBulk.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    getEl('bulk-spinner').classList.remove('d-none');
+                    getEl('btn-submit-bulk').disabled = true;
+                    
+                    const purpose = getEl('bulk-purpose').value;
+                    const date = getEl('bulk-date').value;
+                    const amount = parseFloat(getEl('bulk-amount').value);
+                    
+                    await window.processBulkCharge(purpose, date, amount);
+                    
+                    getEl('bulk-spinner').classList.add('d-none');
+                    getEl('btn-submit-bulk').disabled = false;
+                    bootstrap.Modal.getInstance(getEl('bulkCollectionModal')).hide();
+                });
+            }
+
+            getEl('form-settings-general').addEventListener('submit', function(e) {
+                e.preventDefault();
+                window.saveDataDoc('config', 'settings', { ...window.appData.settings,
+                    acadYear: getEl('set-acad-year').value, semester: getEl('set-semester').value,
+                    penaltyAmount: parseFloat(getEl('set-penalty-amount').value)
+                });
+            });
+
+            getEl('form-settings-lists').addEventListener('submit', function(e) {
+                e.preventDefault();
+                window.saveDataDoc('config', 'settings', { ...window.appData.settings,
+                    subjects: getEl('set-subjects').value.split(',').map(s=>s.trim()).filter(s=>s),
+                    collectionPurposes: getEl('set-col-purposes').value.split(',').map(s=>s.trim()).filter(s=>s),
+                    examTypes: getEl('set-exam-types').value.split(',').map(s=>s.trim()).filter(s=>s),
+                    expenseCategories: getEl('set-exp-cat').value.split(',').map(s=>s.trim()).filter(s=>s)
+                });
+            });
+        });
+    </script>
+</body>
+</html>
