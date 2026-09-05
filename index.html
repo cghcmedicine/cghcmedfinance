@@ -17,13 +17,14 @@
     
     <style>
         :root {
-            --sidebar-width: 260px;
-            --topbar-height: 64px;
+            /* COMPACT VIEW UPDATES */
+            --sidebar-width: 220px; 
+            --topbar-height: 52px;
             --brand-color: #4F46E5; 
             --brand-hover: #4338CA;
             --bg-color-light: #F8FAFC;
-            --card-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -2px rgba(0,0,0,0.02);
-            --card-radius: 16px;
+            --card-shadow: 0 2px 4px -1px rgba(0,0,0,0.05), 0 1px 2px -1px rgba(0,0,0,0.02);
+            --card-radius: 12px;
             --font-family: 'Inter', system-ui, -apple-system, sans-serif;
             --border-color-light: #E2E8F0;
             --text-primary-light: #0F172A;
@@ -31,7 +32,7 @@
 
         [data-bs-theme="dark"] {
             --bg-color-light: #0F172A;
-            --card-shadow: 0 10px 15px -3px rgba(0,0,0,0.3), 0 4px 6px -4px rgba(0,0,0,0.3);
+            --card-shadow: 0 4px 6px -1px rgba(0,0,0,0.3), 0 2px 4px -2px rgba(0,0,0,0.3);
             --brand-color: #6366F1;
             --border-color-light: #1E293B;
             --text-primary-light: #F8FAFC;
@@ -42,16 +43,17 @@
             font-family: var(--font-family);
             overflow-x: hidden;
             color: #334155;
+            font-size: 0.85rem; /* Compact font size */
         }
 
         [data-bs-theme="dark"] body { color: #CBD5E1; }
 
         /* Typography & Utilities */
         h1, h2, h3, h4, h5, h6 { font-weight: 600; letter-spacing: -0.025em; color: var(--text-primary-light); }
-        .btn { border-radius: 8px; font-weight: 500; padding: 0.5rem 1rem; transition: all 0.2s; }
+        .btn { border-radius: 6px; font-weight: 500; padding: 0.35rem 0.75rem; font-size: 0.85rem; transition: all 0.2s; }
         .btn-primary { background-color: var(--brand-color); border-color: var(--brand-color); }
         .btn-primary:hover { background-color: var(--brand-hover); border-color: var(--brand-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2); }
-        .form-control, .form-select { border-radius: 8px; padding: 0.6rem 1rem; border-color: var(--border-color-light); background-color: #ffffff; }
+        .form-control, .form-select { border-radius: 6px; padding: 0.4rem 0.75rem; border-color: var(--border-color-light); background-color: #ffffff; font-size: 0.85rem; }
         .form-control:focus, .form-select:focus { border-color: var(--brand-color); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); }
         
         [data-bs-theme="dark"] .form-control, [data-bs-theme="dark"] .form-select { border-color: #334155; background-color: #1E293B; color: #F1F5F9; }
@@ -62,7 +64,7 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             transition: opacity 0.5s ease;
         }
-        .spinner-brand { color: var(--brand-color); width: 3rem; height: 3rem; }
+        .spinner-brand { color: var(--brand-color); width: 2rem; height: 2rem; }
 
         /* Sidebar Styling */
         #sidebar {
@@ -73,25 +75,25 @@
         [data-bs-theme="dark"] #sidebar { background-color: #0B1120; border-right-color: rgba(255,255,255,0.05); }
 
         .sidebar-brand {
-            height: var(--topbar-height); display: flex; align-items: center; padding: 0 1.5rem;
-            font-weight: 700; font-size: 1.1rem; color: var(--brand-color); letter-spacing: -0.01em;
+            height: var(--topbar-height); display: flex; align-items: center; padding: 0 1rem;
+            font-weight: 700; font-size: 1rem; color: var(--brand-color); letter-spacing: -0.01em;
             border-bottom: 1px solid var(--border-color-light);
         }
         [data-bs-theme="dark"] .sidebar-brand { border-bottom-color: rgba(255,255,255,0.05); }
 
-        .sidebar-nav { flex: 1; padding: 1.5rem 1rem; overflow-y: auto; }
-        .nav-item { margin-bottom: 0.25rem; }
+        .sidebar-nav { flex: 1; padding: 1rem 0.75rem; overflow-y: auto; }
+        .nav-item { margin-bottom: 0.15rem; }
         .sidebar-link {
-            display: flex; align-items: center; padding: 0.75rem 1rem; border-radius: 10px;
-            color: #64748B; text-decoration: none; transition: all 0.2s ease; font-weight: 500; font-size: 0.95rem;
+            display: flex; align-items: center; padding: 0.5rem 0.75rem; border-radius: 8px;
+            color: #64748B; text-decoration: none; transition: all 0.2s ease; font-weight: 500; font-size: 0.85rem;
         }
         [data-bs-theme="dark"] .sidebar-link { color: #94A3B8; }
-        .sidebar-link i { margin-right: 12px; font-size: 1.2rem; transition: transform 0.2s; }
+        .sidebar-link i { margin-right: 10px; font-size: 1.1rem; transition: transform 0.2s; }
         
         .sidebar-link:hover { background-color: #F1F5F9; color: #0F172A; }
         [data-bs-theme="dark"] .sidebar-link:hover { background-color: #1E293B; color: #F8FAFC; }
         
-        .sidebar-link.active { background-color: var(--brand-color); color: white !important; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25); }
+        .sidebar-link.active { background-color: var(--brand-color); color: white !important; box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25); }
         .sidebar-link.active i { transform: scale(1.1); }
 
         /* Main Content & Topbar */
@@ -107,37 +109,37 @@
         
         #topbar {
             height: var(--topbar-height); display: flex; align-items: center; justify-content: space-between;
-            padding: 0 2rem; position: sticky; top: 0; z-index: 999;
+            padding: 0 1.5rem; position: sticky; top: 0; z-index: 999;
             background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--border-color-light);
         }
         [data-bs-theme="dark"] #topbar { background: rgba(11, 17, 32, 0.7); border-bottom-color: rgba(255,255,255,0.05); }
 
-        .content-container { padding: 2rem; flex: 1; }
+        .content-container { padding: 1rem; flex: 1; }
 
-        /* Card Styling */
+        /* Card Styling - Compact */
         .card {
             border: 1px solid var(--border-color-light); border-radius: var(--card-radius); box-shadow: var(--card-shadow);
-            margin-bottom: 1.5rem; background-color: #ffffff; overflow: hidden;
+            margin-bottom: 1rem; background-color: #ffffff; overflow: hidden;
         }
         [data-bs-theme="dark"] .card { background-color: #1E293B; border-color: rgba(255,255,255,0.05); }
         
         .card-header {
             background-color: transparent; border-bottom: 1px solid var(--border-color-light);
-            font-weight: 700; padding: 1.25rem 1.5rem; color: var(--text-primary-light);
+            font-weight: 700; padding: 0.75rem 1rem; font-size: 0.9rem; color: var(--text-primary-light);
         }
         [data-bs-theme="dark"] .card-header { border-bottom-color: rgba(255,255,255,0.05); }
-        .card-body { padding: 1.5rem; }
+        .card-body { padding: 1rem; }
 
-        /* Chart Wrappers */
-        .chart-wrapper-lg { position: relative; height: 300px; width: 100%; }
-        .chart-wrapper-md { position: relative; height: 250px; width: 100%; }
+        /* Chart Wrappers - Compact */
+        .chart-wrapper-lg { position: relative; height: 180px; width: 100%; }
+        .chart-wrapper-md { position: relative; height: 160px; width: 100%; }
 
-        /* Summary Cards */
-        .summary-card { padding: 1.5rem; border-radius: var(--card-radius); color: white; position: relative; overflow: hidden; border: none; }
-        .summary-card h3 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0; position: relative; z-index: 2; letter-spacing: -0.05em; color: white; }
-        .summary-card p { margin-bottom: 0.5rem; font-size: 0.85rem; opacity: 0.9; font-weight: 500; position: relative; z-index: 2; text-transform: uppercase; letter-spacing: 0.05em; }
-        .summary-card i.bg-icon { position: absolute; right: -15px; bottom: -20px; font-size: 6rem; opacity: 0.15; z-index: 1; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        /* Summary Cards - Compact */
+        .summary-card { padding: 1rem; border-radius: var(--card-radius); color: white; position: relative; overflow: hidden; border: none; }
+        .summary-card h3 { font-size: 1.35rem; font-weight: 700; margin-bottom: 0; position: relative; z-index: 2; letter-spacing: -0.02em; color: white; }
+        .summary-card p { margin-bottom: 0.25rem; font-size: 0.75rem; opacity: 0.9; font-weight: 500; position: relative; z-index: 2; text-transform: uppercase; letter-spacing: 0.05em; }
+        .summary-card i.bg-icon { position: absolute; right: -10px; bottom: -15px; font-size: 4rem; opacity: 0.15; z-index: 1; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         .summary-card:hover i.bg-icon { transform: scale(1.1) rotate(-5deg); }
         
         .bg-gradient-primary { background: linear-gradient(135deg, #4F46E5, #818CF8); }
@@ -148,17 +150,17 @@
         .bg-gradient-purple  { background: linear-gradient(135deg, #7C3AED, #A78BFA); }
         .bg-gradient-dark    { background: linear-gradient(135deg, #334155, #64748B); }
 
-        /* Tables */
+        /* Tables - Compact */
         .table { margin-bottom: 0; }
-        .table th { font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; color: #64748B; padding: 1rem; border-bottom-width: 2px; }
+        .table th { font-weight: 600; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.05em; color: #64748B; padding: 0.5rem 0.75rem; border-bottom-width: 1px; }
         [data-bs-theme="dark"] .table th { color: #94A3B8; border-color: #334155; }
-        .table td { padding: 1rem; vertical-align: middle; border-color: var(--border-color-light); font-size: 0.9rem; }
+        .table td { padding: 0.5rem 0.75rem; vertical-align: middle; border-color: var(--border-color-light); font-size: 0.8rem; }
         [data-bs-theme="dark"] .table td { border-color: #334155; }
         .table-hover tbody tr:hover { background-color: rgba(79, 70, 229, 0.03); }
         [data-bs-theme="dark"] .table-hover tbody tr:hover { background-color: rgba(255,255,255,0.02); }
 
         /* Badges */
-        .badge-status { padding: 0.5em 0.8em; font-weight: 600; border-radius: 6px; font-size: 0.75rem; letter-spacing: 0.02em; }
+        .badge-status { padding: 0.35em 0.6em; font-weight: 600; border-radius: 4px; font-size: 0.7rem; letter-spacing: 0.02em; }
         .bg-success-subtle { background-color: #D1FAE5 !important; color: #065F46 !important; }
         .bg-warning-subtle { background-color: #FEF3C7 !important; color: #92400E !important; }
         .bg-danger-subtle { background-color: #FEE2E2 !important; color: #991B1B !important; }
@@ -168,9 +170,9 @@
         [data-bs-theme="dark"] .bg-danger-subtle { background-color: rgba(239, 68, 68, 0.2) !important; color: #F87171 !important; }
 
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
         [data-bs-theme="dark"] ::-webkit-scrollbar-thumb { background: #475569; }
 
@@ -179,15 +181,14 @@
             #sidebar { transform: translateX(-100%); }
             #sidebar.show { transform: translateX(0); }
             #main-content { margin-left: 0; width: 100%; }
-            .content-container { padding: 1rem; }
             .sidebar-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 999; display: none; opacity: 0; transition: opacity 0.3s; }
             .sidebar-overlay.show { display: block; opacity: 1; }
         }
 
         /* Animations */
-        .page-section { display: none; animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .page-section { display: none; animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
         .page-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         body.view-only .admin-only { display: none !important; }
     </style>
@@ -196,11 +197,10 @@
 
     <!-- Loading Screen -->
     <div id="loading-screen">
-        <div class="spinner-border spinner-brand mb-3" role="status">
+        <div class="spinner-border spinner-brand mb-2" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
-        <h4 class="fw-bold">Medicine 2028 Financial Tracker</h4>
-        <p class="text-muted">Connecting to secure cloud database...</p>
+        <h5 class="fw-bold">Med 2028 Tracker</h5>
     </div>
 
     <!-- Sidebar Overlay for Mobile -->
@@ -209,7 +209,7 @@
     <!-- Sidebar -->
     <aside id="sidebar">
         <div class="sidebar-brand">
-            <i class="bi bi-heart-pulse-fill me-2 fs-4"></i> Med 2028
+            <i class="bi bi-heart-pulse-fill me-2 fs-5"></i> Med 2028
         </div>
         <div class="sidebar-nav">
             <div class="nav-item"><a href="#" class="sidebar-link active" data-page="dashboard"><i class="bi bi-grid-1x2-fill"></i> Dashboard</a></div>
@@ -219,7 +219,7 @@
             <div class="nav-item"><a href="#" class="sidebar-link" data-page="income"><i class="bi bi-graph-up-arrow"></i> Income</a></div>
             <div class="nav-item"><a href="#" class="sidebar-link" data-page="expenses"><i class="bi bi-graph-down-arrow"></i> Expenses</a></div>
             <div class="nav-item"><a href="#" class="sidebar-link" data-page="reports"><i class="bi bi-file-earmark-bar-graph-fill"></i> Reports</a></div>
-            <div class="nav-item mt-4"><a href="#" class="sidebar-link admin-only" data-page="settings"><i class="bi bi-gear-fill"></i> Settings</a></div>
+            <div class="nav-item mt-3"><a href="#" class="sidebar-link admin-only" data-page="settings"><i class="bi bi-gear-fill"></i> Settings</a></div>
         </div>
     </aside>
 
@@ -229,16 +229,16 @@
         <nav id="topbar">
             <div class="d-flex align-items-center">
                 <button class="btn btn-link d-lg-none me-2 text-body p-0" id="sidebarToggle">
-                    <i class="bi bi-list fs-3"></i>
+                    <i class="bi bi-list fs-4"></i>
                 </button>
-                <h4 class="mb-0 fw-bold" id="pageTitle">Dashboard</h4>
+                <h5 class="mb-0 fw-bold" id="pageTitle">Dashboard</h5>
             </div>
             <div class="d-flex align-items-center gap-2">
-                <button class="btn btn-primary btn-sm admin-only d-flex align-items-center" onclick="generateViewLink()">
-                    <i class="bi bi-share-fill me-2"></i> <span class="d-none d-sm-inline">Share View</span>
+                <button class="btn btn-primary btn-sm admin-only d-flex align-items-center py-1 px-2" onclick="generateViewLink()">
+                    <i class="bi bi-share-fill me-1"></i> <span class="d-none d-sm-inline">Share</span>
                 </button>
-                <button class="btn btn-light border-0 p-2 text-body" id="themeToggle" title="Toggle Theme">
-                    <i class="bi bi-moon-stars-fill fs-5"></i>
+                <button class="btn btn-light border-0 p-1 px-2 text-body" id="themeToggle" title="Toggle Theme">
+                    <i class="bi bi-moon-stars-fill fs-6"></i>
                 </button>
             </div>
         </nav>
@@ -247,69 +247,71 @@
 
             <section id="page-dashboard" class="page-section active">
                 
-                <div class="card mb-4 bg-gradient-primary text-white border-0 shadow-sm admin-only">
-                    <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-md-center p-4">
+                <div class="card mb-3 bg-gradient-primary text-white border-0 shadow-sm admin-only">
+                    <div class="card-body d-flex flex-row justify-content-between align-items-center py-2 px-3">
                         <div>
-                            <h5 class="fw-bold mb-1 text-white"><i class="bi bi-google me-2"></i>Google Drive Receipts Database</h5>
-                            <p class="mb-md-0 opacity-75 small">Access all uploaded proof of payments and official receipts here.</p>
+                            <h6 class="fw-bold mb-0 text-white"><i class="bi bi-google me-2"></i>Google Drive Receipts Database</h6>
                         </div>
-                        <a href="https://drive.google.com/drive/folders/1up-ClxhhKN3fsZ74YY_XadMT56vuDNQt" target="_blank" class="btn btn-light text-primary fw-bold px-4 mt-3 mt-md-0">Open Drive <i class="bi bi-box-arrow-up-right ms-1"></i></a>
+                        <a href="https://drive.google.com/drive/folders/1up-ClxhhKN3fsZ74YY_XadMT56vuDNQt" target="_blank" class="btn btn-light btn-sm text-primary fw-bold px-3">Open Drive <i class="bi bi-box-arrow-up-right ms-1"></i></a>
                     </div>
                 </div>
 
-                <div class="row g-4 mb-4">
-                    <div class="col-12 col-sm-6 col-xl-3">
+                <div class="row g-2 mb-3">
+                    <div class="col-6 col-md-3">
                         <div class="summary-card bg-gradient-primary shadow-sm">
-                            <p>Current Batch Balance</p>
+                            <p>Current Balance</p>
                             <h3 id="dash-balance">₱0.00</h3>
                             <i class="bi bi-wallet2 bg-icon"></i>
                         </div>
                     </div>
-                    <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="col-6 col-md-3">
                         <div class="summary-card bg-gradient-success shadow-sm">
                             <p>Total Cash In</p>
                             <h3 id="dash-income">₱0.00</h3>
                             <i class="bi bi-arrow-down-circle bg-icon"></i>
                         </div>
                     </div>
-                    <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="col-6 col-md-3">
                         <div class="summary-card bg-gradient-danger shadow-sm">
                             <p>Total Expenses</p>
                             <h3 id="dash-expenses">₱0.00</h3>
                             <i class="bi bi-arrow-up-circle bg-icon"></i>
                         </div>
                     </div>
-                    <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="col-6 col-md-3">
                         <div class="summary-card bg-gradient-info shadow-sm">
                             <p>Net Cash Flow</p>
                             <h3 id="dash-netflow">₱0.00</h3>
-                            <div class="mt-2 pt-2 border-top border-light border-opacity-25 d-flex justify-content-between align-items-center">
-                                <span class="small opacity-75">Projected</span>
-                                <span class="fw-bold small" id="dash-projected">₱0.00</span>
+                            <div class="mt-1 pt-1 border-top border-light border-opacity-25 d-flex justify-content-between align-items-center">
+                                <span class="small opacity-75" style="font-size: 0.65rem;">Proj.</span>
+                                <span class="fw-bold" style="font-size: 0.75rem;" id="dash-projected">₱0.00</span>
                             </div>
                             <i class="bi bi-activity bg-icon"></i>
                         </div>
                     </div>
-                    <div class="col-12 col-sm-6 col-xl-4">
+                </div>
+                
+                <div class="row g-2 mb-3">
+                    <div class="col-12 col-md-4">
                         <div class="summary-card bg-gradient-warning shadow-sm">
                             <p>Outstanding Penalties</p>
                             <h3 id="dash-out-penalties">₱0.00</h3>
                             <i class="bi bi-exclamation-octagon bg-icon"></i>
                         </div>
                     </div>
-                    <div class="col-12 col-sm-6 col-xl-4">
+                    <div class="col-12 col-md-4">
                         <div class="summary-card bg-gradient-purple shadow-sm">
                             <p>Outstanding Collections</p>
                             <h3 id="dash-out-collections">₱0.00</h3>
                             <i class="bi bi-collection bg-icon"></i>
                         </div>
                     </div>
-                    <div class="col-12 col-sm-12 col-xl-4">
+                    <div class="col-12 col-md-4">
                         <div class="summary-card bg-gradient-dark shadow-sm">
                             <p>Collection Completion</p>
-                            <div class="d-flex align-items-center gap-3">
+                            <div class="d-flex align-items-center gap-2">
                                 <h3 id="dash-completion" class="mb-0">0%</h3>
-                                <div class="progress flex-grow-1 bg-light bg-opacity-25" style="height: 8px;">
+                                <div class="progress flex-grow-1 bg-light bg-opacity-25" style="height: 6px;">
                                     <div class="progress-bar bg-success" id="dash-progress-bar" style="width: 0%"></div>
                                 </div>
                             </div>
@@ -318,11 +320,11 @@
                     </div>
                 </div>
 
-                <div class="row mb-4 g-4">
+                <div class="row mb-3 g-2">
                     <div class="col-lg-8">
                         <div class="card h-100">
                             <div class="card-header border-0 pb-0">Monthly Cash Flow</div>
-                            <div class="card-body">
+                            <div class="card-body pt-1">
                                 <div class="chart-wrapper-lg"><canvas id="chartCashFlow"></canvas></div>
                             </div>
                         </div>
@@ -330,42 +332,42 @@
                     <div class="col-lg-4">
                         <div class="card h-100">
                             <div class="card-header border-0 pb-0">Income vs Expenses</div>
-                            <div class="card-body">
+                            <div class="card-body pt-1">
                                 <div class="chart-wrapper-lg"><canvas id="chartIncExp"></canvas></div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="row mb-4 g-4">
+                <div class="row mb-3 g-2">
                     <div class="col-lg-4 col-md-6">
                         <div class="card h-100">
                             <div class="card-header border-0 pb-0">Penalties by Subject</div>
-                            <div class="card-body"><div class="chart-wrapper-md"><canvas id="chartPenSubject"></canvas></div></div>
+                            <div class="card-body pt-1"><div class="chart-wrapper-md"><canvas id="chartPenSubject"></canvas></div></div>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-6">
                         <div class="card h-100">
                             <div class="card-header border-0 pb-0">Expenses by Category</div>
-                            <div class="card-body"><div class="chart-wrapper-md"><canvas id="chartExpCategory"></canvas></div></div>
+                            <div class="card-body pt-1"><div class="chart-wrapper-md"><canvas id="chartExpCategory"></canvas></div></div>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-12">
                         <div class="card h-100">
                             <div class="card-header border-0 pb-0">Payment Modes</div>
-                            <div class="card-body"><div class="chart-wrapper-md"><canvas id="chartPaymentMode"></canvas></div></div>
+                            <div class="card-body pt-1"><div class="chart-wrapper-md"><canvas id="chartPaymentMode"></canvas></div></div>
                         </div>
                     </div>
                 </div>
 
-                <div class="row g-4">
+                <div class="row g-2">
                     <div class="col-md-6">
-                        <div class="card h-100">
+                        <div class="card h-100 mb-0">
                             <div class="card-header">Top Students (Highest Balance)</div>
                             <div class="card-body p-0">
                                 <div class="table-responsive">
                                     <table class="table table-hover align-middle text-nowrap mb-0" id="dash-top-students">
-                                        <thead class="table-light"><tr><th class="ps-4">Name</th><th class="text-end pe-4">Balance</th></tr></thead>
+                                        <thead class="table-light"><tr><th class="ps-3">Name</th><th class="text-end pe-3">Balance</th></tr></thead>
                                         <tbody></tbody>
                                     </table>
                                 </div>
@@ -373,12 +375,12 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="card h-100">
+                        <div class="card h-100 mb-0">
                             <div class="card-header">Recent Transactions</div>
                             <div class="card-body p-0">
                                 <div class="table-responsive">
                                     <table class="table table-hover align-middle text-nowrap mb-0" id="dash-recent-tx">
-                                        <thead class="table-light"><tr><th class="ps-4">Date</th><th>Type</th><th class="text-end pe-4">Amount</th></tr></thead>
+                                        <thead class="table-light"><tr><th class="ps-3">Date</th><th>Type</th><th class="text-end pe-3">Amount</th></tr></thead>
                                         <tbody></tbody>
                                     </table>
                                 </div>
@@ -390,28 +392,28 @@
 
             <section id="page-students" class="page-section">
                 <div class="card border-0 shadow-sm">
-                    <div class="card-header d-flex justify-content-between align-items-center py-3 bg-transparent">
-                        <h5 class="mb-0 fw-bold">Batch Roster (2028)</h5>
-                        <button class="btn btn-primary btn-sm admin-only" onclick="openModal('studentModal')"><i class="bi bi-plus-lg me-1"></i> Add Student</button>
+                    <div class="card-header d-flex justify-content-between align-items-center bg-transparent">
+                        <h6 class="mb-0 fw-bold">Batch Roster (2028)</h6>
+                        <button class="btn btn-primary btn-sm admin-only" onclick="openModal('studentModal')"><i class="bi bi-plus-lg me-1"></i> Add</button>
                     </div>
                     <div class="card-body">
-                        <div class="row mb-4">
+                        <div class="row mb-2">
                             <div class="col-md-5">
-                                <div class="input-group shadow-sm rounded-3">
+                                <div class="input-group input-group-sm shadow-sm rounded">
                                     <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
                                     <input type="text" id="search-students" class="form-control border-start-0" placeholder="Search by name...">
                                 </div>
                             </div>
                         </div>
-                        <div class="table-responsive rounded-3 border">
+                        <div class="table-responsive rounded border">
                             <table class="table table-hover align-middle text-nowrap mb-0" id="table-students">
                                 <thead class="table-light">
                                     <tr>
-                                        <th class="ps-4">Student Name</th>
+                                        <th class="ps-3">Student Name</th>
                                         <th class="text-end">Penalty Bal</th>
                                         <th class="text-end">Collection Bal</th>
                                         <th class="text-end fw-bold">Overall Bal</th>
-                                        <th class="text-center admin-only pe-4">Actions</th>
+                                        <th class="text-center admin-only pe-3">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -423,20 +425,20 @@
 
             <section id="page-penalties" class="page-section">
                 <div class="card border-0 shadow-sm">
-                    <div class="card-header d-flex justify-content-between align-items-center py-3 bg-transparent">
-                        <h5 class="mb-0 fw-bold">Penalty Records</h5>
-                        <button class="btn btn-primary btn-sm admin-only" onclick="openModal('penaltyModal')"><i class="bi bi-plus-lg me-1"></i> Add Penalty</button>
+                    <div class="card-header d-flex justify-content-between align-items-center bg-transparent">
+                        <h6 class="mb-0 fw-bold">Penalty Records</h6>
+                        <button class="btn btn-primary btn-sm admin-only" onclick="openModal('penaltyModal')"><i class="bi bi-plus-lg me-1"></i> Add</button>
                     </div>
                     <div class="card-body">
-                        <div class="row mb-4 g-3">
+                        <div class="row mb-2 g-2">
                             <div class="col-md-4">
-                                <div class="input-group shadow-sm rounded-3">
+                                <div class="input-group input-group-sm shadow-sm rounded">
                                     <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
                                     <input type="text" id="search-penalties" class="form-control border-start-0" placeholder="Search subject or student...">
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <select id="filter-penalties-status" class="form-select shadow-sm">
+                                <select id="filter-penalties-status" class="form-select form-select-sm shadow-sm">
                                     <option value="">All Statuses</option>
                                     <option value="Unpaid">Unpaid</option>
                                     <option value="Partial">Partial</option>
@@ -444,11 +446,11 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="table-responsive rounded-3 border">
+                        <div class="table-responsive rounded border">
                             <table class="table table-hover align-middle text-nowrap mb-0" id="table-penalties">
                                 <thead class="table-light">
                                     <tr>
-                                        <th class="ps-4">Date</th>
+                                        <th class="ps-3">Date</th>
                                         <th>Student</th>
                                         <th>Subject / Exam</th>
                                         <th class="text-center">Missed</th>
@@ -456,8 +458,8 @@
                                         <th class="text-end">Paid</th>
                                         <th class="text-end">Balance</th>
                                         <th class="text-center">Status</th>
-                                        <th class="text-center pe-4">Payment Info</th>
-                                        <th class="text-center admin-only pe-4">Actions</th>
+                                        <th class="text-center pe-3">Payment Info</th>
+                                        <th class="text-center admin-only pe-3">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -468,42 +470,38 @@
             </section>
 
             <section id="page-collections" class="page-section">
-                
-                <ul class="nav nav-pills mb-4 gap-2" id="collectionTabs" role="tablist">
+                <ul class="nav nav-pills mb-2 gap-1" id="collectionTabs" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link custom-tab active" data-bs-toggle="tab" data-bs-target="#col-records" type="button" role="tab">Detailed Records</button>
+                        <button class="nav-link custom-tab active btn-sm py-1" data-bs-toggle="tab" data-bs-target="#col-records" type="button" role="tab">Records</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link custom-tab" data-bs-toggle="tab" data-bs-target="#col-summary" type="button" role="tab">Summary & Masterlists</button>
+                        <button class="nav-link custom-tab btn-sm py-1" data-bs-toggle="tab" data-bs-target="#col-summary" type="button" role="tab">Summary</button>
                     </li>
                 </ul>
 
                 <div class="tab-content" id="collectionTabsContent">
-                    
                     <div class="tab-pane fade show active" id="col-records" role="tabpanel">
                         <div class="card border-0 shadow-sm">
-                            <div class="card-header d-flex justify-content-between align-items-center py-3 bg-transparent">
-                                <h5 class="mb-0 fw-bold">Collections Tracker</h5>
-                                <div class="d-flex gap-2 admin-only">
-                                    <button class="btn btn-outline-primary btn-sm" onclick="openBulkModal()"><i class="bi bi-people-fill me-1"></i> Bulk Charge Batch</button>
-                                    <button class="btn btn-primary btn-sm" onclick="openModal('collectionModal')"><i class="bi bi-plus-lg me-1"></i> Add Collection</button>
+                            <div class="card-header d-flex justify-content-between align-items-center bg-transparent">
+                                <h6 class="mb-0 fw-bold">Collections Tracker</h6>
+                                <div class="d-flex gap-1 admin-only">
+                                    <button class="btn btn-outline-primary btn-sm py-1" onclick="openBulkModal()"><i class="bi bi-people-fill me-1"></i> Bulk</button>
+                                    <button class="btn btn-primary btn-sm py-1" onclick="openModal('collectionModal')"><i class="bi bi-plus-lg me-1"></i> Add</button>
                                 </div>
                             </div>
                             <div class="card-body">
-                                <div class="row mb-4 g-3">
-                                    <div class="col-md-4">
-                                        <div class="input-group shadow-sm rounded-3">
+                                <div class="row mb-2 g-2">
+                                    <div class="col-md-3">
+                                        <div class="input-group input-group-sm shadow-sm rounded">
                                             <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
                                             <input type="text" id="search-collections" class="form-control border-start-0" placeholder="Search student...">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <select id="filter-collections-purpose" class="form-select shadow-sm">
-                                            <option value="">All Purposes</option>
-                                        </select>
+                                        <select id="filter-collections-purpose" class="form-select form-select-sm shadow-sm"><option value="">All Purposes</option></select>
                                     </div>
-                                    <div class="col-md-2">
-                                        <select id="filter-collections-status" class="form-select shadow-sm">
+                                    <div class="col-md-3">
+                                        <select id="filter-collections-status" class="form-select form-select-sm shadow-sm">
                                             <option value="">All Statuses</option>
                                             <option value="Unpaid">Unpaid</option>
                                             <option value="Partial">Partial</option>
@@ -511,19 +509,17 @@
                                         </select>
                                     </div>
                                     <div class="col-md-3">
-                                        <select id="sort-collections" class="form-select shadow-sm">
-                                            <option value="date-desc">Newest First</option>
-                                            <option value="date-asc">Oldest First</option>
-                                            <option value="name-asc">Name (A-Z)</option>
-                                            <option value="name-desc">Name (Z-A)</option>
+                                        <select id="sort-collections" class="form-select form-select-sm shadow-sm">
+                                            <option value="date-desc">Newest First</option><option value="date-asc">Oldest First</option>
+                                            <option value="name-asc">Name (A-Z)</option><option value="name-desc">Name (Z-A)</option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="table-responsive rounded-3 border">
+                                <div class="table-responsive rounded border">
                                     <table class="table table-hover align-middle text-nowrap mb-0" id="table-collections">
                                         <thead class="table-light">
                                             <tr>
-                                                <th class="ps-4">Due Date</th>
+                                                <th class="ps-3">Due Date</th>
                                                 <th>Student</th>
                                                 <th>Purpose / Details</th>
                                                 <th class="text-end">Due</th>
@@ -531,7 +527,7 @@
                                                 <th class="text-end">Balance</th>
                                                 <th class="text-center">Status</th>
                                                 <th class="text-center">Payment Info</th>
-                                                <th class="text-center admin-only pe-4">Actions</th>
+                                                <th class="text-center admin-only pe-3">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
@@ -540,39 +536,35 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="tab-pane fade" id="col-summary" role="tabpanel">
-                        <div id="collections-summary-container">
-                            <!-- Populated by JS -->
-                        </div>
+                        <div id="collections-summary-container"></div>
                     </div>
-
                 </div>
             </section>
 
             <section id="page-income" class="page-section">
                 <div class="card border-0 shadow-sm">
-                    <div class="card-header d-flex justify-content-between align-items-center py-3 bg-transparent">
-                        <h5 class="mb-0 fw-bold">External Income</h5>
-                        <button class="btn btn-primary btn-sm admin-only" onclick="openModal('incomeModal')"><i class="bi bi-plus-lg me-1"></i> Record Income</button>
+                    <div class="card-header d-flex justify-content-between align-items-center bg-transparent">
+                        <h6 class="mb-0 fw-bold">External Income</h6>
+                        <button class="btn btn-primary btn-sm admin-only" onclick="openModal('incomeModal')"><i class="bi bi-plus-lg me-1"></i> Record</button>
                     </div>
                     <div class="card-body">
-                         <div class="alert alert-info py-2 d-flex align-items-center border-0 bg-info bg-opacity-10 text-info-emphasis rounded-3">
-                             <i class="bi bi-info-circle-fill me-3 fs-5"></i>
-                             <div>Use this for external income (e.g., Donations, Sponsorships). Student payments are logged via Penalties/Collections.</div>
+                         <div class="alert alert-info py-1 px-2 mb-2 d-flex align-items-center border-0 bg-info bg-opacity-10 text-info-emphasis rounded small">
+                             <i class="bi bi-info-circle-fill me-2 fs-6"></i>
+                             <div>Use this for external income (e.g., Donations, Sponsorships). Student payments are handled in Penalties/Collections.</div>
                          </div>
-                        <div class="table-responsive mt-3 rounded-3 border">
+                        <div class="table-responsive rounded border">
                             <table class="table table-hover align-middle text-nowrap mb-0" id="table-income">
                                 <thead class="table-light">
                                     <tr>
-                                        <th class="ps-4">Date</th>
+                                        <th class="ps-3">Date</th>
                                         <th>Source</th>
                                         <th>Description</th>
                                         <th class="text-end">Amount</th>
                                         <th class="text-center">Payment Info</th>
                                         <th>Receiver</th>
                                         <th>Ref No.</th>
-                                        <th class="text-center admin-only pe-4">Actions</th>
+                                        <th class="text-center admin-only pe-3">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -584,22 +576,22 @@
 
             <section id="page-expenses" class="page-section">
                 <div class="card border-0 shadow-sm">
-                    <div class="card-header d-flex justify-content-between align-items-center py-3 bg-transparent">
-                        <h5 class="mb-0 fw-bold">Expense Tracker</h5>
-                        <button class="btn btn-primary btn-sm admin-only" onclick="openModal('expenseModal')"><i class="bi bi-plus-lg me-1"></i> Record Expense</button>
+                    <div class="card-header d-flex justify-content-between align-items-center bg-transparent">
+                        <h6 class="mb-0 fw-bold">Expense Tracker</h6>
+                        <button class="btn btn-primary btn-sm admin-only" onclick="openModal('expenseModal')"><i class="bi bi-plus-lg me-1"></i> Record</button>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive rounded-3 border">
+                        <div class="table-responsive rounded border">
                             <table class="table table-hover align-middle text-nowrap mb-0" id="table-expenses">
                                 <thead class="table-light">
                                     <tr>
-                                        <th class="ps-4">Date</th>
+                                        <th class="ps-3">Date</th>
                                         <th>Category</th>
                                         <th>Description</th>
                                         <th class="text-end">Amount</th>
                                         <th class="text-center">Payment Info</th>
                                         <th>Paid By</th>
-                                        <th class="text-center admin-only pe-4">Actions</th>
+                                        <th class="text-center admin-only pe-3">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -610,35 +602,36 @@
             </section>
 
             <section id="page-reports" class="page-section">
-                <div class="row">
-                    <div class="col-12 mb-4 no-print">
+                <div class="row g-2">
+                    <div class="col-12 mb-2 no-print">
                         <div class="card border-0 shadow-sm">
-                            <div class="card-body p-4">
-                                <h5 class="mb-3 fw-bold">Generate Report</h5>
-                                <div class="d-flex flex-wrap gap-3">
-                                    <select id="report-type" class="form-select w-auto shadow-sm">
+                            <div class="card-body p-2">
+                                <h6 class="mb-2 fw-bold" style="font-size: 0.85rem;">Generate Report</h6>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <select id="report-type" class="form-select form-select-sm w-auto shadow-sm">
                                         <option value="financial_summary">Financial Summary</option>
                                         <option value="student_statement">Student Statement of Account</option>
                                         <option value="penalty_report">Penalty Report</option>
                                         <option value="collection_report">Collection Report</option>
                                         <option value="scrubs_report">Scrubs Masterlist Report</option>
+                                        <option value="income_report">Income Report</option>
                                         <option value="expense_report">Expense Report</option>
                                     </select>
-                                    <select id="report-student-select" class="form-select w-auto d-none shadow-sm"></select>
-                                    <button class="btn btn-primary px-4 shadow-sm" onclick="generateReport()">Generate</button>
-                                    <button class="btn btn-light border px-4 shadow-sm text-dark" onclick="window.print()"><i class="bi bi-printer me-1"></i> Print</button>
-                                    <button class="btn btn-success px-4 shadow-sm" onclick="exportCSV()"><i class="bi bi-filetype-csv me-1"></i> Export CSV</button>
+                                    <select id="report-student-select" class="form-select form-select-sm w-auto d-none shadow-sm"></select>
+                                    <button class="btn btn-primary btn-sm px-3 shadow-sm" onclick="generateReport()">Generate</button>
+                                    <button class="btn btn-light btn-sm border px-3 shadow-sm text-dark" onclick="window.print()"><i class="bi bi-printer me-1"></i> Print</button>
+                                    <button class="btn btn-success btn-sm px-3 shadow-sm" onclick="exportCSV()"><i class="bi bi-filetype-csv me-1"></i> CSV</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="card border-0 shadow-sm">
-                            <div class="card-body p-5" id="report-container">
-                                <div class="text-center text-muted py-5">
-                                    <i class="bi bi-file-earmark-bar-graph display-1 opacity-25 mb-3"></i>
-                                    <h4 class="fw-bold">Ready to generate</h4>
-                                    <p>Select a report type above and click Generate.</p>
+                            <div class="card-body p-2" id="report-container">
+                                <div class="text-center text-muted py-3">
+                                    <i class="bi bi-file-earmark-bar-graph display-6 opacity-25 mb-1"></i>
+                                    <h6 class="fw-bold mb-1" style="font-size: 0.85rem;">Ready to generate</h6>
+                                    <p class="small mb-0" style="font-size: 0.75rem;">Select a report type above and click Generate.</p>
                                 </div>
                             </div>
                         </div>
@@ -647,58 +640,58 @@
             </section>
 
             <section id="page-settings" class="page-section admin-only">
-                <div class="row g-4">
+                <div class="row g-2">
                     <div class="col-lg-6">
                         <div class="card h-100 border-0 shadow-sm">
-                            <div class="card-header bg-transparent py-3"><h6 class="mb-0 fw-bold">General Configurations</h6></div>
+                            <div class="card-header bg-transparent"><h6 class="mb-0 fw-bold">General Configurations</h6></div>
                             <div class="card-body">
                                 <form id="form-settings-general">
-                                    <div class="mb-3">
-                                        <label class="form-label text-muted small fw-bold text-uppercase">Academic Year</label>
-                                        <input type="text" class="form-control" id="set-acad-year" required>
+                                    <div class="mb-2">
+                                        <label class="form-label text-muted small fw-bold text-uppercase mb-1">Academic Year</label>
+                                        <input type="text" class="form-control form-control-sm" id="set-acad-year" required>
                                     </div>
-                                    <div class="mb-3">
-                                        <label class="form-label text-muted small fw-bold text-uppercase">Semester</label>
-                                        <select class="form-select" id="set-semester">
+                                    <div class="mb-2">
+                                        <label class="form-label text-muted small fw-bold text-uppercase mb-1">Semester</label>
+                                        <select class="form-select form-select-sm" id="set-semester">
                                             <option value="1st Semester">1st Semester</option>
                                             <option value="2nd Semester">2nd Semester</option>
                                             <option value="Summer">Summer</option>
                                         </select>
                                     </div>
-                                    <div class="mb-4">
-                                        <label class="form-label text-muted small fw-bold text-uppercase">Penalty Amount per Q Missed (₱)</label>
-                                        <div class="input-group">
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted small fw-bold text-uppercase mb-1">Penalty Amount per Q Missed (₱)</label>
+                                        <div class="input-group input-group-sm">
                                             <span class="input-group-text bg-light">₱</span>
                                             <input type="number" class="form-control" id="set-penalty-amount" min="1" required>
                                         </div>
                                     </div>
-                                    <button type="submit" class="btn btn-primary w-100 shadow-sm">Save Configuration</button>
+                                    <button type="submit" class="btn btn-primary btn-sm w-100 shadow-sm">Save</button>
                                 </form>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="card h-100 border-0 shadow-sm">
-                            <div class="card-header bg-transparent py-3"><h6 class="mb-0 fw-bold">System Lists (Comma Separated)</h6></div>
+                            <div class="card-header bg-transparent"><h6 class="mb-0 fw-bold">System Lists (Comma Separated)</h6></div>
                             <div class="card-body">
                                 <form id="form-settings-lists">
-                                    <div class="mb-3">
-                                        <label class="form-label text-muted small fw-bold text-uppercase">Subjects</label>
-                                        <textarea class="form-control" id="set-subjects" rows="2"></textarea>
+                                    <div class="mb-2">
+                                        <label class="form-label text-muted small fw-bold text-uppercase mb-1">Subjects</label>
+                                        <textarea class="form-control form-control-sm" id="set-subjects" rows="2"></textarea>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label text-muted small fw-bold text-uppercase mb-1">Collection Purposes</label>
+                                        <textarea class="form-control form-control-sm" id="set-col-purposes" rows="2"></textarea>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label text-muted small fw-bold text-uppercase mb-1">Exam Types</label>
+                                        <textarea class="form-control form-control-sm" id="set-exam-types" rows="1"></textarea>
                                     </div>
                                     <div class="mb-3">
-                                        <label class="form-label text-muted small fw-bold text-uppercase">Collection Purposes</label>
-                                        <textarea class="form-control" id="set-col-purposes" rows="2" placeholder="e.g., Review Materials, Class Funds, Scrubs"></textarea>
+                                        <label class="form-label text-muted small fw-bold text-uppercase mb-1">Expense Categories</label>
+                                        <textarea class="form-control form-control-sm" id="set-exp-cat" rows="1"></textarea>
                                     </div>
-                                    <div class="mb-3">
-                                        <label class="form-label text-muted small fw-bold text-uppercase">Exam Types</label>
-                                        <textarea class="form-control" id="set-exam-types" rows="1"></textarea>
-                                    </div>
-                                    <div class="mb-4">
-                                        <label class="form-label text-muted small fw-bold text-uppercase">Expense Categories</label>
-                                        <textarea class="form-control" id="set-exp-cat" rows="1"></textarea>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary w-100 shadow-sm">Save System Lists</button>
+                                    <button type="submit" class="btn btn-primary btn-sm w-100 shadow-sm">Save Lists</button>
                                 </form>
                             </div>
                         </div>
@@ -711,23 +704,23 @@
 
     <!-- Student Modal -->
     <div class="modal fade" id="studentModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 12px;">
                 <form id="form-student">
-                    <div class="modal-header border-bottom-0 pb-0 px-4 pt-4">
-                        <h5 class="modal-title fw-bold">Student Profile</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <div class="modal-header border-bottom-0 pb-0 px-3 pt-3">
+                        <h6 class="modal-title fw-bold">Student Profile</h6>
+                        <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal"></button>
                     </div>
-                    <div class="modal-body px-4">
+                    <div class="modal-body px-3 py-2">
                         <input type="hidden" id="student-id">
                         <div class="mb-2">
-                            <label class="form-label text-muted small fw-bold">Full Name (Last, First Middle)</label>
-                            <input type="text" class="form-control" id="student-name" required>
+                            <label class="form-label text-muted small fw-bold mb-1">Full Name (Last, First M)</label>
+                            <input type="text" class="form-control form-control-sm" id="student-name" required>
                         </div>
                     </div>
-                    <div class="modal-footer border-top-0 px-4 pb-4">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary px-4">Save</button>
+                    <div class="modal-footer border-top-0 px-3 pb-3 pt-1">
+                        <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary btn-sm px-3">Save</button>
                     </div>
                 </form>
             </div>
@@ -737,72 +730,70 @@
     <!-- Penalty Modal -->
     <div class="modal fade" id="penaltyModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 12px;">
                 <form id="form-penalty">
-                    <div class="modal-header border-bottom-0 pb-0 px-4 pt-4">
-                        <h5 class="modal-title fw-bold">Record Penalty</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <div class="modal-header border-bottom-0 pb-0 px-3 pt-3">
+                        <h6 class="modal-title fw-bold">Record Penalty</h6>
+                        <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal"></button>
                     </div>
-                    <div class="modal-body px-4">
+                    <div class="modal-body px-3 py-2">
                         <input type="hidden" id="penalty-id">
-                        <div class="row g-3 mb-3">
+                        <div class="row g-2 mb-2">
                             <div class="col-md-6">
-                                <label class="form-label text-muted small fw-bold">Date</label>
-                                <input type="date" class="form-control" id="penalty-date" required>
+                                <label class="form-label text-muted small fw-bold mb-1">Date</label>
+                                <input type="date" class="form-control form-control-sm" id="penalty-date" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label text-muted small fw-bold">Student</label>
-                                <select class="form-select" id="penalty-student" required></select>
+                                <label class="form-label text-muted small fw-bold mb-1">Student</label>
+                                <select class="form-select form-select-sm" id="penalty-student" required></select>
                             </div>
                         </div>
-                        <div class="row g-3 mb-3">
+                        <div class="row g-2 mb-2">
                             <div class="col-md-6">
-                                <label class="form-label text-muted small fw-bold">Subject</label>
-                                <select class="form-select dynamic-opts" id="penalty-subject" data-list="subjects" required></select>
+                                <label class="form-label text-muted small fw-bold mb-1">Subject</label>
+                                <select class="form-select form-select-sm dynamic-opts" id="penalty-subject" data-list="subjects" required></select>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label text-muted small fw-bold">Exam Type</label>
-                                <select class="form-select dynamic-opts" id="penalty-exam" data-list="examTypes" required></select>
+                                <label class="form-label text-muted small fw-bold mb-1">Exam Type</label>
+                                <select class="form-select form-select-sm dynamic-opts" id="penalty-exam" data-list="examTypes" required></select>
                             </div>
                         </div>
-                        <div class="row g-3 mb-3">
+                        <div class="row g-2 mb-2">
                             <div class="col-md-4">
-                                <label class="form-label text-muted small fw-bold">Qs Missed</label>
-                                <input type="number" class="form-control" id="penalty-qs" min="1" required>
+                                <label class="form-label text-muted small fw-bold mb-1">Qs Missed</label>
+                                <input type="number" class="form-control form-control-sm" id="penalty-qs" min="1" required>
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label text-muted small fw-bold">Penalty (₱)</label>
-                                <input type="number" class="form-control bg-light" id="penalty-amount" readonly>
-                                <div class="form-text mt-1" id="penalty-rate-hint" style="font-size: 0.7rem;"></div>
+                                <label class="form-label text-muted small fw-bold mb-1">Penalty (₱)</label>
+                                <input type="number" class="form-control form-control-sm bg-light" id="penalty-amount" readonly>
+                                <div class="form-text mt-0" id="penalty-rate-hint" style="font-size: 0.65rem;"></div>
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label text-muted small fw-bold">Paid (₱)</label>
-                                <input type="number" class="form-control border-success" id="penalty-paid" min="0" step="0.01" value="0" required>
+                                <label class="form-label text-muted small fw-bold mb-1">Paid (₱)</label>
+                                <input type="number" class="form-control form-control-sm border-success" id="penalty-paid" min="0" step="0.01" value="0" required>
                             </div>
                         </div>
-                        <div class="row g-3 mb-3">
+                        <div class="row g-2 mb-2">
                             <div class="col-md-4">
-                                <label class="form-label text-muted small fw-bold">Payment Mode</label>
-                                <select class="form-select" id="penalty-mode" required>
+                                <label class="form-label text-muted small fw-bold mb-1">Payment Mode</label>
+                                <select class="form-select form-select-sm" id="penalty-mode" required>
                                     <option value="N/A">N/A</option>
-                                    <option value="Cash">Cash</option>
-                                    <option value="GCash">GCash</option>
-                                    <option value="Bank Transfer">Bank Transfer</option>
+                                    <option value="Cash">Cash</option><option value="GCash">GCash</option><option value="Bank Transfer">Bank Transfer</option>
                                 </select>
                             </div>
                             <div class="col-md-8">
-                                <label class="form-label text-muted small fw-bold">Receipt Link (G-Drive / URL)</label>
-                                <input type="url" class="form-control" id="penalty-receipt" placeholder="https://...">
+                                <label class="form-label text-muted small fw-bold mb-1">Receipt Link</label>
+                                <input type="url" class="form-control form-control-sm" id="penalty-receipt" placeholder="https://...">
                             </div>
                         </div>
-                        <div class="mb-2">
-                            <label class="form-label text-muted small fw-bold">Remarks (Optional)</label>
-                            <input type="text" class="form-control" id="penalty-remarks">
+                        <div class="mb-1">
+                            <label class="form-label text-muted small fw-bold mb-1">Remarks</label>
+                            <input type="text" class="form-control form-control-sm" id="penalty-remarks">
                         </div>
                     </div>
-                    <div class="modal-footer border-top-0 px-4 pb-4">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary px-4">Save Record</button>
+                    <div class="modal-footer border-top-0 px-3 pb-3 pt-1">
+                        <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary btn-sm px-3">Save</button>
                     </div>
                 </form>
             </div>
@@ -812,93 +803,82 @@
     <!-- Collection Modal -->
     <div class="modal fade" id="collectionModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 12px;">
                 <form id="form-collection">
-                    <div class="modal-header border-bottom-0 pb-0 px-4 pt-4">
-                        <h5 class="modal-title fw-bold">Record Collection</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <div class="modal-header border-bottom-0 pb-0 px-3 pt-3">
+                        <h6 class="modal-title fw-bold">Record Collection</h6>
+                        <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal"></button>
                     </div>
-                    <div class="modal-body px-4">
+                    <div class="modal-body px-3 py-2">
                         <input type="hidden" id="collection-id">
-                        <div class="row g-3 mb-3">
+                        <div class="row g-2 mb-2">
                             <div class="col-md-6">
-                                <label class="form-label text-muted small fw-bold">Due Date</label>
-                                <input type="date" class="form-control" id="collection-date" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label text-muted small fw-bold">Student</label>
-                                <select class="form-select" id="collection-student" required></select>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label text-muted small fw-bold">Collection Purpose</label>
-                            <select class="form-select dynamic-opts" id="collection-purpose" data-list="collectionPurposes" required></select>
-                        </div>
-                        
-                        <!-- Dynamic Scrubs Fields -->
-                        <div id="scrubs-fields" class="mb-3 p-3 bg-primary bg-opacity-10 rounded-3 border border-primary border-opacity-25 d-none">
-                            <h6 class="text-primary fw-bold mb-3"><i class="bi bi-scissors me-2"></i>Scrubs Order Details</h6>
-                            <div class="row g-2 mb-2">
-                                <div class="col-4">
-                                    <label class="form-label text-muted small fw-bold">Quantity</label>
-                                    <input type="number" class="form-control form-control-sm" id="scrubs-qty" min="1" value="1">
-                                </div>
-                                <div class="col-4">
-                                    <label class="form-label text-muted small fw-bold">Top Size</label>
-                                    <select class="form-select form-select-sm" id="scrubs-top">
-                                        <option value="XS">XS</option><option value="S">S</option><option value="M">M</option>
-                                        <option value="L">L</option><option value="XL">XL</option><option value="2XL">2XL</option>
-                                        <option value="3XL">3XL</option><option value="4XL">4XL</option><option value="5XL">5XL</option>
-                                    </select>
-                                </div>
-                                <div class="col-4">
-                                    <label class="form-label text-muted small fw-bold">Pants Size</label>
-                                    <select class="form-select form-select-sm" id="scrubs-pants">
-                                        <option value="XS">XS</option><option value="S">S</option><option value="M">M</option>
-                                        <option value="L">L</option><option value="XL">XL</option><option value="2XL">2XL</option>
-                                        <option value="3XL">3XL</option><option value="4XL">4XL</option><option value="5XL">5XL</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="mb-1">
-                                <label class="form-label text-muted small fw-bold">Embroidery Name</label>
-                                <input type="text" class="form-control form-control-sm" id="scrubs-name" placeholder="Name to be embroidered">
-                            </div>
-                        </div>
-
-                        <div class="row g-3 mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label text-muted small fw-bold">Amount Due (₱)</label>
-                                <input type="number" class="form-control" id="collection-amount" min="1" step="0.01" required>
+                                <label class="form-label text-muted small fw-bold mb-1">Due Date</label>
+                                <input type="date" class="form-control form-control-sm" id="collection-date" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label text-muted small fw-bold">Amount Paid (₱)</label>
-                                <input type="number" class="form-control border-success" id="collection-paid" min="0" step="0.01" value="0" required>
-                            </div>
-                        </div>
-                        <div class="row g-3 mb-3">
-                            <div class="col-md-4">
-                                <label class="form-label text-muted small fw-bold">Payment Mode</label>
-                                <select class="form-select" id="collection-mode" required>
-                                    <option value="N/A">N/A</option>
-                                    <option value="Cash">Cash</option>
-                                    <option value="GCash">GCash</option>
-                                    <option value="Bank Transfer">Bank Transfer</option>
-                                </select>
-                            </div>
-                            <div class="col-md-8">
-                                <label class="form-label text-muted small fw-bold">Receipt Link (Optional)</label>
-                                <input type="url" class="form-control" id="collection-receipt" placeholder="https://...">
+                                <label class="form-label text-muted small fw-bold mb-1">Student</label>
+                                <select class="form-select form-select-sm" id="collection-student" required></select>
                             </div>
                         </div>
                         <div class="mb-2">
-                            <label class="form-label text-muted small fw-bold">Remarks (Optional)</label>
-                            <input type="text" class="form-control" id="collection-remarks">
+                            <label class="form-label text-muted small fw-bold mb-1">Purpose</label>
+                            <select class="form-select form-select-sm dynamic-opts" id="collection-purpose" data-list="collectionPurposes" required></select>
+                        </div>
+                        
+                        <div id="scrubs-fields" class="mb-2 p-2 bg-primary bg-opacity-10 rounded border border-primary border-opacity-25 d-none">
+                            <h6 class="text-primary fw-bold mb-2 small"><i class="bi bi-scissors me-1"></i>Scrubs Order</h6>
+                            <div class="row g-2 mb-1">
+                                <div class="col-4">
+                                    <label class="form-label text-muted small fw-bold mb-0">Qty</label>
+                                    <input type="number" class="form-control form-control-sm" id="scrubs-qty" min="1" value="1">
+                                </div>
+                                <div class="col-4">
+                                    <label class="form-label text-muted small fw-bold mb-0">Top</label>
+                                    <select class="form-select form-select-sm" id="scrubs-top"><option value="XS">XS</option><option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option><option value="2XL">2XL</option><option value="3XL">3XL</option></select>
+                                </div>
+                                <div class="col-4">
+                                    <label class="form-label text-muted small fw-bold mb-0">Pants</label>
+                                    <select class="form-select form-select-sm" id="scrubs-pants"><option value="XS">XS</option><option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option><option value="2XL">2XL</option><option value="3XL">3XL</option></select>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="form-label text-muted small fw-bold mb-0">Embroidery Name</label>
+                                <input type="text" class="form-control form-control-sm" id="scrubs-name">
+                            </div>
+                        </div>
+
+                        <div class="row g-2 mb-2">
+                            <div class="col-md-6">
+                                <label class="form-label text-muted small fw-bold mb-1">Amount Due (₱)</label>
+                                <input type="number" class="form-control form-control-sm" id="collection-amount" min="1" step="0.01" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-muted small fw-bold mb-1">Amount Paid (₱)</label>
+                                <input type="number" class="form-control form-control-sm border-success" id="collection-paid" min="0" step="0.01" value="0" required>
+                            </div>
+                        </div>
+                        <div class="row g-2 mb-2">
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small fw-bold mb-1">Payment Mode</label>
+                                <select class="form-select form-select-sm" id="collection-mode" required>
+                                    <option value="N/A">N/A</option>
+                                    <option value="Cash">Cash</option><option value="GCash">GCash</option><option value="Bank Transfer">Bank Transfer</option>
+                                </select>
+                            </div>
+                            <div class="col-md-8">
+                                <label class="form-label text-muted small fw-bold mb-1">Receipt Link</label>
+                                <input type="url" class="form-control form-control-sm" id="collection-receipt" placeholder="https://...">
+                            </div>
+                        </div>
+                        <div class="mb-1">
+                            <label class="form-label text-muted small fw-bold mb-1">Remarks</label>
+                            <input type="text" class="form-control form-control-sm" id="collection-remarks">
                         </div>
                     </div>
-                    <div class="modal-footer border-top-0 px-4 pb-4">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary px-4">Save Collection</button>
+                    <div class="modal-footer border-top-0 px-3 pb-3 pt-1">
+                        <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary btn-sm px-3">Save</button>
                     </div>
                 </form>
             </div>
@@ -907,37 +887,34 @@
 
     <!-- Bulk Charge Modal -->
     <div class="modal fade" id="bulkCollectionModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 12px;">
                 <form id="form-bulk-collection">
-                    <div class="modal-header border-bottom-0 pb-0 px-4 pt-4">
-                        <h5 class="modal-title fw-bold text-primary"><i class="bi bi-people-fill me-2"></i>Bulk Charge Batch</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <div class="modal-header border-bottom-0 pb-0 px-3 pt-3">
+                        <h6 class="modal-title fw-bold text-primary"><i class="bi bi-people-fill me-1"></i>Bulk Charge</h6>
+                        <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal"></button>
                     </div>
-                    <div class="modal-body px-4">
-                        <div class="alert alert-primary bg-primary bg-opacity-10 border-0 small mb-4">
-                            This will create an unpaid collection record for <strong>EVERY</strong> student in the batch roster.
+                    <div class="modal-body px-3 py-2">
+                        <div class="alert alert-primary bg-primary bg-opacity-10 border-0 p-2 small mb-2">
+                            Creates record for <strong>EVERY</strong> student.
                         </div>
-                        <div class="row g-3 mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label text-muted small fw-bold">Due Date</label>
-                                <input type="date" class="form-control" id="bulk-date" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label text-muted small fw-bold">Amount Due per Student (₱)</label>
-                                <input type="number" class="form-control text-danger fw-bold" id="bulk-amount" min="1" step="0.01" required>
-                            </div>
+                        <div class="mb-2">
+                            <label class="form-label text-muted small fw-bold mb-1">Due Date</label>
+                            <input type="date" class="form-control form-control-sm" id="bulk-date" required>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label text-muted small fw-bold">Collection Purpose</label>
-                            <select class="form-select dynamic-opts" id="bulk-purpose" data-list="collectionPurposes" required></select>
+                        <div class="mb-2">
+                            <label class="form-label text-muted small fw-bold mb-1">Amount (₱)</label>
+                            <input type="number" class="form-control form-control-sm text-danger fw-bold" id="bulk-amount" min="1" step="0.01" required>
+                        </div>
+                        <div class="mb-1">
+                            <label class="form-label text-muted small fw-bold mb-1">Purpose</label>
+                            <select class="form-select form-select-sm dynamic-opts" id="bulk-purpose" data-list="collectionPurposes" required></select>
                         </div>
                     </div>
-                    <div class="modal-footer border-top-0 px-4 pb-4">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary px-4" id="btn-submit-bulk">
-                            <span class="spinner-border spinner-border-sm d-none me-2" id="bulk-spinner" role="status"></span>
-                            Generate Records
+                    <div class="modal-footer border-top-0 px-3 pb-3 pt-1">
+                        <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary btn-sm px-3" id="btn-submit-bulk">
+                            <span class="spinner-border spinner-border-sm d-none me-1" id="bulk-spinner" role="status"></span>Generate
                         </button>
                     </div>
                 </form>
@@ -947,57 +924,51 @@
 
     <!-- Income Modal -->
     <div class="modal fade" id="incomeModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 12px;">
                 <form id="form-income">
-                    <div class="modal-header border-bottom-0 pb-0 px-4 pt-4">
-                        <h5 class="modal-title fw-bold">Record Income</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <div class="modal-header border-bottom-0 pb-0 px-3 pt-3">
+                        <h6 class="modal-title fw-bold">Record Income</h6>
+                        <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal"></button>
                     </div>
-                    <div class="modal-body px-4">
+                    <div class="modal-body px-3 py-2">
                         <input type="hidden" id="income-id">
-                        <div class="row g-3 mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label text-muted small fw-bold">Date</label>
-                                <input type="date" class="form-control" id="income-date" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label text-muted small fw-bold">Source</label>
-                                <input type="text" class="form-control" id="income-source" placeholder="e.g., Sponsor Name" required>
-                            </div>
+                        <div class="mb-2">
+                            <label class="form-label text-muted small fw-bold mb-1">Date</label>
+                            <input type="date" class="form-control form-control-sm" id="income-date" required>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label text-muted small fw-bold">Description</label>
-                            <input type="text" class="form-control" id="income-desc" required>
+                        <div class="mb-2">
+                            <label class="form-label text-muted small fw-bold mb-1">Source</label>
+                            <input type="text" class="form-control form-control-sm" id="income-source" placeholder="Sponsor Name" required>
                         </div>
-                        <div class="row g-3 mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label text-muted small fw-bold">Amount (₱)</label>
-                                <input type="number" class="form-control border-success" id="income-amount" min="1" step="0.01" required>
+                        <div class="mb-2">
+                            <label class="form-label text-muted small fw-bold mb-1">Description</label>
+                            <input type="text" class="form-control form-control-sm" id="income-desc" required>
+                        </div>
+                        <div class="row g-2 mb-2">
+                            <div class="col-6">
+                                <label class="form-label text-muted small fw-bold mb-1">Amount (₱)</label>
+                                <input type="number" class="form-control form-control-sm border-success" id="income-amount" min="1" step="0.01" required>
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label text-muted small fw-bold">Payment Mode</label>
-                                <select class="form-select" id="income-mode" required>
-                                    <option value="Cash">Cash</option>
-                                    <option value="GCash">GCash</option>
-                                    <option value="Bank Transfer">Bank Transfer</option>
+                            <div class="col-6">
+                                <label class="form-label text-muted small fw-bold mb-1">Mode</label>
+                                <select class="form-select form-select-sm" id="income-mode" required>
+                                    <option value="Cash">Cash</option><option value="GCash">GCash</option><option value="Bank Transfer">Bank Transfer</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="row g-3 mb-2">
-                            <div class="col-md-6">
-                                <label class="form-label text-muted small fw-bold">Received By</label>
-                                <input type="text" class="form-control" id="income-receiver">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label text-muted small fw-bold">Receipt / Ref Link</label>
-                                <input type="url" class="form-control" id="income-ref" placeholder="https://...">
-                            </div>
+                        <div class="mb-2">
+                            <label class="form-label text-muted small fw-bold mb-1">Received By</label>
+                            <input type="text" class="form-control form-control-sm" id="income-receiver">
+                        </div>
+                        <div class="mb-1">
+                            <label class="form-label text-muted small fw-bold mb-1">Ref Link</label>
+                            <input type="url" class="form-control form-control-sm" id="income-ref" placeholder="https://...">
                         </div>
                     </div>
-                    <div class="modal-footer border-top-0 px-4 pb-4">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary px-4">Save Income</button>
+                    <div class="modal-footer border-top-0 px-3 pb-3 pt-1">
+                        <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary btn-sm px-3">Save</button>
                     </div>
                 </form>
             </div>
@@ -1006,57 +977,51 @@
 
     <!-- Expense Modal -->
     <div class="modal fade" id="expenseModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 12px;">
                 <form id="form-expense">
-                    <div class="modal-header border-bottom-0 pb-0 px-4 pt-4">
-                        <h5 class="modal-title fw-bold">Record Expense</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <div class="modal-header border-bottom-0 pb-0 px-3 pt-3">
+                        <h6 class="modal-title fw-bold">Record Expense</h6>
+                        <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal"></button>
                     </div>
-                    <div class="modal-body px-4">
+                    <div class="modal-body px-3 py-2">
                         <input type="hidden" id="expense-id">
-                        <div class="row g-3 mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label text-muted small fw-bold">Date</label>
-                                <input type="date" class="form-control" id="expense-date" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label text-muted small fw-bold">Category</label>
-                                <select class="form-select dynamic-opts" id="expense-category" data-list="expenseCategories" required></select>
-                            </div>
+                        <div class="mb-2">
+                            <label class="form-label text-muted small fw-bold mb-1">Date</label>
+                            <input type="date" class="form-control form-control-sm" id="expense-date" required>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label text-muted small fw-bold">Description</label>
-                            <input type="text" class="form-control" id="expense-desc" required>
+                        <div class="mb-2">
+                            <label class="form-label text-muted small fw-bold mb-1">Category</label>
+                            <select class="form-select form-select-sm dynamic-opts" id="expense-category" data-list="expenseCategories" required></select>
                         </div>
-                        <div class="row g-3 mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label text-muted small fw-bold">Amount Spent (₱)</label>
-                                <input type="number" class="form-control border-danger" id="expense-amount" min="1" step="0.01" required>
+                        <div class="mb-2">
+                            <label class="form-label text-muted small fw-bold mb-1">Description</label>
+                            <input type="text" class="form-control form-control-sm" id="expense-desc" required>
+                        </div>
+                        <div class="row g-2 mb-2">
+                            <div class="col-6">
+                                <label class="form-label text-muted small fw-bold mb-1">Amount (₱)</label>
+                                <input type="number" class="form-control form-control-sm border-danger" id="expense-amount" min="1" step="0.01" required>
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label text-muted small fw-bold">Payment Mode</label>
-                                <select class="form-select" id="expense-mode" required>
-                                    <option value="Cash">Cash</option>
-                                    <option value="GCash">GCash</option>
-                                    <option value="Bank Transfer">Bank Transfer</option>
+                            <div class="col-6">
+                                <label class="form-label text-muted small fw-bold mb-1">Mode</label>
+                                <select class="form-select form-select-sm" id="expense-mode" required>
+                                    <option value="Cash">Cash</option><option value="GCash">GCash</option><option value="Bank Transfer">Bank Transfer</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="row g-3 mb-2">
-                            <div class="col-md-6">
-                                <label class="form-label text-muted small fw-bold">Paid By</label>
-                                <input type="text" class="form-control" id="expense-payer">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label text-muted small fw-bold">Receipt Link (Optional)</label>
-                                <input type="url" class="form-control" id="expense-receipt" placeholder="https://...">
-                            </div>
+                        <div class="mb-2">
+                            <label class="form-label text-muted small fw-bold mb-1">Paid By</label>
+                            <input type="text" class="form-control form-control-sm" id="expense-payer">
+                        </div>
+                        <div class="mb-1">
+                            <label class="form-label text-muted small fw-bold mb-1">Receipt Link</label>
+                            <input type="url" class="form-control form-control-sm" id="expense-receipt" placeholder="https://...">
                         </div>
                     </div>
-                    <div class="modal-footer border-top-0 px-4 pb-4">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary px-4">Save Expense</button>
+                    <div class="modal-footer border-top-0 px-3 pb-3 pt-1">
+                        <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary btn-sm px-3">Save</button>
                     </div>
                 </form>
             </div>
@@ -1066,20 +1031,20 @@
     <!-- Confirm Modal -->
     <div class="modal fade" id="confirmModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content border-0 shadow-lg text-center p-4" style="border-radius: 20px;">
-                <i class="bi bi-exclamation-circle text-danger display-4 mb-3"></i>
-                <h5 class="fw-bold mb-3">Confirm Action</h5>
-                <p id="confirmMessage" class="text-muted mb-4">Are you sure?</p>
+            <div class="modal-content border-0 shadow-lg text-center p-3" style="border-radius: 12px;">
+                <i class="bi bi-exclamation-circle text-danger fs-1 mb-2"></i>
+                <h6 class="fw-bold mb-2">Confirm Action</h6>
+                <p id="confirmMessage" class="text-muted small mb-3">Are you sure?</p>
                 <div class="d-flex gap-2 justify-content-center">
-                    <button type="button" class="btn btn-light w-50" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger w-50" id="confirmBtn">Yes, Proceed</button>
+                    <button type="button" class="btn btn-light btn-sm w-50" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger btn-sm w-50" id="confirmBtn">Confirm</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Toast Container -->
-    <div class="toast-container position-fixed bottom-0 end-0 p-4" style="z-index: 1055;" id="toastContainer"></div>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1055;" id="toastContainer"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -1139,7 +1104,7 @@
                 }, 800);
             } catch (err) {
                 console.error("Firebase init failed:", err);
-                document.getElementById('loading-screen').innerHTML = `<i class="bi bi-x-circle text-danger display-4 mb-3"></i><h4>Connection Error</h4>`;
+                document.getElementById('loading-screen').innerHTML = `<i class="bi bi-x-circle text-danger fs-1 mb-2"></i><h6>Connection Error</h6>`;
             }
         }
 
@@ -1180,7 +1145,6 @@
             catch(e) { console.error(e); window.showToast('Error deleting', 'danger'); }
         }
 
-        // Export bulk charge to window so HTML button can trigger it
         window.processBulkCharge = async function(purpose, date, amount) {
             try {
                 const batch = writeBatch(db);
@@ -1193,7 +1157,7 @@
                     });
                 });
                 await batch.commit();
-                window.showToast(`Successfully generated ${window.appData.students.length} records for ${purpose}!`);
+                window.showToast(`Successfully generated ${window.appData.students.length} records!`);
                 return true;
             } catch(e) { console.error(e); window.showToast('Error creating bulk records', 'danger'); return false; }
         }
@@ -1209,9 +1173,9 @@
 
         window.showToast = function(message, type = 'success') {
             const toastEl = document.createElement('div');
-            toastEl.className = `toast align-items-center text-white bg-${type} border-0 shadow-lg mb-2`;
-            toastEl.style.borderRadius = '12px';
-            toastEl.innerHTML = `<div class="d-flex"><div class="toast-body fw-medium px-3 py-2"><i class="bi bi-info-circle me-2"></i>${message}</div><button type="button" class="btn-close btn-close-white me-3 m-auto" data-bs-dismiss="toast"></button></div>`;
+            toastEl.className = `toast align-items-center text-white bg-${type} border-0 shadow-sm mb-2`;
+            toastEl.style.borderRadius = '8px';
+            toastEl.innerHTML = `<div class="d-flex"><div class="toast-body fw-medium px-2 py-1" style="font-size:0.8rem;"><i class="bi bi-info-circle me-1"></i>${message}</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div>`;
             getEl('toastContainer').appendChild(toastEl);
             new bootstrap.Toast(toastEl, { delay: 3000 }).show();
             toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove());
@@ -1235,7 +1199,7 @@
         function formatReceiptLink(link) {
             if(!link) return '<span class="text-muted small">-</span>';
             if(!link.startsWith('http')) link = 'https://' + link;
-            return `<a href="${link}" target="_blank" class="btn btn-sm btn-light border py-1 text-primary"><i class="bi bi-link-45deg"></i> View</a>`;
+            return `<a href="${link}" target="_blank" class="btn btn-sm btn-light border py-0 px-1 text-primary" style="font-size:0.75rem;"><i class="bi bi-link-45deg"></i> View</a>`;
         }
 
         let pendingConfirmAction = null; let confirmModalInstance = null;
@@ -1436,19 +1400,19 @@
                 .filter(s => s.bal > 0).sort((a,b) => b.bal - a.bal).slice(0, 5);
             
             getEl('dash-top-students').querySelector('tbody').innerHTML = studsWithBal.length ? 
-                studsWithBal.map(s => `<tr><td class="fw-medium text-secondary-emphasis ps-4">${s.name}</td><td class="text-end text-danger fw-bold pe-4">${formatMoney(s.bal)}</td></tr>`).join('') :
-                `<tr><td colspan="2" class="text-center text-muted py-4"><i class="bi bi-emoji-smile fs-4 d-block mb-2"></i>No outstanding balances</td></tr>`;
+                studsWithBal.map(s => `<tr><td class="fw-medium text-secondary-emphasis ps-3">${s.name}</td><td class="text-end text-danger fw-bold pe-3">${formatMoney(s.bal)}</td></tr>`).join('') :
+                `<tr><td colspan="2" class="text-center text-muted py-2"><i class="bi bi-emoji-smile fs-6 d-block mb-1"></i>No balances</td></tr>`;
 
             let recentTx = [
                 ...window.appData.income.map(i => ({ date: i.date, type: 'Income', amt: i.amount, sign: 1 })),
                 ...window.appData.expenses.map(e => ({ date: e.date, type: `Expense: ${e.category}`, amt: e.amount, sign: -1 })),
-                ...window.appData.penalties.filter(p=>p.amountPaid>0).map(p => ({ date: p.date, type: 'Penalty Payment', amt: p.amountPaid, sign: 1 })),
-                ...window.appData.collections.filter(c=>c.amountPaid>0).map(c => ({ date: c.date, type: 'Collection Payment', amt: c.amountPaid, sign: 1 }))
+                ...window.appData.penalties.filter(p=>p.amountPaid>0).map(p => ({ date: p.date, type: 'Penalty Pymt', amt: p.amountPaid, sign: 1 })),
+                ...window.appData.collections.filter(c=>c.amountPaid>0).map(c => ({ date: c.date, type: 'Collection Pymt', amt: c.amountPaid, sign: 1 }))
             ].sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
 
             getEl('dash-recent-tx').querySelector('tbody').innerHTML = recentTx.length ?
-                recentTx.map(t => `<tr><td class="ps-4">${formatDate(t.date)}</td><td class="text-secondary-emphasis">${t.type}</td><td class="text-end pe-4 fw-medium ${t.sign > 0 ? 'text-success' : 'text-danger'}">${t.sign > 0 ? '+' : '-'}${formatMoney(t.amt)}</td></tr>`).join('') :
-                `<tr><td colspan="3" class="text-center text-muted py-4">No recent transactions</td></tr>`;
+                recentTx.map(t => `<tr><td class="ps-3">${formatDate(t.date)}</td><td class="text-secondary-emphasis">${t.type}</td><td class="text-end pe-3 fw-medium ${t.sign > 0 ? 'text-success' : 'text-danger'}">${t.sign > 0 ? '+' : '-'}${formatMoney(t.amt)}</td></tr>`).join('') :
+                `<tr><td colspan="3" class="text-center text-muted py-2">No transactions</td></tr>`;
         }
 
         function initChart(id, config) {
@@ -1469,7 +1433,7 @@
             initChart('chartIncExp', {
                 type: 'doughnut',
                 data: { 
-                    labels: hasIncExp ? ['Income', 'Expenses'] : ['No Data Yet'], 
+                    labels: hasIncExp ? ['Income', 'Expenses'] : ['No Data'], 
                     datasets: [{ 
                         data: hasIncExp ? [totalIn, totalExp] : [1], 
                         backgroundColor: hasIncExp ? ['#34D399', '#F87171'] : [emptyColor], 
@@ -1479,8 +1443,8 @@
                 options: { 
                     responsive: true, maintainAspectRatio: false, cutout: '75%', 
                     plugins: { 
-                        legend: { position: 'bottom', labels: {usePointStyle: true} },
-                        tooltip: { callbacks: { label: function(context) { return hasIncExp ? ' ' + context.label + ': ' + formatMoney(context.raw) : ' No transactions yet'; } } }
+                        legend: { position: 'bottom', labels: {usePointStyle: true, boxWidth: 6} },
+                        tooltip: { callbacks: { label: function(context) { return hasIncExp ? ' ' + context.label + ': ' + formatMoney(context.raw) : ' No data'; } } }
                     } 
                 }
             });
@@ -1493,9 +1457,9 @@
                 type: 'bar',
                 data: { 
                     labels: hasPenalties ? Object.keys(subData) : ['No Records'], 
-                    datasets: [{ label: 'Total Penalty', data: hasPenalties ? Object.values(subData) : [0], backgroundColor: hasPenalties ? '#6366F1' : emptyColor, borderRadius: 6 }] 
+                    datasets: [{ label: 'Total Penalty', data: hasPenalties ? Object.values(subData) : [0], backgroundColor: hasPenalties ? '#6366F1' : emptyColor, borderRadius: 4 }] 
                 },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: {font: {size: 9}} }, x: { ticks: {font: {size: 9}} } } }
             });
 
             // 3. Expenses by Category
@@ -1505,14 +1469,14 @@
             initChart('chartExpCategory', {
                 type: 'polarArea',
                 data: { 
-                    labels: hasExp ? Object.keys(expData) : ['No Data Yet'], 
+                    labels: hasExp ? Object.keys(expData) : ['No Data'], 
                     datasets: [{ data: hasExp ? Object.values(expData) : [1], backgroundColor: hasExp ? ['#F87171','#FBBF24','#34D399','#22D3EE','#6366F1','#A78BFA'] : [emptyColor], borderWidth: 0 }] 
                 },
                 options: { 
                     responsive: true, maintainAspectRatio: false, 
                     plugins: { 
-                        legend: { position: 'right', labels: {usePointStyle: true} },
-                        tooltip: { callbacks: { label: function(context) { return hasExp ? ' ' + context.label + ': ' + formatMoney(context.raw) : ' No expenses yet'; } } }
+                        legend: { position: 'right', labels: {usePointStyle: true, boxWidth: 6} },
+                        tooltip: { callbacks: { label: function(context) { return hasExp ? ' ' + context.label + ': ' + formatMoney(context.raw) : ' No data'; } } }
                     } 
                 }
             });
@@ -1533,7 +1497,7 @@
             initChart('chartPaymentMode', {
                 type: 'pie',
                 data: { 
-                    labels: hasPModes ? Object.keys(pModes) : ['No Data Yet'], 
+                    labels: hasPModes ? Object.keys(pModes) : ['No Data'], 
                     datasets: [{ 
                         data: hasPModes ? Object.values(pModes) : [1], 
                         backgroundColor: hasPModes ? ['#34D399', '#3B82F6', '#8B5CF6', '#F59E0B'] : [emptyColor], 
@@ -1543,8 +1507,8 @@
                 options: { 
                     responsive: true, maintainAspectRatio: false, 
                     plugins: { 
-                        legend: { position: 'bottom', labels: {usePointStyle: true} },
-                        tooltip: { callbacks: { label: function(context) { return hasPModes ? ' ' + context.label + ': ' + formatMoney(context.raw) : ' No transactions yet'; } } }
+                        legend: { position: 'bottom', labels: {usePointStyle: true, boxWidth: 6} },
+                        tooltip: { callbacks: { label: function(context) { return hasPModes ? ' ' + context.label + ': ' + formatMoney(context.raw) : ' No data'; } } }
                     } 
                 }
             });
@@ -1562,11 +1526,11 @@
                 data: { 
                     labels: hasFlow ? sortedMonths : ['Jan', 'Feb', 'Mar'], 
                     datasets: [{ 
-                        label: 'Net Cash Flow', data: hasFlow ? sortedMonths.map(m => mFlow[m]) : [0, 0, 0], 
+                        label: 'Net Flow', data: hasFlow ? sortedMonths.map(m => mFlow[m]) : [0, 0, 0], 
                         borderColor: hasFlow ? '#6366F1' : emptyColor, backgroundColor: hasFlow ? 'rgba(99, 102, 241, 0.1)' : 'transparent', fill: true, tension: 0.4 
                     }] 
                 },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks:{font:{size:9}} }, x: {ticks:{font:{size:9}}} } }
             });
         }
 
@@ -1580,25 +1544,25 @@
                 const bal = getStudentBalances(s.id);
                 tbody.innerHTML += `
                     <tr>
-                        <td class="fw-medium text-secondary-emphasis ps-4">${s.name}</td>
+                        <td class="fw-medium text-secondary-emphasis ps-3">${s.name}</td>
                         <td class="text-end">${formatMoney(bal.penaltyBalance)}</td>
                         <td class="text-end">${formatMoney(bal.collectionBalance)}</td>
                         <td class="text-end fw-bold ${bal.overall > 0 ? 'text-danger' : 'text-success'}">${formatMoney(bal.overall)}</td>
-                        <td class="text-center pe-4">
-                            ${bal.overall > 0 ? `<button class="btn btn-sm btn-light text-primary me-1 py-1 px-2 border" onclick='window.copyReminder("${s.id}")' title="Copy Reminder Message"><i class="bi bi-chat-dots"></i></button>` : ''}
-                            <button class="btn btn-sm btn-light text-info me-1 py-1 px-2 border" onclick='window.jumpToSOA("${s.id}")' title="Quick SOA"><i class="bi bi-file-earmark-text"></i></button>
+                        <td class="text-center pe-3">
+                            ${bal.overall > 0 ? `<button class="btn btn-sm btn-light text-primary me-1 py-0 px-1 border" onclick='window.copyReminder("${s.id}")' title="Copy Reminder"><i class="bi bi-chat-dots"></i></button>` : ''}
+                            <button class="btn btn-sm btn-light text-info me-1 py-0 px-1 border" onclick='window.jumpToSOA("${s.id}")' title="Quick SOA"><i class="bi bi-file-earmark-text"></i></button>
                             <span class="admin-only">
-                                <button class="btn btn-sm btn-light text-primary me-1 py-1 px-2 border" onclick='window.openModal("studentModal", ${JSON.stringify(s).replace(/'/g, "&apos;")})'><i class="bi bi-pencil"></i></button>
-                                <button class="btn btn-sm btn-light text-danger py-1 px-2 border" onclick='window.deleteStudent("${s.id}")'><i class="bi bi-trash"></i></button>
+                                <button class="btn btn-sm btn-light text-primary me-1 py-0 px-1 border" onclick='window.openModal("studentModal", ${JSON.stringify(s).replace(/'/g, "&apos;")})'><i class="bi bi-pencil"></i></button>
+                                <button class="btn btn-sm btn-light text-danger py-0 px-1 border" onclick='window.deleteStudent("${s.id}")'><i class="bi bi-trash"></i></button>
                             </span>
                         </td>
                     </tr>`;
             });
-            if(!filtered.length) tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-muted">No students found.</td></tr>`;
+            if(!filtered.length) tbody.innerHTML = `<tr><td colspan="5" class="text-center py-3 text-muted">No students found.</td></tr>`;
         }
 
         window.deleteStudent = function(id) {
-            if(window.appData.penalties.some(p=>p.studentId===id) || window.appData.collections.some(c=>c.studentId===id)) return window.showToast("Cannot delete student. They have associated records.", "warning");
+            if(window.appData.penalties.some(p=>p.studentId===id) || window.appData.collections.some(c=>c.studentId===id)) return window.showToast("Cannot delete student. Associated records exist.", "warning");
             window.confirmAction("Delete this student permanently?", () => window.deleteDataDoc('students', id));
         }
 
@@ -1617,22 +1581,22 @@
             filtered.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(p => {
                 tbody.innerHTML += `
                     <tr>
-                        <td class="text-muted small ps-4">${formatDate(p.date)}</td>
+                        <td class="text-muted ps-3">${formatDate(p.date)}</td>
                         <td class="fw-medium text-secondary-emphasis">${p.sName}</td>
-                        <td>${p.subject} <br><span class="badge bg-light text-dark border mt-1 fw-normal">${p.examType}</span></td>
+                        <td>${p.subject} <br><span class="badge bg-light text-dark border mt-1 fw-normal" style="font-size:0.65rem;">${p.examType}</span></td>
                         <td class="text-center fw-bold">${p.qsMissed}</td>
                         <td class="text-end">${formatMoney(p.penaltyAmount)}</td>
                         <td class="text-end text-success fw-medium">${formatMoney(p.amountPaid)}</td>
                         <td class="text-end fw-bold text-danger">${formatMoney(p.penaltyAmount - p.amountPaid)}</td>
                         <td class="text-center"><span class="badge badge-status ${p.stat.class}">${p.stat.text}</span></td>
                         <td class="text-center"><span class="badge bg-light text-dark border me-1 fw-normal">${p.paymentMode || 'N/A'}</span> ${formatReceiptLink(p.receiptLink)}</td>
-                        <td class="text-center admin-only pe-4">
-                            <button class="btn btn-sm btn-light text-primary py-1 px-2 border" onclick='window.openModal("penaltyModal", ${JSON.stringify(p).replace(/'/g, "&apos;")})'><i class="bi bi-pencil"></i></button>
-                            <button class="btn btn-sm btn-light text-danger py-1 px-2 border" onclick='window.confirmAction("Delete penalty?", () => window.deleteDataDoc("penalties", "${p.id}"))'><i class="bi bi-trash"></i></button>
+                        <td class="text-center admin-only pe-3">
+                            <button class="btn btn-sm btn-light text-primary py-0 px-1 border" onclick='window.openModal("penaltyModal", ${JSON.stringify(p).replace(/'/g, "&apos;")})'><i class="bi bi-pencil"></i></button>
+                            <button class="btn btn-sm btn-light text-danger py-0 px-1 border" onclick='window.confirmAction("Delete penalty?", () => window.deleteDataDoc("penalties", "${p.id}"))'><i class="bi bi-trash"></i></button>
                         </td>
                     </tr>`;
             });
-            if(!filtered.length) tbody.innerHTML = `<tr><td colspan="10" class="text-center py-4 text-muted">No records found.</td></tr>`;
+            if(!filtered.length) tbody.innerHTML = `<tr><td colspan="10" class="text-center py-3 text-muted">No records found.</td></tr>`;
         }
 
         function renderCollections() {
@@ -1663,11 +1627,11 @@
             }).forEach(c => {
                 let details = c.purpose;
                 if(c.purpose.toLowerCase().includes('scrub') && c.scrubsTopSize) {
-                    details += `<br><span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 mt-1 fw-normal">Qty: ${c.scrubsQty||1} | T:${c.scrubsTopSize} P:${c.scrubsPantsSize} | ${c.scrubsName||'-'}</span>`;
+                    details += `<br><span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 mt-1 fw-normal" style="font-size:0.65rem;">Qty: ${c.scrubsQty||1} | T:${c.scrubsTopSize} P:${c.scrubsPantsSize} | ${c.scrubsName||'-'}</span>`;
                 }
                 tbody.innerHTML += `
                     <tr>
-                        <td class="text-muted small ps-4">${formatDate(c.date)}</td>
+                        <td class="text-muted ps-3">${formatDate(c.date)}</td>
                         <td class="fw-medium text-secondary-emphasis">${c.sName}</td>
                         <td>${details}</td>
                         <td class="text-end">${formatMoney(c.amountDue)}</td>
@@ -1675,13 +1639,13 @@
                         <td class="text-end fw-bold text-danger">${formatMoney(c.amountDue - c.amountPaid)}</td>
                         <td class="text-center"><span class="badge badge-status ${c.stat.class}">${c.stat.text}</span></td>
                         <td class="text-center"><span class="badge bg-light text-dark border me-1 fw-normal">${c.paymentMode || 'N/A'}</span> ${formatReceiptLink(c.receiptLink)}</td>
-                        <td class="text-center admin-only pe-4">
-                            <button class="btn btn-sm btn-light text-primary py-1 px-2 border" onclick='window.openModal("collectionModal", ${JSON.stringify(c).replace(/'/g, "&apos;")})'><i class="bi bi-pencil"></i></button>
-                            <button class="btn btn-sm btn-light text-danger py-1 px-2 border" onclick='window.confirmAction("Delete collection?", () => window.deleteDataDoc("collections", "${c.id}"))'><i class="bi bi-trash"></i></button>
+                        <td class="text-center admin-only pe-3">
+                            <button class="btn btn-sm btn-light text-primary py-0 px-1 border" onclick='window.openModal("collectionModal", ${JSON.stringify(c).replace(/'/g, "&apos;")})'><i class="bi bi-pencil"></i></button>
+                            <button class="btn btn-sm btn-light text-danger py-0 px-1 border" onclick='window.confirmAction("Delete collection?", () => window.deleteDataDoc("collections", "${c.id}"))'><i class="bi bi-trash"></i></button>
                         </td>
                     </tr>`;
             });
-            if(!filtered.length) tbody.innerHTML = `<tr><td colspan="9" class="text-center py-4 text-muted">No records found.</td></tr>`;
+            if(!filtered.length) tbody.innerHTML = `<tr><td colspan="9" class="text-center py-3 text-muted">No records found.</td></tr>`;
 
             // SUMMARY GENERATION
             const sumContainer = getEl('collections-summary-container');
@@ -1696,23 +1660,23 @@
             const normalPurposes = allPurposes.filter(p => !p.toLowerCase().includes('scrub'));
             const allStudents = [...window.appData.students].sort((a,b) => a.name.localeCompare(b.name));
 
-            if(!allPurposes.length) { sumContainer.innerHTML = `<div class="text-center py-5 text-muted">No collection purposes defined yet. Add one in Settings.</div>`; return; }
+            if(!allPurposes.length) { sumContainer.innerHTML = `<div class="text-center py-3 text-muted">No collection purposes defined. Add one in Settings.</div>`; return; }
 
             normalPurposes.forEach(purpose => {
                 const records = window.appData.collections.filter(c => c.purpose === purpose);
                 const stdAmount = records.length > 0 ? Math.max(...records.map(r=>r.amountDue)) : 0;
                 
                 sumHTML += `
-                <div class="card mb-4 border-0 shadow-sm">
-                    <div class="card-header bg-light d-flex justify-content-between align-items-center py-3">
-                        <h6 class="mb-0 fw-bold text-primary">${purpose} <span class="badge bg-secondary ms-2">${records.length}/${allStudents.length}</span></h6>
-                        <button class="btn btn-sm btn-white border shadow-sm text-primary" onclick="copyUnpaidList('${purpose}')"><i class="bi bi-clipboard me-1"></i> Copy Unpaid</button>
+                <div class="card mb-3 border-0 shadow-sm">
+                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0 fw-bold text-primary">${purpose} <span class="badge bg-secondary ms-1">${records.length}/${allStudents.length}</span></h6>
+                        <button class="btn btn-sm btn-white border shadow-sm text-primary py-0" onclick="copyUnpaidList('${purpose}')"><i class="bi bi-clipboard me-1"></i> Unpaid List</button>
                     </div>
                     <div class="card-body p-0">
-                        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                        <div class="table-responsive" style="max-height: 250px; overflow-y: auto;">
                             <table class="table table-hover align-middle mb-0 text-nowrap">
                                 <thead class="table-light sticky-top shadow-sm">
-                                    <tr><th class="ps-4">Student Name</th><th class="text-end">Due</th><th class="text-end">Paid</th><th class="text-end">Balance</th><th class="text-center pe-4">Status</th></tr>
+                                    <tr><th class="ps-3">Student Name</th><th class="text-end">Due</th><th class="text-end">Paid</th><th class="text-end">Balance</th><th class="text-center pe-3">Status</th></tr>
                                 </thead>
                                 <tbody>`;
                 
@@ -1720,31 +1684,31 @@
                     const rec = records.find(r => r.studentId === s.id);
                     if(rec) {
                         const stat = getStatus(rec.amountDue, rec.amountPaid);
-                        sumHTML += `<tr><td class="fw-medium ps-4 text-secondary-emphasis">${s.name}</td><td class="text-end">${formatMoney(rec.amountDue)}</td><td class="text-end text-success">${formatMoney(rec.amountPaid)}</td><td class="text-end fw-bold text-danger">${formatMoney(rec.amountDue - rec.amountPaid)}</td><td class="text-center pe-4"><span class="badge badge-status ${stat.class}">${stat.text}</span></td></tr>`;
+                        sumHTML += `<tr><td class="fw-medium ps-3 text-secondary-emphasis">${s.name}</td><td class="text-end">${formatMoney(rec.amountDue)}</td><td class="text-end text-success">${formatMoney(rec.amountPaid)}</td><td class="text-end fw-bold text-danger">${formatMoney(rec.amountDue - rec.amountPaid)}</td><td class="text-center pe-3"><span class="badge badge-status ${stat.class}">${stat.text}</span></td></tr>`;
                     } else {
-                        sumHTML += `<tr><td class="fw-medium ps-4 text-secondary-emphasis">${s.name}</td><td class="text-end">${formatMoney(stdAmount)}</td><td class="text-end text-success">₱0.00</td><td class="text-end fw-bold text-danger">${formatMoney(stdAmount)}</td><td class="text-center pe-4"><span class="badge badge-status bg-danger-subtle">Unpaid (No Record)</span></td></tr>`;
+                        sumHTML += `<tr><td class="fw-medium ps-3 text-secondary-emphasis">${s.name}</td><td class="text-end">${formatMoney(stdAmount)}</td><td class="text-end text-success">₱0.00</td><td class="text-end fw-bold text-danger">${formatMoney(stdAmount)}</td><td class="text-center pe-3"><span class="badge badge-status bg-danger-subtle">Unpaid (No Record)</span></td></tr>`;
                     }
                 });
                 sumHTML += `</tbody></table></div></div></div>`;
             });
 
             if(scrubPurposes.length > 0) {
-                sumHTML += `<h5 class="mt-5 mb-3 fw-bold text-primary border-bottom pb-2"><i class="bi bi-person-lines-fill me-2"></i>Scrubs Masterlists</h5>`;
+                sumHTML += `<h6 class="mt-4 mb-2 fw-bold text-primary border-bottom pb-1"><i class="bi bi-person-lines-fill me-1"></i>Scrubs Masterlists</h6>`;
                 scrubPurposes.forEach(purpose => {
                     const records = window.appData.collections.filter(c => c.purpose === purpose);
                     const stdAmount = records.length > 0 ? Math.max(...records.map(r=>r.amountDue)) : 0;
                     
                     sumHTML += `
-                    <div class="card mb-4 border-0 shadow-sm border border-primary border-opacity-25">
-                        <div class="card-header bg-primary bg-opacity-10 d-flex justify-content-between align-items-center py-3">
-                            <h6 class="mb-0 fw-bold text-primary">${purpose} <span class="badge bg-primary ms-2">${records.length}/${allStudents.length}</span></h6>
-                            <button class="btn btn-sm btn-white border shadow-sm text-primary" onclick="copyUnpaidList('${purpose}')"><i class="bi bi-clipboard me-1"></i> Copy Unpaid</button>
+                    <div class="card mb-3 border-0 shadow-sm border border-primary border-opacity-25">
+                        <div class="card-header bg-primary bg-opacity-10 d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0 fw-bold text-primary">${purpose} <span class="badge bg-primary ms-1">${records.length}/${allStudents.length}</span></h6>
+                            <button class="btn btn-sm btn-white border shadow-sm text-primary py-0" onclick="copyUnpaidList('${purpose}')"><i class="bi bi-clipboard me-1"></i> Unpaid List</button>
                         </div>
                         <div class="card-body p-0">
-                            <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
+                            <div class="table-responsive" style="max-height: 250px; overflow-y: auto;">
                                 <table class="table table-hover align-middle mb-0 text-nowrap">
                                     <thead class="table-light sticky-top shadow-sm">
-                                        <tr><th class="ps-4">Student Name</th><th class="text-center bg-info bg-opacity-10">Qty</th><th class="text-center bg-info bg-opacity-10">Top</th><th class="text-center bg-info bg-opacity-10">Pants</th><th class="bg-info bg-opacity-10">Embroidery Name</th><th class="text-end">Balance</th><th class="text-center pe-4">Status</th></tr>
+                                        <tr><th class="ps-3">Student Name</th><th class="text-center bg-info bg-opacity-10">Qty</th><th class="text-center bg-info bg-opacity-10">Top</th><th class="text-center bg-info bg-opacity-10">Pants</th><th class="bg-info bg-opacity-10">Embroidery Name</th><th class="text-end">Balance</th><th class="text-center pe-3">Status</th></tr>
                                     </thead>
                                     <tbody>`;
                     
@@ -1752,9 +1716,9 @@
                         const rec = records.find(r => r.studentId === s.id);
                         if(rec) {
                             const stat = getStatus(rec.amountDue, rec.amountPaid);
-                            sumHTML += `<tr><td class="fw-medium ps-4 text-secondary-emphasis">${s.name}</td><td class="text-center fw-bold text-primary bg-info bg-opacity-10">${rec.scrubsQty || 1}</td><td class="text-center fw-bold text-primary bg-info bg-opacity-10">${rec.scrubsTopSize || '-'}</td><td class="text-center fw-bold text-primary bg-info bg-opacity-10">${rec.scrubsPantsSize || '-'}</td><td class="fw-medium bg-info bg-opacity-10">${rec.scrubsName || '-'}</td><td class="text-end fw-bold text-danger">${formatMoney(rec.amountDue - rec.amountPaid)}</td><td class="text-center pe-4"><span class="badge badge-status ${stat.class}">${stat.text}</span></td></tr>`;
+                            sumHTML += `<tr><td class="fw-medium ps-3 text-secondary-emphasis">${s.name}</td><td class="text-center fw-bold text-primary bg-info bg-opacity-10">${rec.scrubsQty || 1}</td><td class="text-center fw-bold text-primary bg-info bg-opacity-10">${rec.scrubsTopSize || '-'}</td><td class="text-center fw-bold text-primary bg-info bg-opacity-10">${rec.scrubsPantsSize || '-'}</td><td class="fw-medium bg-info bg-opacity-10">${rec.scrubsName || '-'}</td><td class="text-end fw-bold text-danger">${formatMoney(rec.amountDue - rec.amountPaid)}</td><td class="text-center pe-3"><span class="badge badge-status ${stat.class}">${stat.text}</span></td></tr>`;
                         } else {
-                            sumHTML += `<tr><td class="fw-medium ps-4 text-secondary-emphasis">${s.name}</td><td class="text-center fw-bold text-muted bg-info bg-opacity-10">-</td><td class="text-center fw-bold text-muted bg-info bg-opacity-10">-</td><td class="text-center fw-bold text-muted bg-info bg-opacity-10">-</td><td class="fw-medium text-muted bg-info bg-opacity-10">-</td><td class="text-end fw-bold text-danger">${formatMoney(stdAmount)}</td><td class="text-center pe-4"><span class="badge badge-status bg-danger-subtle">Unpaid (No Record)</span></td></tr>`;
+                            sumHTML += `<tr><td class="fw-medium ps-3 text-secondary-emphasis">${s.name}</td><td class="text-center fw-bold text-muted bg-info bg-opacity-10">-</td><td class="text-center fw-bold text-muted bg-info bg-opacity-10">-</td><td class="text-center fw-bold text-muted bg-info bg-opacity-10">-</td><td class="fw-medium text-muted bg-info bg-opacity-10">-</td><td class="text-end fw-bold text-danger">${formatMoney(stdAmount)}</td><td class="text-center pe-3"><span class="badge badge-status bg-danger-subtle">Unpaid (No Record)</span></td></tr>`;
                         }
                     });
                     sumHTML += `</tbody></table></div></div></div>`;
@@ -1769,20 +1733,20 @@
             window.appData.income.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(i => {
                 tbody.innerHTML += `
                     <tr>
-                        <td class="text-muted small ps-4">${formatDate(i.date)}</td>
+                        <td class="text-muted ps-3">${formatDate(i.date)}</td>
                         <td class="fw-medium text-secondary-emphasis">${i.source}</td>
                         <td>${i.desc}</td>
                         <td class="text-end text-success fw-bold">+${formatMoney(i.amount)}</td>
                         <td class="text-center"><span class="badge bg-light text-dark border me-1 fw-normal">${i.paymentMode || 'Cash'}</span> ${formatReceiptLink(i.refNo || i.receiptLink)}</td>
                         <td>${i.receivedBy}</td>
-                        <td class="text-muted small">${i.refNo || '-'}</td>
-                        <td class="text-center admin-only pe-4">
-                            <button class="btn btn-sm btn-light text-primary py-1 px-2 border" onclick='window.openModal("incomeModal", ${JSON.stringify(i).replace(/'/g, "&apos;")})'><i class="bi bi-pencil"></i></button>
-                            <button class="btn btn-sm btn-light text-danger py-1 px-2 border" onclick='window.confirmAction("Delete income?", () => window.deleteDataDoc("income", "${i.id}"))'><i class="bi bi-trash"></i></button>
+                        <td class="text-muted">${i.refNo || '-'}</td>
+                        <td class="text-center admin-only pe-3">
+                            <button class="btn btn-sm btn-light text-primary py-0 px-1 border" onclick='window.openModal("incomeModal", ${JSON.stringify(i).replace(/'/g, "&apos;")})'><i class="bi bi-pencil"></i></button>
+                            <button class="btn btn-sm btn-light text-danger py-0 px-1 border" onclick='window.confirmAction("Delete income?", () => window.deleteDataDoc("income", "${i.id}"))'><i class="bi bi-trash"></i></button>
                         </td>
                     </tr>`;
             });
-            if(!window.appData.income.length) tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-muted">No records found.</td></tr>`;
+            if(!window.appData.income.length) tbody.innerHTML = `<tr><td colspan="8" class="text-center py-3 text-muted">No records found.</td></tr>`;
         }
 
         function renderExpenses() {
@@ -1791,19 +1755,19 @@
             window.appData.expenses.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(e => {
                 tbody.innerHTML += `
                     <tr>
-                        <td class="text-muted small ps-4">${formatDate(e.date)}</td>
+                        <td class="text-muted ps-3">${formatDate(e.date)}</td>
                         <td><span class="badge bg-light text-dark border fw-normal">${e.category}</span></td>
                         <td class="text-secondary-emphasis">${e.desc}</td>
                         <td class="text-end text-danger fw-bold">-${formatMoney(e.amount)}</td>
                         <td class="text-center"><span class="badge bg-light text-dark border me-1 fw-normal">${e.paymentMode || 'Cash'}</span> ${formatReceiptLink(e.receiptLink || e.receipt)}</td>
                         <td>${e.paidBy}</td>
-                        <td class="text-center admin-only pe-4">
-                            <button class="btn btn-sm btn-light text-primary py-1 px-2 border" onclick='window.openModal("expenseModal", ${JSON.stringify(e).replace(/'/g, "&apos;")})'><i class="bi bi-pencil"></i></button>
-                            <button class="btn btn-sm btn-light text-danger py-1 px-2 border" onclick='window.confirmAction("Delete expense?", () => window.deleteDataDoc("expenses", "${e.id}"))'><i class="bi bi-trash"></i></button>
+                        <td class="text-center admin-only pe-3">
+                            <button class="btn btn-sm btn-light text-primary py-0 px-1 border" onclick='window.openModal("expenseModal", ${JSON.stringify(e).replace(/'/g, "&apos;")})'><i class="bi bi-pencil"></i></button>
+                            <button class="btn btn-sm btn-light text-danger py-0 px-1 border" onclick='window.confirmAction("Delete expense?", () => window.deleteDataDoc("expenses", "${e.id}"))'><i class="bi bi-trash"></i></button>
                         </td>
                     </tr>`;
             });
-            if(!window.appData.expenses.length) tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-muted">No records found.</td></tr>`;
+            if(!window.appData.expenses.length) tbody.innerHTML = `<tr><td colspan="7" class="text-center py-3 text-muted">No records found.</td></tr>`;
         }
 
         function setupReports() {
@@ -1815,7 +1779,9 @@
         window.generateReport = function() {
             const type = getEl('report-type').value;
             const container = getEl('report-container');
-            let html = `<div class="text-center mb-5"><h2 class="fw-bold text-primary">Medicine 2028 Financial Report</h2><h5 class="text-muted">${window.appData.settings.acadYear} - ${window.appData.settings.semester}</h5><p class="small text-muted">Generated on ${new Date().toLocaleDateString()}</p></div>`;
+            
+            // Ultra-Compact Header for Reports
+            let html = `<div class="text-center mb-2 lh-1"><h6 class="fw-bold text-primary mb-1" style="font-size: 0.85rem;">Med 2028 Financial Report</h6><div class="text-muted" style="font-size: 0.7rem;">${window.appData.settings.acadYear} - ${window.appData.settings.semester} | Generated: ${new Date().toLocaleDateString()}</div></div>`;
 
             if (type === 'financial_summary') {
                 const rawIncome = window.appData.income.reduce((s,i) => s + Number(i.amount), 0);
@@ -1824,14 +1790,14 @@
                 const totalIn = rawIncome + penPaid + colPaid;
                 const totalExp = window.appData.expenses.reduce((s,e) => s + Number(e.amount), 0);
                 
-                html += `<h4 class="border-bottom pb-2 mb-4">Financial Summary</h4>
-                    <table class="table table-bordered table-hover mb-5">
-                        <tr><th class="bg-light">Total External Income</th><td class="text-end fw-medium">${formatMoney(rawIncome)}</td></tr>
-                        <tr><th class="bg-light">Total Penalty Collections</th><td class="text-end fw-medium">${formatMoney(penPaid)}</td></tr>
-                        <tr><th class="bg-light">Total Other Collections</th><td class="text-end fw-medium">${formatMoney(colPaid)}</td></tr>
-                        <tr class="table-success"><th class="fs-5">Total Cash Inflow</th><td class="text-end fw-bold fs-5 text-success">${formatMoney(totalIn)}</td></tr>
-                        <tr class="table-danger"><th class="fs-5">Total Expenses (Outflow)</th><td class="text-end fw-bold fs-5 text-danger">-${formatMoney(totalExp)}</td></tr>
-                        <tr class="table-primary"><th class="fs-4 py-3">Net Available Balance</th><td class="text-end fw-bold fs-4 py-3 text-primary">${formatMoney(totalIn - totalExp)}</td></tr>
+                html += `<h6 class="border-bottom pb-1 mb-1 fw-bold text-dark" style="font-size: 0.75rem;">Financial Summary</h6>
+                    <table class="table table-bordered table-sm mb-1" style="font-size: 0.7rem;">
+                        <tr><th class="bg-light w-50 py-1">Total External Income</th><td class="text-end fw-medium py-1">${formatMoney(rawIncome)}</td></tr>
+                        <tr><th class="bg-light py-1">Total Penalty Collections</th><td class="text-end fw-medium py-1">${formatMoney(penPaid)}</td></tr>
+                        <tr><th class="bg-light py-1">Total Other Collections</th><td class="text-end fw-medium py-1">${formatMoney(colPaid)}</td></tr>
+                        <tr class="table-success"><th class="py-1">Total Cash Inflow</th><td class="text-end fw-bold text-success py-1">${formatMoney(totalIn)}</td></tr>
+                        <tr class="table-danger"><th class="py-1">Total Expenses (Outflow)</th><td class="text-end fw-bold text-danger py-1">-${formatMoney(totalExp)}</td></tr>
+                        <tr class="table-primary"><th class="py-1 fw-bold">Net Available Balance</th><td class="text-end fw-bold py-1 text-primary">${formatMoney(totalIn - totalExp)}</td></tr>
                     </table>`;
             } else if (type === 'student_statement') {
                 const sId = getEl('report-student-select').value;
@@ -1839,44 +1805,46 @@
                 const student = window.appData.students.find(s=>s.id === sId);
                 const bal = getStudentBalances(sId);
                 
-                html += `<h4 class="border-bottom pb-2 mb-3">Statement of Account: <span class="text-primary">${student.name}</span></h4>`;
-                html += `<div class="alert ${bal.overall > 0 ? 'alert-danger' : 'alert-success'} fs-5 mb-4 d-flex justify-content-between"><span>Overall Outstanding Balance:</span> <strong>${formatMoney(bal.overall)}</strong></div>`;
+                html += `<div class="d-flex justify-content-between align-items-end border-bottom pb-1 mb-1"><h6 class="mb-0 fw-bold" style="font-size: 0.75rem;">SOA: <span class="text-primary">${student.name}</span></h6>
+                         <span class="badge ${bal.overall > 0 ? 'bg-danger' : 'bg-success'}" style="font-size: 0.7rem;">Total Bal: ${formatMoney(bal.overall)}</span></div>`;
                 
-                html += `<h5 class="mt-4 mb-3">Penalty Breakdown</h5><table class="table table-sm table-bordered"><thead class="table-light"><tr><th>Date</th><th>Subject</th><th class="text-end">Amount</th><th class="text-end">Paid</th><th class="text-end">Bal</th></tr></thead><tbody>`;
-                window.appData.penalties.filter(p=>p.studentId === sId).forEach(p => { html += `<tr><td>${formatDate(p.date)}</td><td>${p.subject}</td><td class="text-end">${formatMoney(p.penaltyAmount)}</td><td class="text-end">${formatMoney(p.amountPaid)}</td><td class="text-danger text-end fw-bold">${formatMoney(p.penaltyAmount-p.amountPaid)}</td></tr>` });
+                html += `<div class="fw-bold text-dark mb-1 mt-1" style="font-size: 0.7rem;">Penalties</div><table class="table table-sm table-bordered mb-1" style="font-size: 0.65rem;"><thead class="table-light"><tr><th class="py-1">Date</th><th class="py-1">Subject</th><th class="text-end py-1">Amt</th><th class="text-end py-1">Paid</th><th class="text-end py-1">Bal</th></tr></thead><tbody>`;
+                window.appData.penalties.filter(p=>p.studentId === sId).forEach(p => { html += `<tr><td class="py-1">${formatDate(p.date)}</td><td class="py-1">${p.subject}</td><td class="text-end py-1">${formatMoney(p.penaltyAmount)}</td><td class="text-end py-1">${formatMoney(p.amountPaid)}</td><td class="text-danger text-end fw-bold py-1">${formatMoney(p.penaltyAmount-p.amountPaid)}</td></tr>` });
                 html += `</tbody></table>`;
 
-                html += `<h5 class="mt-5 mb-3">Collections Breakdown</h5><table class="table table-sm table-bordered"><thead class="table-light"><tr><th>Date</th><th>Purpose</th><th class="text-end">Due</th><th class="text-end">Paid</th><th class="text-end">Bal</th></tr></thead><tbody>`;
+                html += `<div class="fw-bold text-dark mb-1 mt-1" style="font-size: 0.7rem;">Collections</div><table class="table table-sm table-bordered mb-1" style="font-size: 0.65rem;"><thead class="table-light"><tr><th class="py-1">Date</th><th class="py-1">Purpose</th><th class="text-end py-1">Due</th><th class="text-end py-1">Paid</th><th class="text-end py-1">Bal</th></tr></thead><tbody>`;
                 window.appData.collections.filter(c=>c.studentId === sId).forEach(c => { 
                     let detail = c.purpose;
-                    if(c.purpose.toLowerCase().includes('scrub')) detail += `<br><small class="text-muted">Qty: ${c.scrubsQty||1} | Size: ${c.scrubsTopSize}/${c.scrubsPantsSize} | Name: ${c.scrubsName}</small>`;
-                    html += `<tr><td>${formatDate(c.date)}</td><td>${detail}</td><td class="text-end">${formatMoney(c.amountDue)}</td><td class="text-end">${formatMoney(c.amountPaid)}</td><td class="text-danger text-end fw-bold">${formatMoney(c.amountDue-c.amountPaid)}</td></tr>` 
+                    if(c.purpose.toLowerCase().includes('scrub')) detail += ` (Q:${c.scrubsQty||1} T:${c.scrubsTopSize}/${c.scrubsPantsSize})`;
+                    html += `<tr><td class="py-1">${formatDate(c.date)}</td><td class="py-1">${detail}</td><td class="text-end py-1">${formatMoney(c.amountDue)}</td><td class="text-end py-1">${formatMoney(c.amountPaid)}</td><td class="text-danger text-end fw-bold py-1">${formatMoney(c.amountDue-c.amountPaid)}</td></tr>` 
                 });
                 html += `</tbody></table>`;
             } else if (type === 'scrubs_report') {
                 const scrubPurposes = window.appData.settings.collectionPurposes.filter(p=>p.toLowerCase().includes('scrub'));
                 const allStudents = [...window.appData.students].sort((a,b)=>a.name.localeCompare(b.name));
                 
-                html += `<h4 class="border-bottom pb-2 mb-4">Scrubs Masterlist Report</h4>`;
+                html += `<h6 class="border-bottom pb-1 mb-1 fw-bold text-dark" style="font-size: 0.75rem;">Scrubs Masterlist</h6>`;
                 scrubPurposes.forEach(purpose => {
                     const records = window.appData.collections.filter(c => c.purpose === purpose);
-                    html += `<h5 class="mt-4">${purpose}</h5><div class="table-responsive"><table class="table table-striped table-bordered table-sm text-nowrap"><thead class="table-light"><tr><th>Name</th><th class="text-center">Qty</th><th class="text-center">Top</th><th class="text-center">Pants</th><th>Embroidery Name</th><th class="text-end">Balance</th></tr></thead><tbody>`;
+                    html += `<div class="fw-bold mt-1 mb-1" style="font-size:0.7rem;">${purpose}</div><div class="table-responsive"><table class="table table-striped table-bordered table-sm text-nowrap mb-1" style="font-size:0.65rem;"><thead class="table-light"><tr><th class="py-1">Name</th><th class="text-center py-1">Qty</th><th class="text-center py-1">Top</th><th class="text-center py-1">Pants</th><th class="py-1">Name</th><th class="text-end py-1">Balance</th></tr></thead><tbody>`;
                     allStudents.forEach(s => {
                         const r = records.find(rec => rec.studentId === s.id);
-                        if(r) html += `<tr><td>${s.name}</td><td class="text-center">${r.scrubsQty||1}</td><td class="text-center">${r.scrubsTopSize||'-'}</td><td class="text-center">${r.scrubsPantsSize||'-'}</td><td>${r.scrubsName||'-'}</td><td class="text-end text-danger">${formatMoney(r.amountDue - r.amountPaid)}</td></tr>`;
-                        else html += `<tr><td>${s.name}</td><td class="text-center text-muted">-</td><td class="text-center text-muted">-</td><td class="text-center text-muted">-</td><td class="text-muted">-</td><td class="text-end text-danger">No Record</td></tr>`;
+                        if(r) html += `<tr><td class="py-1">${s.name}</td><td class="text-center py-1">${r.scrubsQty||1}</td><td class="text-center py-1">${r.scrubsTopSize||'-'}</td><td class="text-center py-1">${r.scrubsPantsSize||'-'}</td><td class="py-1">${r.scrubsName||'-'}</td><td class="text-end text-danger py-1">${formatMoney(r.amountDue - r.amountPaid)}</td></tr>`;
+                        else html += `<tr><td class="py-1">${s.name}</td><td class="text-center text-muted py-1">-</td><td class="text-center text-muted py-1">-</td><td class="text-center text-muted py-1">-</td><td class="text-muted py-1">-</td><td class="text-end text-danger py-1">No Record</td></tr>`;
                     });
                     html += `</tbody></table></div>`;
                 });
             } else {
                 let data = [], headers = [];
                 if(type==='penalty_report') { headers = ['Date','Student','Detail','Amount','Paid','Balance']; data = window.appData.penalties.map(p=>[formatDate(p.date), window.appData.students.find(s=>s.id===p.studentId)?.name, p.subject, formatMoney(p.penaltyAmount), formatMoney(p.amountPaid), formatMoney(p.penaltyAmount-p.amountPaid)]); }
-                if(type==='collection_report') { headers = ['Date','Student','Detail','Scrubs Info','Amount','Paid','Balance']; data = window.appData.collections.map(c=>[formatDate(c.date), window.appData.students.find(s=>s.id===c.studentId)?.name, c.purpose, c.purpose.toLowerCase().includes('scrub')?`Q:${c.scrubsQty||1} T:${c.scrubsTopSize} P:${c.scrubsPantsSize} N:${c.scrubsName||'-'}`:'-', formatMoney(c.amountDue), formatMoney(c.amountPaid), formatMoney(c.amountDue-c.amountPaid)]); }
+                if(type==='collection_report') { headers = ['Date','Student','Purpose','Scrubs Info','Amount','Paid','Balance']; data = window.appData.collections.map(c=>[formatDate(c.date), window.appData.students.find(s=>s.id===c.studentId)?.name, c.purpose, c.purpose.toLowerCase().includes('scrub')?`Q:${c.scrubsQty||1} T:${c.scrubsTopSize} P:${c.scrubsPantsSize}`:'-', formatMoney(c.amountDue), formatMoney(c.amountPaid), formatMoney(c.amountDue-c.amountPaid)]); }
                 if(type==='expense_report') { headers = ['Date','Category','Description','Amount','Paid By']; data = window.appData.expenses.map(e=>[formatDate(e.date), e.category, e.desc, formatMoney(e.amount), e.paidBy]); }
+                if(type==='income_report') { headers = ['Date','Source','Description','Amount','Received By','Ref No.']; data = window.appData.income.map(i=>[formatDate(i.date), i.source, i.desc, formatMoney(i.amount), i.receivedBy || '-', i.refNo || i.receiptLink || '-']); }
                 
-                html += `<h4 class="border-bottom pb-2 mb-4">${type.replace('_',' ').toUpperCase()}</h4><div class="table-responsive"><table class="table table-striped table-bordered table-sm text-nowrap"><thead class="table-light"><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>`;
-                data.forEach(row => { html += `<tr>${row.map(cell=>`<td>${cell}</td>`).join('')}</tr>`; });
-                if(!data.length) html += `<tr><td colspan="${headers.length}" class="text-center text-muted">No data available.</td></tr>`;
+                const titleStr = type.replace('_',' ').toUpperCase();
+                html += `<h6 class="border-bottom pb-1 mb-1 fw-bold text-dark" style="font-size: 0.75rem;">${titleStr}</h6><div class="table-responsive"><table class="table table-striped table-bordered table-sm text-nowrap mb-0" style="font-size: 0.65rem;"><thead class="table-light"><tr>${headers.map(h=>`<th class="py-1">${h}</th>`).join('')}</tr></thead><tbody>`;
+                data.forEach(row => { html += `<tr>${row.map(cell=>`<td class="py-1">${cell}</td>`).join('')}</tr>`; });
+                if(!data.length) html += `<tr><td colspan="${headers.length}" class="text-center text-muted py-1">No data available.</td></tr>`;
                 html += `</tbody></table></div>`;
             }
             container.innerHTML = html;
@@ -1913,6 +1881,9 @@
                 } else if(type==='expense_report') {
                     csv += "Date,Category,Description,Amount,Paid By\n";
                     data = window.appData.expenses.map(e=>[e.date, e.category, `"${e.desc}"`, e.amount, `"${e.paidBy}"`]);
+                } else if(type==='income_report') {
+                    csv += "Date,Source,Description,Amount,Received By,Ref No.\n";
+                    data = window.appData.income.map(i=>[i.date, `"${i.source}"`, `"${i.desc}"`, i.amount, `"${i.receivedBy}"`, `"${i.refNo || i.receiptLink || '-'}"`]);
                 }
                 data.forEach(row => { csv += row.join(",") + "\n"; });
             }
@@ -1946,7 +1917,7 @@
             getEl('themeToggle').addEventListener('click', () => {
                 const html = document.documentElement; const current = html.getAttribute('data-bs-theme');
                 html.setAttribute('data-bs-theme', current === 'dark' ? 'light' : 'dark');
-                getEl('themeToggle').innerHTML = current === 'dark' ? '<i class="bi bi-moon-stars-fill fs-5"></i>' : '<i class="bi bi-sun-fill fs-5"></i>';
+                getEl('themeToggle').innerHTML = current === 'dark' ? '<i class="bi bi-moon-stars-fill fs-6"></i>' : '<i class="bi bi-sun-fill fs-6"></i>';
                 if(getEl('page-dashboard').classList.contains('active')) renderDashboard(); 
             });
 
@@ -2010,7 +1981,7 @@
                 id, date: getEl('income-date').value, source: getEl('income-source').value,
                 desc: getEl('income-desc').value, amount: parseFloat(getEl('income-amount').value),
                 paymentMode: getEl('income-mode').value, receivedBy: getEl('income-receiver').value,
-                receiptLink: getEl('income-ref').value, refNo: getEl('income-ref').value // Keep refNo for backwards compat
+                receiptLink: getEl('income-ref').value, refNo: getEl('income-ref').value
             }));
             modalFormHandler('form-expense', 'expenseModal', 'expenses', (id) => ({
                 id, date: getEl('expense-date').value, category: getEl('expense-category').value,
