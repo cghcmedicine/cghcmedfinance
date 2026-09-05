@@ -5,14 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Medicine 2028 Financial Tracker</title>
     
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
     <style>
         :root {
             --sidebar-width: 260px;
@@ -44,8 +46,8 @@
 
         [data-bs-theme="dark"] body { color: #CBD5E1; }
 
+        /* Typography & Utilities */
         h1, h2, h3, h4, h5, h6 { font-weight: 600; letter-spacing: -0.025em; color: var(--text-primary-light); }
-        
         .btn { border-radius: 8px; font-weight: 500; padding: 0.5rem 1rem; transition: all 0.2s; }
         .btn-primary { background-color: var(--brand-color); border-color: var(--brand-color); }
         .btn-primary:hover { background-color: var(--brand-hover); border-color: var(--brand-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2); }
@@ -54,6 +56,7 @@
         
         [data-bs-theme="dark"] .form-control, [data-bs-theme="dark"] .form-select { border-color: #334155; background-color: #1E293B; color: #F1F5F9; }
 
+        /* Loading Screen */
         #loading-screen {
             position: fixed; inset: 0; background: var(--bg-color-light); z-index: 9999;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -61,6 +64,7 @@
         }
         .spinner-brand { color: var(--brand-color); width: 3rem; height: 3rem; }
 
+        /* Sidebar Styling */
         #sidebar {
             width: var(--sidebar-width); height: 100vh; position: fixed; top: 0; left: 0; z-index: 1000;
             transition: transform 0.3s ease; display: flex; flex-direction: column;
@@ -81,7 +85,6 @@
             display: flex; align-items: center; padding: 0.75rem 1rem; border-radius: 10px;
             color: #64748B; text-decoration: none; transition: all 0.2s ease; font-weight: 500; font-size: 0.95rem;
         }
-        
         [data-bs-theme="dark"] .sidebar-link { color: #94A3B8; }
         .sidebar-link i { margin-right: 12px; font-size: 1.2rem; transition: transform 0.2s; }
         
@@ -91,6 +94,7 @@
         .sidebar-link.active { background-color: var(--brand-color); color: white !important; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25); }
         .sidebar-link.active i { transform: scale(1.1); }
 
+        /* Main Content & Topbar */
         #main-content { 
             margin-left: var(--sidebar-width); 
             min-height: 100vh; 
@@ -111,6 +115,7 @@
 
         .content-container { padding: 2rem; flex: 1; }
 
+        /* Card Styling */
         .card {
             border: 1px solid var(--border-color-light); border-radius: var(--card-radius); box-shadow: var(--card-shadow);
             margin-bottom: 1.5rem; background-color: #ffffff; overflow: hidden;
@@ -124,9 +129,11 @@
         [data-bs-theme="dark"] .card-header { border-bottom-color: rgba(255,255,255,0.05); }
         .card-body { padding: 1.5rem; }
 
+        /* Chart Wrappers */
         .chart-wrapper-lg { position: relative; height: 300px; width: 100%; }
         .chart-wrapper-md { position: relative; height: 250px; width: 100%; }
 
+        /* Summary Cards */
         .summary-card { padding: 1.5rem; border-radius: var(--card-radius); color: white; position: relative; overflow: hidden; border: none; }
         .summary-card h3 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0; position: relative; z-index: 2; letter-spacing: -0.05em; color: white; }
         .summary-card p { margin-bottom: 0.5rem; font-size: 0.85rem; opacity: 0.9; font-weight: 500; position: relative; z-index: 2; text-transform: uppercase; letter-spacing: 0.05em; }
@@ -141,6 +148,7 @@
         .bg-gradient-purple  { background: linear-gradient(135deg, #7C3AED, #A78BFA); }
         .bg-gradient-dark    { background: linear-gradient(135deg, #334155, #64748B); }
 
+        /* Tables */
         .table { margin-bottom: 0; }
         .table th { font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; color: #64748B; padding: 1rem; border-bottom-width: 2px; }
         [data-bs-theme="dark"] .table th { color: #94A3B8; border-color: #334155; }
@@ -149,6 +157,7 @@
         .table-hover tbody tr:hover { background-color: rgba(79, 70, 229, 0.03); }
         [data-bs-theme="dark"] .table-hover tbody tr:hover { background-color: rgba(255,255,255,0.02); }
 
+        /* Badges */
         .badge-status { padding: 0.5em 0.8em; font-weight: 600; border-radius: 6px; font-size: 0.75rem; letter-spacing: 0.02em; }
         .bg-success-subtle { background-color: #D1FAE5 !important; color: #065F46 !important; }
         .bg-warning-subtle { background-color: #FEF3C7 !important; color: #92400E !important; }
@@ -158,12 +167,14 @@
         [data-bs-theme="dark"] .bg-warning-subtle { background-color: rgba(245, 158, 11, 0.2) !important; color: #FBBF24 !important; }
         [data-bs-theme="dark"] .bg-danger-subtle { background-color: rgba(239, 68, 68, 0.2) !important; color: #F87171 !important; }
 
+        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
         [data-bs-theme="dark"] ::-webkit-scrollbar-thumb { background: #475569; }
 
+        /* Responsive Utilities */
         @media (max-width: 992px) {
             #sidebar { transform: translateX(-100%); }
             #sidebar.show { transform: translateX(0); }
@@ -173,15 +184,26 @@
             .sidebar-overlay.show { display: block; opacity: 1; }
         }
 
+        /* Animations */
         .page-section { display: none; animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         .page-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
         body.view-only .admin-only { display: none !important; }
+
+        /* Report Specific Styles */
+        #report-container {
+            background-color: white;
+            color: black;
+            border-radius: 8px;
+        }
+        [data-bs-theme="dark"] #report-container { background-color: #ffffff; color: #000000; }
+        
     </style>
 </head>
 <body>
 
+    <!-- Loading Screen -->
     <div id="loading-screen">
         <div class="spinner-border spinner-brand mb-3" role="status">
             <span class="visually-hidden">Loading...</span>
@@ -193,6 +215,7 @@
     <!-- Sidebar Overlay for Mobile -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
+    <!-- Sidebar -->
     <aside id="sidebar">
         <div class="sidebar-brand">
             <i class="bi bi-heart-pulse-fill me-2 fs-4"></i> Med 2028
@@ -209,7 +232,9 @@
         </div>
     </aside>
 
+    <!-- Main Content Wrapper -->
     <div id="main-content">
+        <!-- Top Navbar -->
         <nav id="topbar">
             <div class="d-flex align-items-center">
                 <button class="btn btn-link d-lg-none me-2 text-body p-0" id="sidebarToggle">
@@ -599,37 +624,42 @@
                         <div class="card border-0 shadow-sm">
                             <div class="card-body p-4">
                                 <h5 class="mb-3 fw-bold">Generate Report</h5>
-                                <div class="d-flex flex-wrap gap-3 align-items-center">
-                                    <select id="report-type" class="form-select w-auto shadow-sm">
-                                        <option value="financial_summary">Financial Summary</option>
-                                        <option value="student_statement">Student Statement of Account</option>
-                                        <option value="penalty_report">Penalty Report</option>
-                                        <option value="collection_report">Collection Report</option>
-                                        <option value="scrubs_report">Scrubs Masterlist Report</option>
-                                        <option value="income_report">Income Report</option>
-                                        <option value="expense_report">Expense Report</option>
-                                    </select>
-                                    <select id="report-student-select" class="form-select w-auto d-none shadow-sm"></select>
+                                
+                                <!-- Updated flexbox layout to ensure wrapping is left aligned cleanly -->
+                                <div class="d-flex flex-column flex-xl-row gap-3 align-items-xl-center">
+                                    <!-- Left Group: Selection -->
+                                    <div class="d-flex flex-wrap align-items-center gap-2">
+                                        <select id="report-type" class="form-select w-auto shadow-sm">
+                                            <option value="financial_summary">Financial Summary</option>
+                                            <option value="student_statement">Student Statement of Account</option>
+                                            <option value="penalty_report">Penalty Report</option>
+                                            <option value="collection_report">Collection Report</option>
+                                            <option value="scrubs_report">Scrubs Masterlist Report</option>
+                                            <option value="income_report">Income Report</option>
+                                            <option value="expense_report">Expense Report</option>
+                                        </select>
+                                        <select id="report-student-select" class="form-select w-auto d-none shadow-sm"></select>
+                                        <button class="btn btn-primary shadow-sm px-4" onclick="generateReport()">Generate UI</button>
+                                    </div>
                                     
-                                    <button class="btn btn-primary px-4 shadow-sm" onclick="generateReport()"><i class="bi bi-arrow-clockwise me-1"></i> Generate UI</button>
-                                    
-                                    <div class="ms-auto d-flex gap-2">
-                                        <button class="btn btn-danger px-4 shadow-sm" onclick="exportPDF(event)"><i class="bi bi-file-earmark-pdf me-1"></i> Export PDF</button>
-                                        <button class="btn btn-light border px-4 shadow-sm text-dark" onclick="window.print()"><i class="bi bi-printer me-1"></i> Print</button>
-                                        <button class="btn btn-success px-4 shadow-sm" onclick="exportCSV()"><i class="bi bi-filetype-csv me-1"></i> CSV</button>
+                                    <!-- Right Group: Actions (aligned naturally via column logic on small, pushed right on xl screen) -->
+                                    <div class="d-flex flex-wrap align-items-center gap-2 ms-xl-auto">
+                                        <button class="btn btn-danger shadow-sm" onclick="exportPDF()"><i class="bi bi-file-earmark-pdf me-1"></i> Export PDF</button>
+                                        <button class="btn btn-light border shadow-sm text-dark" onclick="window.print()"><i class="bi bi-printer me-1"></i> Print</button>
+                                        <button class="btn btn-success shadow-sm" onclick="exportCSV()"><i class="bi bi-filetype-csv me-1"></i> CSV</button>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
                     <div class="col-12">
-                        <div class="card border-0 shadow-sm bg-white">
-                            <!-- Adjusted padding so the view looks good on screen and transfers well to PDF -->
-                            <div class="card-body p-4 p-md-5" id="report-container">
-                                <div class="text-center text-muted py-5 my-5">
+                        <div class="card border-0 shadow-sm overflow-hidden">
+                            <div class="card-body p-2 p-md-5 bg-white" id="report-container">
+                                <div class="text-center text-muted py-5">
                                     <i class="bi bi-file-earmark-bar-graph display-1 opacity-25 mb-3"></i>
                                     <h4 class="fw-bold">Ready to generate</h4>
-                                    <p>Select a report type above and click "Generate UI" to preview.</p>
+                                    <p>Select a report type above and click Generate UI.</p>
                                 </div>
                             </div>
                         </div>
@@ -1074,6 +1104,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- html2pdf Library for clean PDF Exports -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -1806,15 +1838,12 @@
         window.generateReport = function() {
             const type = getEl('report-type').value;
             const container = getEl('report-container');
+            const generatedDate = new Date().toLocaleDateString();
             
-            // Standard pleasing aesthetic with proper margins and readable text for the web interface and PDF.
-            let html = `
-                <div class="text-center mb-4 pb-2 border-bottom">
-                    <h4 class="fw-bold text-primary mb-1">Med 2028 Financial Report</h4>
-                    <h6 class="text-muted mb-2">${window.appData.settings.acadYear} - ${window.appData.settings.semester}</h6>
-                    <p class="small text-muted mb-0">Generated: ${new Date().toLocaleDateString()}</p>
-                </div>
-            `;
+            let html = `<div class="text-center mb-4 pt-2">
+                <h3 class="fw-bold text-primary mb-1">Med 2028 Financial Report</h3>
+                <p class="text-muted small mb-0">${window.appData.settings.acadYear} - ${window.appData.settings.semester} | Generated: ${generatedDate}</p>
+            </div>`;
 
             if (type === 'financial_summary') {
                 const rawIncome = window.appData.income.reduce((s,i) => s + Number(i.amount), 0);
@@ -1823,14 +1852,14 @@
                 const totalIn = rawIncome + penPaid + colPaid;
                 const totalExp = window.appData.expenses.reduce((s,e) => s + Number(e.amount), 0);
                 
-                html += `<h5 class="fw-bold text-dark mb-3">Financial Summary</h5>
-                    <table class="table table-bordered mb-4 align-middle">
-                        <tr><th class="bg-light w-50 p-3">Total External Income</th><td class="text-end fw-medium p-3">${formatMoney(rawIncome)}</td></tr>
-                        <tr><th class="bg-light p-3">Total Penalty Collections</th><td class="text-end fw-medium p-3">${formatMoney(penPaid)}</td></tr>
-                        <tr><th class="bg-light p-3">Total Other Collections</th><td class="text-end fw-medium p-3">${formatMoney(colPaid)}</td></tr>
-                        <tr class="table-success"><th class="p-3 fs-6">Total Cash Inflow</th><td class="text-end fw-bold text-success p-3 fs-6">${formatMoney(totalIn)}</td></tr>
-                        <tr class="table-danger"><th class="p-3 fs-6">Total Expenses (Outflow)</th><td class="text-end fw-bold text-danger p-3 fs-6">-${formatMoney(totalExp)}</td></tr>
-                        <tr class="table-primary"><th class="p-3 fs-5 fw-bold">Net Available Balance</th><td class="text-end fw-bold p-3 text-primary fs-5">${formatMoney(totalIn - totalExp)}</td></tr>
+                html += `<h5 class="fw-bold border-bottom pb-2 mb-3">Financial Summary</h5>
+                    <table class="table table-bordered table-hover">
+                        <tr><th class="bg-light text-uppercase small text-muted w-50">Total External Income</th><td class="text-end fw-medium w-50">${formatMoney(rawIncome)}</td></tr>
+                        <tr><th class="bg-light text-uppercase small text-muted">Total Penalty Collections</th><td class="text-end fw-medium">${formatMoney(penPaid)}</td></tr>
+                        <tr><th class="bg-light text-uppercase small text-muted">Total Other Collections</th><td class="text-end fw-medium">${formatMoney(colPaid)}</td></tr>
+                        <tr class="table-success"><th class="text-uppercase small fw-bold">Total Cash Inflow</th><td class="text-end fw-bold text-success">${formatMoney(totalIn)}</td></tr>
+                        <tr class="table-danger"><th class="text-uppercase small fw-bold">Total Expenses (Outflow)</th><td class="text-end fw-bold text-danger">-${formatMoney(totalExp)}</td></tr>
+                        <tr class="table-primary"><th class="fs-5 py-3 text-primary">NET AVAILABLE BALANCE</th><td class="text-end fw-bold fs-5 py-3 text-primary">${formatMoney(totalIn - totalExp)}</td></tr>
                     </table>`;
             } else if (type === 'student_statement') {
                 const sId = getEl('report-student-select').value;
@@ -1838,128 +1867,97 @@
                 const student = window.appData.students.find(s=>s.id === sId);
                 const bal = getStudentBalances(sId);
                 
-                html += `
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h5 class="mb-0 fw-bold">Statement of Account: <span class="text-primary">${student.name}</span></h5>
-                    </div>
-                    <div class="alert ${bal.overall > 0 ? 'alert-danger' : 'alert-success'} d-flex justify-content-between align-items-center p-3 mb-4 rounded-3 border-0">
-                        <span class="fs-6 fw-medium">Overall Outstanding Balance:</span>
-                        <strong class="fs-5">${formatMoney(bal.overall)}</strong>
-                    </div>
-                `;
+                html += `<h5 class="fw-bold border-bottom pb-2 mb-3">Statement of Account: <span class="text-primary">${student.name}</span></h5>`;
+                html += `<div class="alert ${bal.overall > 0 ? 'alert-danger' : 'alert-success'} d-flex justify-content-between p-3 rounded-2 mb-4">
+                    <span class="fw-medium text-uppercase small">Outstanding Balance:</span> 
+                    <strong class="fs-5">${formatMoney(bal.overall)}</strong>
+                </div>`;
                 
-                html += `<h6 class="fw-bold text-dark mb-3">Penalty Breakdown</h6>
-                         <div class="table-responsive mb-4"><table class="table table-bordered table-striped align-middle">
-                            <thead class="table-light"><tr><th class="p-2">Date</th><th class="p-2">Subject</th><th class="text-end p-2">Amount</th><th class="text-end p-2">Paid</th><th class="text-end p-2">Balance</th></tr></thead>
-                            <tbody>`;
-                const pens = window.appData.penalties.filter(p=>p.studentId === sId);
-                if(pens.length) {
-                    pens.forEach(p => { html += `<tr><td class="p-2">${formatDate(p.date)}</td><td class="p-2">${p.subject}</td><td class="text-end p-2">${formatMoney(p.penaltyAmount)}</td><td class="text-end p-2">${formatMoney(p.amountPaid)}</td><td class="text-danger text-end fw-bold p-2">${formatMoney(p.penaltyAmount-p.amountPaid)}</td></tr>` });
-                } else {
-                    html += `<tr><td colspan="5" class="text-center text-muted p-3">No penalty records found.</td></tr>`;
-                }
-                html += `</tbody></table></div>`;
+                html += `<h6 class="fw-bold mb-2">Penalty Breakdown</h6><table class="table table-sm table-bordered"><thead class="table-light"><tr class="small text-muted text-uppercase"><th>Date</th><th>Subject</th><th class="text-end">Amount</th><th class="text-end">Paid</th><th class="text-end">Bal</th></tr></thead><tbody>`;
+                let penData = window.appData.penalties.filter(p=>p.studentId === sId);
+                if(penData.length) {
+                    penData.forEach(p => { html += `<tr><td class="small">${formatDate(p.date)}</td><td class="small">${p.subject}</td><td class="text-end small">${formatMoney(p.penaltyAmount)}</td><td class="text-end small">${formatMoney(p.amountPaid)}</td><td class="text-danger text-end fw-bold small">${formatMoney(p.penaltyAmount-p.amountPaid)}</td></tr>` });
+                } else { html += `<tr><td colspan="5" class="text-center text-muted small py-2">No penalty records</td></tr>`; }
+                html += `</tbody></table>`;
 
-                html += `<h6 class="fw-bold text-dark mb-3">Collections Breakdown</h6>
-                         <div class="table-responsive mb-4"><table class="table table-bordered table-striped align-middle">
-                            <thead class="table-light"><tr><th class="p-2">Date</th><th class="p-2">Purpose</th><th class="text-end p-2">Due</th><th class="text-end p-2">Paid</th><th class="text-end p-2">Balance</th></tr></thead>
-                            <tbody>`;
-                const cols = window.appData.collections.filter(c=>c.studentId === sId);
-                if(cols.length) {
-                    cols.forEach(c => { 
+                html += `<h6 class="fw-bold mt-4 mb-2">Collections Breakdown</h6><table class="table table-sm table-bordered"><thead class="table-light"><tr class="small text-muted text-uppercase"><th>Date</th><th>Purpose</th><th class="text-end">Due</th><th class="text-end">Paid</th><th class="text-end">Bal</th></tr></thead><tbody>`;
+                let colData = window.appData.collections.filter(c=>c.studentId === sId);
+                if(colData.length) {
+                    colData.forEach(c => { 
                         let detail = c.purpose;
-                        if(c.purpose.toLowerCase().includes('scrub')) detail += `<br><small class="text-muted opacity-75">Qty: ${c.scrubsQty||1} | Size: ${c.scrubsTopSize}/${c.scrubsPantsSize} | Name: ${c.scrubsName}</small>`;
-                        html += `<tr><td class="p-2">${formatDate(c.date)}</td><td class="p-2">${detail}</td><td class="text-end p-2">${formatMoney(c.amountDue)}</td><td class="text-end p-2">${formatMoney(c.amountPaid)}</td><td class="text-danger text-end fw-bold p-2">${formatMoney(c.amountDue-c.amountPaid)}</td></tr>` 
+                        if(c.purpose.toLowerCase().includes('scrub')) detail += `<br><small class="text-muted" style="font-size:0.7rem;">Q:${c.scrubsQty||1} | T:${c.scrubsTopSize} P:${c.scrubsPantsSize} | N:${c.scrubsName||'-'}</small>`;
+                        html += `<tr><td class="small">${formatDate(c.date)}</td><td class="small">${detail}</td><td class="text-end small">${formatMoney(c.amountDue)}</td><td class="text-end small">${formatMoney(c.amountPaid)}</td><td class="text-danger text-end fw-bold small">${formatMoney(c.amountDue-c.amountPaid)}</td></tr>` 
                     });
-                } else {
-                    html += `<tr><td colspan="5" class="text-center text-muted p-3">No collection records found.</td></tr>`;
-                }
-                html += `</tbody></table></div>`;
+                } else { html += `<tr><td colspan="5" class="text-center text-muted small py-2">No collection records</td></tr>`; }
+                html += `</tbody></table>`;
                 
             } else if (type === 'scrubs_report') {
                 const scrubPurposes = window.appData.settings.collectionPurposes.filter(p=>p.toLowerCase().includes('scrub'));
                 const allStudents = [...window.appData.students].sort((a,b)=>a.name.localeCompare(b.name));
                 
-                html += `<h5 class="fw-bold text-dark mb-4">Scrubs Masterlist Report</h5>`;
+                html += `<h5 class="fw-bold border-bottom pb-2 mb-3">Scrubs Masterlist Report</h5>`;
                 scrubPurposes.forEach(purpose => {
                     const records = window.appData.collections.filter(c => c.purpose === purpose);
-                    html += `<h6 class="fw-bold text-primary mt-4 mb-2">${purpose}</h6>
-                             <div class="table-responsive mb-4"><table class="table table-striped table-bordered align-middle">
-                                <thead class="table-light"><tr><th class="p-2">Name</th><th class="text-center p-2">Qty</th><th class="text-center p-2">Top</th><th class="text-center p-2">Pants</th><th class="p-2">Embroidery Name</th><th class="text-end p-2">Balance</th></tr></thead>
-                                <tbody>`;
+                    html += `<h6 class="fw-bold mt-4 text-primary">${purpose}</h6><table class="table table-bordered table-sm"><thead class="table-light"><tr class="small text-muted text-uppercase"><th>Name</th><th class="text-center">Qty</th><th class="text-center">Top</th><th class="text-center">Pants</th><th>Embroidery Name</th><th class="text-end">Balance</th></tr></thead><tbody>`;
                     allStudents.forEach(s => {
                         const r = records.find(rec => rec.studentId === s.id);
-                        if(r) html += `<tr><td class="p-2 fw-medium">${s.name}</td><td class="text-center p-2">${r.scrubsQty||1}</td><td class="text-center p-2">${r.scrubsTopSize||'-'}</td><td class="text-center p-2">${r.scrubsPantsSize||'-'}</td><td class="p-2">${r.scrubsName||'-'}</td><td class="text-end text-danger fw-medium p-2">${formatMoney(r.amountDue - r.amountPaid)}</td></tr>`;
-                        else html += `<tr><td class="p-2 fw-medium">${s.name}</td><td class="text-center text-muted p-2">-</td><td class="text-center text-muted p-2">-</td><td class="text-center text-muted p-2">-</td><td class="text-muted p-2">-</td><td class="text-end text-danger fw-medium p-2">No Record</td></tr>`;
+                        if(r) html += `<tr><td class="small fw-medium">${s.name}</td><td class="text-center small">${r.scrubsQty||1}</td><td class="text-center small">${r.scrubsTopSize||'-'}</td><td class="text-center small">${r.scrubsPantsSize||'-'}</td><td class="small">${r.scrubsName||'-'}</td><td class="text-end text-danger small fw-bold">${formatMoney(r.amountDue - r.amountPaid)}</td></tr>`;
+                        else html += `<tr><td class="small fw-medium">${s.name}</td><td class="text-center text-muted small">-</td><td class="text-center text-muted small">-</td><td class="text-center text-muted small">-</td><td class="text-muted small">-</td><td class="text-end text-danger small fw-bold">No Record</td></tr>`;
                     });
-                    html += `</tbody></table></div>`;
+                    html += `</tbody></table>`;
                 });
             } else {
-                // Generic handler for Income, Expense, Penalty, and Collection master reports
                 let data = [], headers = [];
+                let title = type.replace('_',' ').toUpperCase();
+                
                 if(type==='penalty_report') { 
                     headers = ['Date','Student','Detail','Amount','Paid','Balance']; 
                     data = window.appData.penalties.map(p=>[formatDate(p.date), window.appData.students.find(s=>s.id===p.studentId)?.name, p.subject, formatMoney(p.penaltyAmount), formatMoney(p.amountPaid), formatMoney(p.penaltyAmount-p.amountPaid)]); 
-                }
-                if(type==='collection_report') { 
-                    headers = ['Date','Student','Purpose','Scrubs Info','Amount','Paid','Balance']; 
-                    data = window.appData.collections.map(c=>[formatDate(c.date), window.appData.students.find(s=>s.id===c.studentId)?.name, c.purpose, c.purpose.toLowerCase().includes('scrub')?`Q:${c.scrubsQty||1} T:${c.scrubsTopSize} P:${c.scrubsPantsSize}`:'-', formatMoney(c.amountDue), formatMoney(c.amountPaid), formatMoney(c.amountDue-c.amountPaid)]); 
-                }
-                if(type==='expense_report') { 
+                } else if(type==='collection_report') { 
+                    headers = ['Date','Student','Detail','Scrubs Info','Amount','Paid','Balance']; 
+                    data = window.appData.collections.map(c=>[formatDate(c.date), window.appData.students.find(s=>s.id===c.studentId)?.name, c.purpose, c.purpose.toLowerCase().includes('scrub')?`Q:${c.scrubsQty||1} T:${c.scrubsTopSize} P:${c.scrubsPantsSize} N:${c.scrubsName||'-'}`:'-', formatMoney(c.amountDue), formatMoney(c.amountPaid), formatMoney(c.amountDue-c.amountPaid)]); 
+                } else if(type==='income_report') { 
+                    headers = ['Date','Source','Description','Amount','Received By']; 
+                    data = window.appData.income.map(i=>[formatDate(i.date), i.source, i.desc, formatMoney(i.amount), i.receivedBy || '-']); 
+                } else if(type==='expense_report') { 
                     headers = ['Date','Category','Description','Amount','Paid By']; 
-                    data = window.appData.expenses.map(e=>[formatDate(e.date), e.category, e.desc, formatMoney(e.amount), e.paidBy]); 
-                }
-                if(type==='income_report') { 
-                    headers = ['Date','Source','Description','Amount','Received By','Ref No.']; 
-                    data = window.appData.income.map(i=>[formatDate(i.date), i.source, i.desc, formatMoney(i.amount), i.receivedBy || '-', i.refNo || i.receiptLink || '-']); 
+                    data = window.appData.expenses.map(e=>[formatDate(e.date), e.category, e.desc, formatMoney(e.amount), e.paidBy || '-']); 
                 }
                 
-                const titleStr = type.replace('_',' ').toUpperCase();
-                html += `<h5 class="fw-bold text-dark mb-3">${titleStr}</h5>
-                    <div class="table-responsive">
-                    <table class="table table-striped table-bordered align-middle mb-0">
-                        <thead class="table-light"><tr>${headers.map(h=>`<th class="p-2">${h}</th>`).join('')}</tr></thead>
-                        <tbody>`;
-                data.forEach(row => { html += `<tr>${row.map(cell=>`<td class="p-2" style="white-space: normal; min-width: 80px;">${cell}</td>`).join('')}</tr>`; });
-                if(!data.length) html += `<tr><td colspan="${headers.length}" class="text-center text-muted p-4">No data available.</td></tr>`;
-                html += `</tbody></table></div>`;
+                html += `<h5 class="fw-bold border-bottom pb-2 mb-3">${title}</h5>
+                <table class="table table-bordered table-sm">
+                    <thead class="table-light"><tr class="small text-muted text-uppercase">${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead>
+                    <tbody>`;
+                data.forEach(row => { html += `<tr>${row.map(cell=>`<td class="small">${cell}</td>`).join('')}</tr>`; });
+                if(!data.length) html += `<tr><td colspan="${headers.length}" class="text-center text-muted py-3">No records available.</td></tr>`;
+                html += `</tbody></table>`;
             }
             container.innerHTML = html;
         }
 
-        window.exportPDF = function(event) {
-            const element = getEl('report-container');
+        window.exportPDF = function() {
+            const element = document.getElementById('report-container');
             const type = getEl('report-type').value;
             
-            // Do not export the empty placeholder state
+            // If the default "Ready to Generate" message is showing, warn the user.
             if(element.innerHTML.includes('Ready to generate')) {
-                return window.showToast("Please click 'Generate UI' first before exporting.", "warning");
+                return window.showToast('Please Generate the UI report first before exporting to PDF.', 'warning');
             }
 
-            // Button loading state
-            const btn = event.currentTarget;
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Exporting...';
-            btn.disabled = true;
-
             const opt = {
-                margin:       [0.4, 0.4, 0.4, 0.4],
-                filename:     `${type}_report_${new Date().toISOString().split('T')[0]}.pdf`,
+                margin:       0.4,
+                filename:     `Med2028_${type}_export.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, logging: false },
-                // Use landscape layout for wide tables like income/expenses/collections
+                html2canvas:  { scale: 2, useCORS: true },
                 jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
             };
 
+            window.showToast('Generating PDF, please wait...', 'info');
             html2pdf().set(opt).from(element).save().then(() => {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-                window.showToast("PDF Exported successfully!");
+                window.showToast('PDF Exported Successfully!', 'success');
             }).catch(err => {
-                console.error(err);
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-                window.showToast("Error exporting PDF.", "danger");
+                console.error("PDF Export Error:", err);
+                window.showToast('Error exporting PDF', 'danger');
             });
         }
 
@@ -1982,7 +1980,7 @@
                     });
                 });
             } else if (type === 'student_statement') {
-                return window.showToast("CSV export for individual statements not supported. Please use PDF or Print.", "warning");
+                return window.showToast("CSV export for individual statements not supported. Use Print or Export PDF.", "warning");
             } else {
                 let data = [];
                 if(type==='penalty_report') {
@@ -1991,12 +1989,12 @@
                 } else if(type==='collection_report') {
                     csv += "Date,Student,Purpose,Scrubs Info,Due,Paid,Balance\n";
                     data = window.appData.collections.map(c=>[c.date, `"${window.appData.students.find(s=>s.id===c.studentId)?.name}"`, c.purpose, c.purpose.toLowerCase().includes('scrub')?`"Q:${c.scrubsQty||1} T:${c.scrubsTopSize} P:${c.scrubsPantsSize} N:${c.scrubsName||'-'}"`:'"-"', c.amountDue, c.amountPaid, c.amountDue-c.amountPaid]);
+                } else if(type==='income_report') {
+                    csv += "Date,Source,Description,Amount,Received By\n";
+                    data = window.appData.income.map(i=>[i.date, `"${i.source}"`, `"${i.desc}"`, i.amount, `"${i.receivedBy || '-'}"`]);
                 } else if(type==='expense_report') {
                     csv += "Date,Category,Description,Amount,Paid By\n";
-                    data = window.appData.expenses.map(e=>[e.date, e.category, `"${e.desc}"`, e.amount, `"${e.paidBy}"`]);
-                } else if(type==='income_report') {
-                    csv += "Date,Source,Description,Amount,Received By,Ref No.\n";
-                    data = window.appData.income.map(i=>[i.date, `"${i.source}"`, `"${i.desc}"`, i.amount, `"${i.receivedBy || '-'}"`, `"${i.refNo || i.receiptLink || '-'}"`]);
+                    data = window.appData.expenses.map(e=>[e.date, e.category, `"${e.desc}"`, e.amount, `"${e.paidBy || '-'}"`]);
                 }
                 data.forEach(row => { csv += row.join(",") + "\n"; });
             }
