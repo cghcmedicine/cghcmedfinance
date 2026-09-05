@@ -11,6 +11,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <style>
         :root {
             --sidebar-width: 260px;
@@ -43,6 +45,7 @@
         [data-bs-theme="dark"] body { color: #CBD5E1; }
 
         h1, h2, h3, h4, h5, h6 { font-weight: 600; letter-spacing: -0.025em; color: var(--text-primary-light); }
+        
         .btn { border-radius: 8px; font-weight: 500; padding: 0.5rem 1rem; transition: all 0.2s; }
         .btn-primary { background-color: var(--brand-color); border-color: var(--brand-color); }
         .btn-primary:hover { background-color: var(--brand-hover); border-color: var(--brand-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2); }
@@ -78,6 +81,7 @@
             display: flex; align-items: center; padding: 0.75rem 1rem; border-radius: 10px;
             color: #64748B; text-decoration: none; transition: all 0.2s ease; font-weight: 500; font-size: 0.95rem;
         }
+        
         [data-bs-theme="dark"] .sidebar-link { color: #94A3B8; }
         .sidebar-link i { margin-right: 12px; font-size: 1.2rem; transition: transform 0.2s; }
         
@@ -178,7 +182,6 @@
 </head>
 <body>
 
-    <!-- Loading Screen -->
     <div id="loading-screen">
         <div class="spinner-border spinner-brand mb-3" role="status">
             <span class="visually-hidden">Loading...</span>
@@ -190,7 +193,6 @@
     <!-- Sidebar Overlay for Mobile -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- Sidebar -->
     <aside id="sidebar">
         <div class="sidebar-brand">
             <i class="bi bi-heart-pulse-fill me-2 fs-4"></i> Med 2028
@@ -207,9 +209,7 @@
         </div>
     </aside>
 
-    <!-- Main Content Wrapper -->
     <div id="main-content">
-        <!-- Top Navbar -->
         <nav id="topbar">
             <div class="d-flex align-items-center">
                 <button class="btn btn-link d-lg-none me-2 text-body p-0" id="sidebarToggle">
@@ -599,8 +599,7 @@
                         <div class="card border-0 shadow-sm">
                             <div class="card-body p-4">
                                 <h5 class="mb-3 fw-bold">Generate Report</h5>
-                                <div class="d-flex flex-wrap gap-3">
-                                    <!-- Added income_report to this dropdown -->
+                                <div class="d-flex flex-wrap gap-3 align-items-center">
                                     <select id="report-type" class="form-select w-auto shadow-sm">
                                         <option value="financial_summary">Financial Summary</option>
                                         <option value="student_statement">Student Statement of Account</option>
@@ -611,21 +610,26 @@
                                         <option value="expense_report">Expense Report</option>
                                     </select>
                                     <select id="report-student-select" class="form-select w-auto d-none shadow-sm"></select>
-                                    <button class="btn btn-primary px-4 shadow-sm" onclick="generateReport()">Generate</button>
-                                    <button class="btn btn-light border px-4 shadow-sm text-dark" onclick="window.print()"><i class="bi bi-printer me-1"></i> Print</button>
-                                    <button class="btn btn-success px-4 shadow-sm" onclick="exportCSV()"><i class="bi bi-filetype-csv me-1"></i> Export CSV</button>
+                                    
+                                    <button class="btn btn-primary px-4 shadow-sm" onclick="generateReport()"><i class="bi bi-arrow-clockwise me-1"></i> Generate UI</button>
+                                    
+                                    <div class="ms-auto d-flex gap-2">
+                                        <button class="btn btn-danger px-4 shadow-sm" onclick="exportPDF(event)"><i class="bi bi-file-earmark-pdf me-1"></i> Export PDF</button>
+                                        <button class="btn btn-light border px-4 shadow-sm text-dark" onclick="window.print()"><i class="bi bi-printer me-1"></i> Print</button>
+                                        <button class="btn btn-success px-4 shadow-sm" onclick="exportCSV()"><i class="bi bi-filetype-csv me-1"></i> CSV</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-12">
-                        <div class="card border-0 shadow-sm">
-                            <!-- Adjusted padding from p-5 to p-3 to save space for screenshots -->
-                            <div class="card-body p-3" id="report-container">
-                                <div class="text-center text-muted py-5">
+                        <div class="card border-0 shadow-sm bg-white">
+                            <!-- Adjusted padding so the view looks good on screen and transfers well to PDF -->
+                            <div class="card-body p-4 p-md-5" id="report-container">
+                                <div class="text-center text-muted py-5 my-5">
                                     <i class="bi bi-file-earmark-bar-graph display-1 opacity-25 mb-3"></i>
                                     <h4 class="fw-bold">Ready to generate</h4>
-                                    <p>Select a report type above and click Generate.</p>
+                                    <p>Select a report type above and click "Generate UI" to preview.</p>
                                 </div>
                             </div>
                         </div>
@@ -1167,6 +1171,7 @@
             catch(e) { console.error(e); window.showToast('Error deleting', 'danger'); }
         }
 
+        // Export bulk charge to window so HTML button can trigger it
         window.processBulkCharge = async function(purpose, date, amount) {
             try {
                 const batch = writeBatch(db);
@@ -1450,6 +1455,7 @@
             Chart.defaults.font.family = "'Inter', sans-serif";
             Chart.defaults.scale.grid.color = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
 
+            // 1. Income vs Expenses
             const hasIncExp = totalIn > 0 || totalExp > 0;
             initChart('chartIncExp', {
                 type: 'doughnut',
@@ -1470,6 +1476,7 @@
                 }
             });
 
+            // 2. Penalties by Subject
             const subData = {}; 
             window.appData.penalties.forEach(p => { subData[p.subject] = (subData[p.subject] || 0) + Number(p.penaltyAmount); });
             const hasPenalties = Object.keys(subData).length > 0;
@@ -1482,6 +1489,7 @@
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
             });
 
+            // 3. Expenses by Category
             const expData = {}; 
             window.appData.expenses.forEach(e => { expData[e.category] = (expData[e.category] || 0) + Number(e.amount); });
             const hasExp = Object.keys(expData).length > 0;
@@ -1500,6 +1508,7 @@
                 }
             });
 
+            // 4. Payment Modes
             const pModes = {}; 
             [
                 ...window.appData.income.map(i => ({ mode: i.paymentMode || 'Cash', amt: i.amount })), 
@@ -1531,6 +1540,7 @@
                 }
             });
 
+            // 5. Cash Flow Line
             const mFlow = {};
             [...window.appData.income.map(i=>({d:i.date, amt:i.amount})), ...window.appData.penalties.filter(p=>p.amountPaid>0).map(p=>({d:p.date, amt:p.amountPaid})), ...window.appData.collections.filter(c=>c.amountPaid>0).map(c=>({d:c.date, amt:c.amountPaid}))]
              .forEach(t => { const m = t.d.substring(0,7); mFlow[m] = (mFlow[m]||0) + Number(t.amt); });
@@ -1664,6 +1674,7 @@
             });
             if(!filtered.length) tbody.innerHTML = `<tr><td colspan="9" class="text-center py-4 text-muted">No records found.</td></tr>`;
 
+            // SUMMARY GENERATION
             const sumContainer = getEl('collections-summary-container');
             if(!sumContainer) return;
             let sumHTML = '';
@@ -1796,8 +1807,14 @@
             const type = getEl('report-type').value;
             const container = getEl('report-container');
             
-            // Ultra-compact header for screenshotting
-            let html = `<div class="text-center mb-2"><h6 class="fw-bold text-primary mb-0" style="font-size: 0.85rem;">Med 2028 Financial Report</h6><p class="text-muted mb-1" style="font-size: 0.65rem;">${window.appData.settings.acadYear} - ${window.appData.settings.semester} | Generated: ${new Date().toLocaleDateString()}</p></div>`;
+            // Standard pleasing aesthetic with proper margins and readable text for the web interface and PDF.
+            let html = `
+                <div class="text-center mb-4 pb-2 border-bottom">
+                    <h4 class="fw-bold text-primary mb-1">Med 2028 Financial Report</h4>
+                    <h6 class="text-muted mb-2">${window.appData.settings.acadYear} - ${window.appData.settings.semester}</h6>
+                    <p class="small text-muted mb-0">Generated: ${new Date().toLocaleDateString()}</p>
+                </div>
+            `;
 
             if (type === 'financial_summary') {
                 const rawIncome = window.appData.income.reduce((s,i) => s + Number(i.amount), 0);
@@ -1806,14 +1823,14 @@
                 const totalIn = rawIncome + penPaid + colPaid;
                 const totalExp = window.appData.expenses.reduce((s,e) => s + Number(e.amount), 0);
                 
-                html += `<h6 class="border-bottom pb-1 mb-1 fw-bold text-dark" style="font-size: 0.75rem;">Financial Summary</h6>
-                    <table class="table table-bordered table-sm mb-1" style="font-size: 0.7rem; width: 100%; table-layout: fixed; word-wrap: break-word;">
-                        <tr><th class="bg-light w-50 py-1">Total External Income</th><td class="text-end fw-medium py-1">${formatMoney(rawIncome)}</td></tr>
-                        <tr><th class="bg-light py-1">Total Penalty Collections</th><td class="text-end fw-medium py-1">${formatMoney(penPaid)}</td></tr>
-                        <tr><th class="bg-light py-1">Total Other Collections</th><td class="text-end fw-medium py-1">${formatMoney(colPaid)}</td></tr>
-                        <tr class="table-success"><th class="py-1">Total Cash Inflow</th><td class="text-end fw-bold text-success py-1">${formatMoney(totalIn)}</td></tr>
-                        <tr class="table-danger"><th class="py-1">Total Expenses (Outflow)</th><td class="text-end fw-bold text-danger py-1">-${formatMoney(totalExp)}</td></tr>
-                        <tr class="table-primary"><th class="py-1 fw-bold">Net Available Balance</th><td class="text-end fw-bold py-1 text-primary">${formatMoney(totalIn - totalExp)}</td></tr>
+                html += `<h5 class="fw-bold text-dark mb-3">Financial Summary</h5>
+                    <table class="table table-bordered mb-4 align-middle">
+                        <tr><th class="bg-light w-50 p-3">Total External Income</th><td class="text-end fw-medium p-3">${formatMoney(rawIncome)}</td></tr>
+                        <tr><th class="bg-light p-3">Total Penalty Collections</th><td class="text-end fw-medium p-3">${formatMoney(penPaid)}</td></tr>
+                        <tr><th class="bg-light p-3">Total Other Collections</th><td class="text-end fw-medium p-3">${formatMoney(colPaid)}</td></tr>
+                        <tr class="table-success"><th class="p-3 fs-6">Total Cash Inflow</th><td class="text-end fw-bold text-success p-3 fs-6">${formatMoney(totalIn)}</td></tr>
+                        <tr class="table-danger"><th class="p-3 fs-6">Total Expenses (Outflow)</th><td class="text-end fw-bold text-danger p-3 fs-6">-${formatMoney(totalExp)}</td></tr>
+                        <tr class="table-primary"><th class="p-3 fs-5 fw-bold">Net Available Balance</th><td class="text-end fw-bold p-3 text-primary fs-5">${formatMoney(totalIn - totalExp)}</td></tr>
                     </table>`;
             } else if (type === 'student_statement') {
                 const sId = getEl('report-student-select').value;
@@ -1821,52 +1838,129 @@
                 const student = window.appData.students.find(s=>s.id === sId);
                 const bal = getStudentBalances(sId);
                 
-                html += `<div class="d-flex justify-content-between align-items-end border-bottom pb-1 mb-1"><h6 class="mb-0 fw-bold" style="font-size: 0.75rem;">SOA: <span class="text-primary">${student.name}</span></h6>
-                         <span class="badge ${bal.overall > 0 ? 'bg-danger' : 'bg-success'}" style="font-size: 0.7rem;">Total Bal: ${formatMoney(bal.overall)}</span></div>`;
+                html += `
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="mb-0 fw-bold">Statement of Account: <span class="text-primary">${student.name}</span></h5>
+                    </div>
+                    <div class="alert ${bal.overall > 0 ? 'alert-danger' : 'alert-success'} d-flex justify-content-between align-items-center p-3 mb-4 rounded-3 border-0">
+                        <span class="fs-6 fw-medium">Overall Outstanding Balance:</span>
+                        <strong class="fs-5">${formatMoney(bal.overall)}</strong>
+                    </div>
+                `;
                 
-                html += `<div class="fw-bold text-dark mb-1 mt-1" style="font-size: 0.7rem;">Penalties</div><table class="table table-sm table-bordered mb-1" style="font-size: 0.65rem; width: 100%; word-break: break-word;"><thead class="table-light"><tr><th class="py-1">Date</th><th class="py-1">Subject</th><th class="text-end py-1">Amt</th><th class="text-end py-1">Paid</th><th class="text-end py-1">Bal</th></tr></thead><tbody>`;
-                window.appData.penalties.filter(p=>p.studentId === sId).forEach(p => { html += `<tr><td class="py-1">${formatDate(p.date)}</td><td class="py-1 text-wrap">${p.subject}</td><td class="text-end py-1">${formatMoney(p.penaltyAmount)}</td><td class="text-end py-1">${formatMoney(p.amountPaid)}</td><td class="text-danger text-end fw-bold py-1">${formatMoney(p.penaltyAmount-p.amountPaid)}</td></tr>` });
-                html += `</tbody></table>`;
+                html += `<h6 class="fw-bold text-dark mb-3">Penalty Breakdown</h6>
+                         <div class="table-responsive mb-4"><table class="table table-bordered table-striped align-middle">
+                            <thead class="table-light"><tr><th class="p-2">Date</th><th class="p-2">Subject</th><th class="text-end p-2">Amount</th><th class="text-end p-2">Paid</th><th class="text-end p-2">Balance</th></tr></thead>
+                            <tbody>`;
+                const pens = window.appData.penalties.filter(p=>p.studentId === sId);
+                if(pens.length) {
+                    pens.forEach(p => { html += `<tr><td class="p-2">${formatDate(p.date)}</td><td class="p-2">${p.subject}</td><td class="text-end p-2">${formatMoney(p.penaltyAmount)}</td><td class="text-end p-2">${formatMoney(p.amountPaid)}</td><td class="text-danger text-end fw-bold p-2">${formatMoney(p.penaltyAmount-p.amountPaid)}</td></tr>` });
+                } else {
+                    html += `<tr><td colspan="5" class="text-center text-muted p-3">No penalty records found.</td></tr>`;
+                }
+                html += `</tbody></table></div>`;
 
-                html += `<div class="fw-bold text-dark mb-1 mt-1" style="font-size: 0.7rem;">Collections</div><table class="table table-sm table-bordered mb-1" style="font-size: 0.65rem; width: 100%; word-break: break-word;"><thead class="table-light"><tr><th class="py-1">Date</th><th class="py-1">Purpose</th><th class="text-end py-1">Due</th><th class="text-end py-1">Paid</th><th class="text-end py-1">Bal</th></tr></thead><tbody>`;
-                window.appData.collections.filter(c=>c.studentId === sId).forEach(c => { 
-                    let detail = c.purpose;
-                    if(c.purpose.toLowerCase().includes('scrub')) detail += ` (Q:${c.scrubsQty||1} T:${c.scrubsTopSize}/${c.scrubsPantsSize})`;
-                    html += `<tr><td class="py-1">${formatDate(c.date)}</td><td class="py-1 text-wrap">${detail}</td><td class="text-end py-1">${formatMoney(c.amountDue)}</td><td class="text-end py-1">${formatMoney(c.amountPaid)}</td><td class="text-danger text-end fw-bold py-1">${formatMoney(c.amountDue-c.amountPaid)}</td></tr>` 
-                });
-                html += `</tbody></table>`;
+                html += `<h6 class="fw-bold text-dark mb-3">Collections Breakdown</h6>
+                         <div class="table-responsive mb-4"><table class="table table-bordered table-striped align-middle">
+                            <thead class="table-light"><tr><th class="p-2">Date</th><th class="p-2">Purpose</th><th class="text-end p-2">Due</th><th class="text-end p-2">Paid</th><th class="text-end p-2">Balance</th></tr></thead>
+                            <tbody>`;
+                const cols = window.appData.collections.filter(c=>c.studentId === sId);
+                if(cols.length) {
+                    cols.forEach(c => { 
+                        let detail = c.purpose;
+                        if(c.purpose.toLowerCase().includes('scrub')) detail += `<br><small class="text-muted opacity-75">Qty: ${c.scrubsQty||1} | Size: ${c.scrubsTopSize}/${c.scrubsPantsSize} | Name: ${c.scrubsName}</small>`;
+                        html += `<tr><td class="p-2">${formatDate(c.date)}</td><td class="p-2">${detail}</td><td class="text-end p-2">${formatMoney(c.amountDue)}</td><td class="text-end p-2">${formatMoney(c.amountPaid)}</td><td class="text-danger text-end fw-bold p-2">${formatMoney(c.amountDue-c.amountPaid)}</td></tr>` 
+                    });
+                } else {
+                    html += `<tr><td colspan="5" class="text-center text-muted p-3">No collection records found.</td></tr>`;
+                }
+                html += `</tbody></table></div>`;
+                
             } else if (type === 'scrubs_report') {
                 const scrubPurposes = window.appData.settings.collectionPurposes.filter(p=>p.toLowerCase().includes('scrub'));
                 const allStudents = [...window.appData.students].sort((a,b)=>a.name.localeCompare(b.name));
                 
-                html += `<h6 class="border-bottom pb-1 mb-1 fw-bold text-dark" style="font-size: 0.75rem;">Scrubs Masterlist</h6>`;
+                html += `<h5 class="fw-bold text-dark mb-4">Scrubs Masterlist Report</h5>`;
                 scrubPurposes.forEach(purpose => {
                     const records = window.appData.collections.filter(c => c.purpose === purpose);
-                    html += `<div class="fw-bold mt-1 mb-1" style="font-size:0.7rem;">${purpose}</div><table class="table table-striped table-bordered table-sm mb-1" style="font-size:0.65rem; width: 100%; word-break: break-word;"><thead class="table-light"><tr><th class="py-1">Name</th><th class="text-center py-1">Qty</th><th class="text-center py-1">Top</th><th class="text-center py-1">Pants</th><th class="py-1">Name</th><th class="text-end py-1">Balance</th></tr></thead><tbody>`;
+                    html += `<h6 class="fw-bold text-primary mt-4 mb-2">${purpose}</h6>
+                             <div class="table-responsive mb-4"><table class="table table-striped table-bordered align-middle">
+                                <thead class="table-light"><tr><th class="p-2">Name</th><th class="text-center p-2">Qty</th><th class="text-center p-2">Top</th><th class="text-center p-2">Pants</th><th class="p-2">Embroidery Name</th><th class="text-end p-2">Balance</th></tr></thead>
+                                <tbody>`;
                     allStudents.forEach(s => {
                         const r = records.find(rec => rec.studentId === s.id);
-                        if(r) html += `<tr><td class="py-1 text-wrap">${s.name}</td><td class="text-center py-1">${r.scrubsQty||1}</td><td class="text-center py-1">${r.scrubsTopSize||'-'}</td><td class="text-center py-1">${r.scrubsPantsSize||'-'}</td><td class="py-1 text-wrap">${r.scrubsName||'-'}</td><td class="text-end text-danger py-1">${formatMoney(r.amountDue - r.amountPaid)}</td></tr>`;
-                        else html += `<tr><td class="py-1 text-wrap">${s.name}</td><td class="text-center text-muted py-1">-</td><td class="text-center text-muted py-1">-</td><td class="text-center text-muted py-1">-</td><td class="text-muted py-1 text-wrap">-</td><td class="text-end text-danger py-1">No Record</td></tr>`;
+                        if(r) html += `<tr><td class="p-2 fw-medium">${s.name}</td><td class="text-center p-2">${r.scrubsQty||1}</td><td class="text-center p-2">${r.scrubsTopSize||'-'}</td><td class="text-center p-2">${r.scrubsPantsSize||'-'}</td><td class="p-2">${r.scrubsName||'-'}</td><td class="text-end text-danger fw-medium p-2">${formatMoney(r.amountDue - r.amountPaid)}</td></tr>`;
+                        else html += `<tr><td class="p-2 fw-medium">${s.name}</td><td class="text-center text-muted p-2">-</td><td class="text-center text-muted p-2">-</td><td class="text-center text-muted p-2">-</td><td class="text-muted p-2">-</td><td class="text-end text-danger fw-medium p-2">No Record</td></tr>`;
                     });
-                    html += `</tbody></table>`;
+                    html += `</tbody></table></div>`;
                 });
             } else {
+                // Generic handler for Income, Expense, Penalty, and Collection master reports
                 let data = [], headers = [];
-                if(type==='penalty_report') { headers = ['Date','Student','Detail','Amount','Paid','Balance']; data = window.appData.penalties.map(p=>[formatDate(p.date), window.appData.students.find(s=>s.id===p.studentId)?.name, p.subject, formatMoney(p.penaltyAmount), formatMoney(p.amountPaid), formatMoney(p.penaltyAmount-p.amountPaid)]); }
-                if(type==='collection_report') { headers = ['Date','Student','Purpose','Scrubs Info','Amount','Paid','Balance']; data = window.appData.collections.map(c=>[formatDate(c.date), window.appData.students.find(s=>s.id===c.studentId)?.name, c.purpose, c.purpose.toLowerCase().includes('scrub')?`Q:${c.scrubsQty||1} T:${c.scrubsTopSize} P:${c.scrubsPantsSize}`:'-', formatMoney(c.amountDue), formatMoney(c.amountPaid), formatMoney(c.amountDue-c.amountPaid)]); }
-                if(type==='expense_report') { headers = ['Date','Category','Description','Amount','Paid By']; data = window.appData.expenses.map(e=>[formatDate(e.date), e.category, e.desc, formatMoney(e.amount), e.paidBy]); }
-                if(type==='income_report') { headers = ['Date','Source','Description','Amount','Received By','Ref No.']; data = window.appData.income.map(i=>[formatDate(i.date), i.source, i.desc, formatMoney(i.amount), i.receivedBy || '-', i.refNo || i.receiptLink || '-']); }
+                if(type==='penalty_report') { 
+                    headers = ['Date','Student','Detail','Amount','Paid','Balance']; 
+                    data = window.appData.penalties.map(p=>[formatDate(p.date), window.appData.students.find(s=>s.id===p.studentId)?.name, p.subject, formatMoney(p.penaltyAmount), formatMoney(p.amountPaid), formatMoney(p.penaltyAmount-p.amountPaid)]); 
+                }
+                if(type==='collection_report') { 
+                    headers = ['Date','Student','Purpose','Scrubs Info','Amount','Paid','Balance']; 
+                    data = window.appData.collections.map(c=>[formatDate(c.date), window.appData.students.find(s=>s.id===c.studentId)?.name, c.purpose, c.purpose.toLowerCase().includes('scrub')?`Q:${c.scrubsQty||1} T:${c.scrubsTopSize} P:${c.scrubsPantsSize}`:'-', formatMoney(c.amountDue), formatMoney(c.amountPaid), formatMoney(c.amountDue-c.amountPaid)]); 
+                }
+                if(type==='expense_report') { 
+                    headers = ['Date','Category','Description','Amount','Paid By']; 
+                    data = window.appData.expenses.map(e=>[formatDate(e.date), e.category, e.desc, formatMoney(e.amount), e.paidBy]); 
+                }
+                if(type==='income_report') { 
+                    headers = ['Date','Source','Description','Amount','Received By','Ref No.']; 
+                    data = window.appData.income.map(i=>[formatDate(i.date), i.source, i.desc, formatMoney(i.amount), i.receivedBy || '-', i.refNo || i.receiptLink || '-']); 
+                }
                 
                 const titleStr = type.replace('_',' ').toUpperCase();
-                html += `<h6 class="border-bottom pb-1 mb-1 fw-bold text-dark" style="font-size: 0.75rem;">${titleStr}</h6>
-                    <table class="table table-striped table-bordered table-sm mb-0" style="font-size: 0.65rem; width: 100%; word-break: break-word;">
-                        <thead class="table-light"><tr>${headers.map(h=>`<th class="py-1">${h}</th>`).join('')}</tr></thead>
+                html += `<h5 class="fw-bold text-dark mb-3">${titleStr}</h5>
+                    <div class="table-responsive">
+                    <table class="table table-striped table-bordered align-middle mb-0">
+                        <thead class="table-light"><tr>${headers.map(h=>`<th class="p-2">${h}</th>`).join('')}</tr></thead>
                         <tbody>`;
-                data.forEach(row => { html += `<tr>${row.map(cell=>`<td class="py-1 text-wrap" style="white-space: normal; min-width: 50px;">${cell}</td>`).join('')}</tr>`; });
-                if(!data.length) html += `<tr><td colspan="${headers.length}" class="text-center text-muted py-1">No data available.</td></tr>`;
-                html += `</tbody></table>`;
+                data.forEach(row => { html += `<tr>${row.map(cell=>`<td class="p-2" style="white-space: normal; min-width: 80px;">${cell}</td>`).join('')}</tr>`; });
+                if(!data.length) html += `<tr><td colspan="${headers.length}" class="text-center text-muted p-4">No data available.</td></tr>`;
+                html += `</tbody></table></div>`;
             }
             container.innerHTML = html;
+        }
+
+        window.exportPDF = function(event) {
+            const element = getEl('report-container');
+            const type = getEl('report-type').value;
+            
+            // Do not export the empty placeholder state
+            if(element.innerHTML.includes('Ready to generate')) {
+                return window.showToast("Please click 'Generate UI' first before exporting.", "warning");
+            }
+
+            // Button loading state
+            const btn = event.currentTarget;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Exporting...';
+            btn.disabled = true;
+
+            const opt = {
+                margin:       [0.4, 0.4, 0.4, 0.4],
+                filename:     `${type}_report_${new Date().toISOString().split('T')[0]}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, logging: false },
+                // Use landscape layout for wide tables like income/expenses/collections
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                window.showToast("PDF Exported successfully!");
+            }).catch(err => {
+                console.error(err);
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                window.showToast("Error exporting PDF.", "danger");
+            });
         }
 
         window.exportCSV = function() {
@@ -1888,7 +1982,7 @@
                     });
                 });
             } else if (type === 'student_statement') {
-                return window.showToast("CSV export for individual statements not supported. Use Print.", "warning");
+                return window.showToast("CSV export for individual statements not supported. Please use PDF or Print.", "warning");
             } else {
                 let data = [];
                 if(type==='penalty_report') {
